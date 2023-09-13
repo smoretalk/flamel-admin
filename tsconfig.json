@@ -10,7 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "target": "esnext",
     "sourceMap": true,
-    "outDir": "./dist",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
