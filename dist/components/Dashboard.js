@@ -1,7 +1,8 @@
-import React from 'react';
-import { Box, Button, H2, H5, Illustration, Text, } from '@adminjs/design-system';
+import React, { useState } from "react";
+import { Box, Button, DropZone, H2, H5, Icon, Illustration, Text } from "@adminjs/design-system";
 import { styled } from '@adminjs/design-system/styled-components';
 import { useTranslation } from 'adminjs';
+import axios from "axios";
 const pageHeaderHeight = 284;
 const pageHeaderPaddingY = 74;
 const pageHeaderPaddingX = 250;
@@ -74,15 +75,60 @@ Card.defaultProps = {
 };
 export const Dashboard = () => {
     const { translateMessage, translateButton } = useTranslation();
+    const [imageFiles, setImageFiles] = useState([]);
+    const [themeFiles, setThemeFiles] = useState([]);
+    const uploadImageFiles = async (files) => {
+        setImageFiles(files);
+        try {
+            const formData = new FormData();
+            files.forEach((file) => {
+                formData.append('file', file);
+            });
+            const res = await axios.post('/api/s3/collectionImages', formData);
+        }
+        catch (err) {
+            if (axios.isAxiosError(err)) {
+                alert(err.response.data);
+            }
+        }
+        setImageFiles([]);
+    };
+    const uploadThemeFiles = async (files) => {
+        setThemeFiles(files);
+        try {
+            const formData = new FormData();
+            files.forEach((file) => {
+                formData.append('file', file);
+            });
+            const res = await axios.post('/api/s3/collectionThemes', formData);
+            if (res.data.length) {
+                alert('중복: ' + res.data.join(', '));
+            }
+        }
+        catch (err) {
+            if (axios.isAxiosError(err)) {
+                console.error(err.response.data);
+            }
+        }
+        setThemeFiles([]);
+    };
     return (React.createElement(Box, null,
         React.createElement(DashboardHeader, null),
         React.createElement(Box, { mt: ['xl', 'xl', '-100px'], mb: "xl", mx: [0, 0, 0, 'auto'], px: ['default', 'lg', 'xxl', '0'], position: "relative", flex: true, flexDirection: "row", flexWrap: "wrap", width: [1, 1, 1, 1024] },
-            boxes({ translateMessage }).map((box, index) => (React.createElement(Box, { key: index, width: [1, 1 / 2, 1 / 2, 1 / 3], p: "lg" },
-                React.createElement(Card, { as: "a", href: box.href, target: "_blank" },
+            React.createElement(Box, { width: [1, 1 / 2, 1 / 2, 1 / 3], p: "lg" },
+                React.createElement(Card, { as: "a" },
                     React.createElement(Text, { textAlign: "center" },
-                        React.createElement(Illustration, { variant: box.variant, width: 100, height: 70 }),
-                        React.createElement(H5, { mt: "lg" }, box.title),
-                        React.createElement(Text, null, box.subtitle)))))),
+                        React.createElement(Icon, { icon: "Image" }),
+                        React.createElement(H5, { mt: "lg" }, translateMessage('uploadCollectionImages')),
+                        React.createElement(Text, null, translateMessage('uploadCollectionImages_detail')),
+                        React.createElement(DropZone, { files: imageFiles, multiple: true, onChange: uploadImageFiles })))),
+            React.createElement(Box, { width: [1, 1 / 2, 1 / 2, 1 / 3], p: "lg" },
+                React.createElement(Card, { as: "a" },
+                    React.createElement(Text, { textAlign: "center" },
+                        React.createElement(Icon, { icon: "Image" }),
+                        React.createElement(H5, { mt: "lg" }, translateMessage('uploadCollectionTheme')),
+                        React.createElement(Text, null, translateMessage('uploadCollectionTheme_detail')),
+                        React.createElement(DropZone, { files: themeFiles, multiple: true, onChange: uploadThemeFiles })))),
             React.createElement(Box, { width: [1, 1, 1 / 2], p: "lg" },
                 React.createElement(Card, { as: "a", flex: true, href: "https://adminjs.page.link/slack", target: "_blank" },
                     React.createElement(Box, { flexShrink: 0 },

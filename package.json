@@ -1,6 +1,7 @@
 {
   "name": "flamel-admin",
   "type": "module",
+  "types": "index.ts",
   "main": "dist/index.js",
   "dependencies": {
     "@adminjs/design-system": "^4.0.2",
