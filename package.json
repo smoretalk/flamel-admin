@@ -1,8 +1,13 @@
 {
   "name": "flamel-admin",
   "type": "module",
-  "types": "index.ts",
-  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "version": "0.0.1",
   "dependencies": {
     "@adminjs/design-system": "^4.0.2",
     "adminjs": "^7.2.1",
