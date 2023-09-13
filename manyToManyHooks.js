@@ -15,6 +15,8 @@ export const after = async (response, request, context) => {
     if (request && request.method) {
         const manyProperties = context.resource.getManyProperties();
         const manyReferences = context.resource.getManyReferences();
+        console.log('manyProperties', manyProperties);
+        console.log('manyReferences', manyReferences);
         const { record, _admin } = context;
         const getCircularReplacer = () => {
             const seen = new WeakSet();
@@ -33,8 +35,16 @@ export const after = async (response, request, context) => {
         if (request.method === 'post' && record.isValid()) {
             const params = flat.unflatten(request.payload);
             await Promise.all(manyProperties.map(async (toResourceId) => {
-                const ids = params[toResourceId] || [];
-                console.log('params', params, 'ids', ids);
+                let ids = params || [];
+                if (toResourceId.includes('.')) {
+                    const relations = toResourceId.split('.');
+                    for (let i = 0; i < relations.length; i++) {
+                        ids = ids[relations[i]] || [];
+                    }
+                }
+                else {
+                    ids = params[toResourceId] || [];
+                }
                 await context.resource.saveRecords(record, toResourceId, ids);
             }));
         }

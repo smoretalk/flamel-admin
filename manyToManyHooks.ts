@@ -41,6 +41,9 @@ export const after = async (
   if (request && request.method) {
     const manyProperties = context.resource.getManyProperties();
     const manyReferences = context.resource.getManyReferences();
+    console.log('manyProperties', manyProperties);
+    console.log('manyReferences', manyReferences);
+
     const { record, _admin } = context;
     // console.log( '🚀 ~ file: many-to-many.hook.ts:34 ~ _admin',
     //   _admin.resources,
@@ -57,30 +60,7 @@ export const after = async (
         return value;
       };
     };
-    // const resource = JSON.stringify(
-    //   _admin.resources[1]._decorated,
-    //   getCircularReplacer(),
-    //   2,
-    // );
-    // const resource = _admin.resources[1];
-    // const resource = context.resource.getManyReferences();
-    // console.log(
-    //   '🚀 ~ file: many-to-many.hook.ts:36 ~ _admin.resources.forEach ~ data',
-    //   resource,
-    // );
 
-    // _admin.resources.forEach((resource: any) => {
-    //   const data = resource;
-    //   console.log(
-    //     '🚀 ~ file: many-to-many.hook.ts:36 ~ _admin.resources.forEach ~ data',
-    //     data,
-    //   );
-    // });
-    // const toResource = _admin.resources.find(resource: CustomResource => resource.getPropertyByKey() )
-    // console.log(
-    //   '🚀 ~ file: many-to-many.hook.ts:32 ~ _admin',
-    //   _admin.resources,
-    // );
     if (context.action.name == 'edit' && request.method === 'get') {
       // await Promise.all(
       //   manyReferences.map(async (reference: CustomResource) => {
@@ -93,8 +73,15 @@ export const after = async (
       const params = flat.unflatten(request.payload);
       await Promise.all(
         manyProperties.map(async (toResourceId: string) => {
-          const ids = params[toResourceId] || [];
-          console.log('params', params, 'ids', ids);
+          let ids = params || [];
+          if (toResourceId.includes('.')) { // 릴레이션이면
+            const relations = toResourceId.split('.');
+            for (let i = 0; i < relations.length; i++) {
+              ids = ids[relations[i]] || [];
+            }
+          } else {
+            ids = params[toResourceId] || [];
+          }
           await context.resource.saveRecords(record, toResourceId, ids);
           // await context.resource.getRoles(record);
         }),
