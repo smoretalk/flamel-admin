@@ -1,4 +1,4 @@
-import { unflatten } from 'flat';
+import flat from 'flat';
 import { Components } from './componentLoader.js';
 const setResponseItems = async (context, response, reference) => {
     const { _admin, resource, record } = context;
@@ -31,7 +31,7 @@ export const after = async (response, request, context) => {
         if (context.action.name == 'edit' && request.method === 'get') {
         }
         if (request.method === 'post' && record.isValid()) {
-            const params = unflatten(request.payload);
+            const params = flat.unflatten(request.payload);
             await Promise.all(manyProperties.map(async (toResourceId) => {
                 const ids = params[toResourceId] || [];
                 await context.resource.saveRecords(record, toResourceId, ids);
