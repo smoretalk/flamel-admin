@@ -34,6 +34,7 @@ export const after = async (response, request, context) => {
             const params = flat.unflatten(request.payload);
             await Promise.all(manyProperties.map(async (toResourceId) => {
                 const ids = params[toResourceId] || [];
+                console.log('params', params, 'ids', ids);
                 await context.resource.saveRecords(record, toResourceId, ids);
             }));
         }

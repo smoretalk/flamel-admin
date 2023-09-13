@@ -94,6 +94,7 @@ export const after = async (
       await Promise.all(
         manyProperties.map(async (toResourceId: string) => {
           const ids = params[toResourceId] || [];
+          console.log('params', params, 'ids', ids);
           await context.resource.saveRecords(record, toResourceId, ids);
           // await context.resource.getRoles(record);
         }),
