@@ -10,6 +10,7 @@
   "version": "0.0.1",
   "dependencies": {
     "@adminjs/design-system": "^4.0.2",
+    "@adminjs/prisma": "^5.0.1",
     "adminjs": "^7.2.1",
     "file-saver": "^2.0.5",
     "react": "^18.2.0",

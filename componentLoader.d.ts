@@ -5,4 +5,7 @@ export declare const Components: {
     DisplayImage: string;
     IdQuerySaver: string;
     ExportCsv: string;
+    ManyToManyEdit: string;
+    ManyToManyShow: string;
+    ManyToManyList: string;
 };
