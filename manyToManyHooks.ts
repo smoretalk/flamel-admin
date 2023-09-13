@@ -4,7 +4,7 @@ import {
   ActionContext,
   ResourceOptions,
 } from 'adminjs';
-import { unflatten } from 'flat';
+import flat from 'flat';
 import { CustomResource } from './customResource.js';
 import { Components } from './componentLoader.js';
 
@@ -90,7 +90,7 @@ export const after = async (
     }
 
     if (request.method === 'post' && record.isValid()) {
-      const params = unflatten(request.payload);
+      const params = flat.unflatten(request.payload);
       await Promise.all(
         manyProperties.map(async (toResourceId: string) => {
           const ids = params[toResourceId] || [];

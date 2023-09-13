@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.5",
+    "@types/flat": "^5.0.2",
     "@types/node": "^20.6.0"
   }
 }
