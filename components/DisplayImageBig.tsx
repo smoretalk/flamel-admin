@@ -5,15 +5,7 @@ const DisplayImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/') +
-        '/thumb')
-
-    const onError = () => {
-        if (!errored) {
-            setErrored(true);
-            setSrc((prev) => prev?.replace("/thumb", ""));
-        }
-    };
+    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/'))
 
   return (
     <section style={{ marginBottom: props.where === 'show' ? 24 : 0 }}>
@@ -39,10 +31,7 @@ const DisplayImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
           width={512}
           id="image"
           alt={props.record.params.originalPrompt}
-          onError={onError}
-          src={
-            src
-          }
+          src={src}
         />
       </div>
     </section>
