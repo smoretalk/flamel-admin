@@ -12,6 +12,10 @@ export const Components = {
       'DisplayImage',
     path.resolve(__dirname, 'components', 'DisplayImage'),
   ),
+  DisplayImageBig: componentLoader.add(
+    'DisplayImageBig',
+    path.resolve(__dirname, 'components', 'DisplayImageBig'),
+  ),
   IdQuerySaver: componentLoader.add('IdQuerySaver', path.resolve(__dirname, 'components', 'IdQuerySaver')),
   ExportCsv: componentLoader.add('ExportCsv', path.resolve(__dirname, 'components', 'ExportCsv')),
   ManyToManyEdit: componentLoader.add(
