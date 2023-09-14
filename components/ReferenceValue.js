@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@adminjs/design-system';
 import { ViewHelpers } from 'adminjs';
 const StyledLink = styled(Link) `
-  padding-left: ${({ theme }) => theme.space.xs};
-  padding-right: ${({ theme }) => theme.space.xs};
+  padding-left: ${({ theme }) => theme.space?.xs};
+  padding-right: ${({ theme }) => theme.space?.xs};
 `;
 const ReferenceValue = (props) => {
     const { property, record } = props;
