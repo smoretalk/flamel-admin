@@ -70,7 +70,19 @@ export const manyToManyComponent = (reference) => ({
 });
 export const injectManyToManySupport = (options, properties) => {
     properties.forEach((propForSupport) => {
+        if (!options.properties) {
+            options.properties = {};
+        }
         options.properties[propForSupport.propertyName] = manyToManyComponent(propForSupport.modelClassName);
+        if (!options.actions) {
+            options.actions = {};
+        }
+        if (!options.actions.new) {
+            options.actions.new = {};
+        }
+        if (!options.actions.edit) {
+            options.actions.edit = {};
+        }
         options.actions.new.after = [after];
         options.actions.edit.after = [after];
     });
