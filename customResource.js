@@ -10,9 +10,39 @@ export class CustomResource extends Resource {
     async findRelated(record, resource, options = {}) {
     }
     async saveRecords(record, resourceId, ids) {
-        await this.update(record.params.id, {
-            [resourceId]: ids.map((value) => ({ id: value.id })),
-        });
+        console.log('record', record.params.id, 'resourceId', resourceId, 'ids', ids);
+        if (resourceId.includes('.')) {
+            const split = resourceId.split('.');
+            const middle = split[0];
+            const last = split[1];
+            const result = await this.manager.findOne({
+                where: {
+                    id: record.params.id,
+                },
+                include: {
+                    [middle]: true,
+                }
+            });
+            if (result?.[middle]) {
+                const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
+                const middleId = result[middle].id;
+                this.client[lowerCase(middle)].update({
+                    where: { id: middleId },
+                    data: {
+                        [last]: {
+                            connect: ids.map((v) => ({
+                                id: typeof v.id === 'string' ? parseInt(v.id) : v.id,
+                            }))
+                        }
+                    }
+                });
+            }
+        }
+        else {
+            await this.update(record.params.id, {
+                [resourceId]: ids.map((value) => ({ id: value.id })),
+            });
+        }
     }
     primaryKeyField() {
         return this.id;
