@@ -17,7 +17,7 @@ const ReferenceValue = (props) => {
         actionName: 'show',
     });
     return (React.createElement(StyledLink, { to: href },
-        React.createElement(Button, { size: "sm", rounded: true }, record.name)));
+        React.createElement(Button, { size: "sm", rounded: true }, record.title)));
 };
 export default ReferenceValue;
 //# sourceMappingURL=ReferenceValue.js.map

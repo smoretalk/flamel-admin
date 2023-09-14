@@ -52,7 +52,7 @@ const ReferenceValue: React.FC<Props> = (props) => {
   return (
     <StyledLink to={href}>
       <Button size="sm" rounded>
-        {record.name}
+        {record.title}
       </Button>
     </StyledLink>
   );
