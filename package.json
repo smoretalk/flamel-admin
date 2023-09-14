@@ -7,6 +7,9 @@
       "default": "./index.js"
     }
   },
+  "scripts": {
+    "postinstall": "patch-package"
+  },
   "version": "0.0.1",
   "dependencies": {
     "@adminjs/design-system": "^4.0.2",

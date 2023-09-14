@@ -43,13 +43,39 @@ export class CustomResource extends Resource {
   // }
 
   async saveRecords(record, resourceId, ids: { id: string | number }[]) {
-    await this.update(record.params.id, {
-      [resourceId]: ids.map((value) => ({ id: value.id })),
-    });
-
-    // const instance = this.getInstance(record);
-    // const association = this.getAssociationsByResourceId(resourceId)[0];
-    // await association.set(instance, ids);
+    console.log('record', record.params.id, 'resourceId', resourceId, 'ids', ids);
+    if (resourceId.includes('.')) { // 중첩된 다대다관계이면
+      // 중첩된 리소스로 타고 들어가서 다대다 수행
+      const split = resourceId.split('.');
+      const middle = split[0];
+      const last = split[1];
+      const result = await this.manager.findOne({
+        where: {
+          id: record.params.id,
+        },
+        include: {
+          [middle]: true,
+        }
+      });
+      if (result?.[middle]) {
+        const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
+        const middleId = result[middle].id;
+        this.client[lowerCase(middle)].update({
+          where: { id: middleId },
+          data: {
+            [last]: {
+              connect: ids.map((v) => ({
+                id: typeof v.id === 'string' ? parseInt(v.id) : v.id,
+              }))
+            }
+          }
+        })
+      }
+    } else {
+      await this.update(record.params.id, {
+        [resourceId]: ids.map((value) => ({ id: value.id })),
+      });
+    }
   }
 
   primaryKeyField() {

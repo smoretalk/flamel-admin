@@ -1,0 +1,21 @@
+diff --git a/node_modules/@adminjs/prisma/lib/Resource.d.ts b/node_modules/@adminjs/prisma/lib/Resource.d.ts
+index ab156ff..9f290e3 100644
+--- a/node_modules/@adminjs/prisma/lib/Resource.d.ts
++++ b/node_modules/@adminjs/prisma/lib/Resource.d.ts
+@@ -3,11 +3,11 @@ import { PrismaClient } from '@prisma/client';
+ import { DMMF } from '@prisma/client/runtime/library.js';
+ import { Property } from './Property.js';
+ export declare class Resource extends BaseResource {
+-    private client;
+-    private model;
+-    private enums;
+-    private manager;
+-    private propertiesObject;
++    protected client;
++    protected model;
++    protected enums;
++    protected manager;
++    protected propertiesObject;
+     constructor(args: {
+         model: DMMF.Model;
+         client: PrismaClient;
