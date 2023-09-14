@@ -56,7 +56,17 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   };
   const error = record?.errors[property.path];
 
-  const selectedValues = unflatten(record.params)[property.path] || [];
+  let selectedValues;
+  if (property.path.includes('.')) {
+    // 중첩된 경로면
+    const middle = property.path.split('.')[0];
+    const last = property.path.split('.')[1];
+    selectedValues = unflatten(record.params)[middle][last] || [];
+  } else {
+    selectedValues = unflatten(record.params)[property.path] || [];
+  }
+
+
 
   const selectedId = record?.params[property.path] as string | undefined;
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();
