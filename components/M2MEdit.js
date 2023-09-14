@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { FormGroup, FormMessage, Label, SelectAsync, } from '@adminjs/design-system';
-import { ApiClient, } from 'adminjs';
+import { ApiClient, useTranslation, } from 'adminjs';
 import { unflatten } from 'flat';
 const EditManyToManyInput = (props) => {
     const { onChange, property, record } = props;
     const { reference: resourceId } = property;
+    const { translateProperty } = useTranslation();
     if (!resourceId) {
         throw new Error(`Cannot reference resource in property '${property.path}'`);
     }
@@ -58,7 +59,7 @@ const EditManyToManyInput = (props) => {
         }
     }, [selectedValue, selectedId, resourceId]);
     return (React.createElement(FormGroup, { error: Boolean(error) },
-        React.createElement(Label, null, property.label),
+        React.createElement(Label, null, translateProperty(property.label)),
         React.createElement(SelectAsync, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, ...property.props }),
         React.createElement(FormMessage, null, error?.message)));
 };

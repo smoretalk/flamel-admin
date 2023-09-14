@@ -9,7 +9,7 @@ import {
   ApiClient,
   EditPropertyPropsInArray,
   RecordJSON,
-  SelectRecord,
+  SelectRecord, useTranslation,
 } from 'adminjs';
 import { unflatten } from 'flat';
 
@@ -21,6 +21,7 @@ type SelectRecordEnhanced = SelectRecord & {
 const EditManyToManyInput: FC<CombinedProps> = (props) => {
   const { onChange, property, record } = props;
   const { reference: resourceId } = property;
+  const { translateProperty } = useTranslation();
 
   if (!resourceId) {
     throw new Error(`Cannot reference resource in property '${property.path}'`);
@@ -90,7 +91,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
 
   return (
     <FormGroup error={Boolean(error)}>
-      <Label>{property.label}</Label>
+      <Label>{translateProperty(property.label)}</Label>
       <SelectAsync
         // @ts-expect-error
         isMulti={true}
