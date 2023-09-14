@@ -42,7 +42,6 @@ export const after = async (
     const manyProperties = context.resource.getManyProperties();
     const manyReferences = context.resource.getManyReferences();
     console.log('manyProperties', manyProperties);
-    console.log('manyReferences', manyReferences);
 
     const { record, _admin } = context;
     // console.log( '🚀 ~ file: many-to-many.hook.ts:34 ~ _admin',
@@ -81,6 +80,9 @@ export const after = async (
             }
           } else {
             ids = params[toResourceId] || [];
+          }
+          if (!Array.isArray(ids) || ids.length === 0) { // 다대다 관계가 아니므로
+            return;
           }
           await context.resource.saveRecords(record, toResourceId, ids);
           // await context.resource.getRoles(record);
