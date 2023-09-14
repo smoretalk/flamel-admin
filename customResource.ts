@@ -49,7 +49,7 @@ export class CustomResource extends Resource {
       const split = resourceId.split('.');
       const middle = split[0];
       const last = split[1];
-      const result = await this.manager.findOne({
+      const result = await this.manager.findFirst({
         where: {
           id: record.params.id,
         },
@@ -60,6 +60,7 @@ export class CustomResource extends Resource {
       if (result?.[middle]) {
         const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
         const middleId = result[middle].id;
+        console.log(Object.keys(this.client));
         this.client[lowerCase(middle)].update({
           where: { id: middleId },
           data: {
