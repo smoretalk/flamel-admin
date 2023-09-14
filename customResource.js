@@ -26,8 +26,8 @@ export class CustomResource extends Resource {
             if (result?.[middle]) {
                 const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
                 const middleId = result[middle].id;
-                console.log(Object.keys(this.client));
-                this.client[lowerCase(middle)].update({
+                console.log(lowerCase(middle), middleId, last);
+                await this.client[lowerCase(middle)].update({
                     where: { id: middleId },
                     data: {
                         [last]: {
