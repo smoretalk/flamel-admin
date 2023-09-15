@@ -2,7 +2,7 @@ import {
   RecordActionResponse,
   ActionRequest,
   ActionContext,
-  ResourceOptions,
+  ResourceOptions, After, ActionResponse,
 } from 'adminjs';
 import flat from 'flat';
 import { CustomResource } from './customResource.js';
@@ -33,9 +33,9 @@ const setResponseItems = async (
   }
 };
 
-export const after = async (
-  response: RecordActionResponse,
-  request: ActionRequest,
+export const after: After<ActionResponse> & After<RecordActionResponse> = async (
+  response,
+  request,
   context: any,
 ) => {
   if (request && request.method) {
@@ -44,29 +44,6 @@ export const after = async (
     console.log('manyProperties', manyProperties);
 
     const { record, _admin } = context;
-    // console.log( '🚀 ~ file: many-to-many.hook.ts:34 ~ _admin',
-    //   _admin.resources,
-    // );
-    const getCircularReplacer = () => {
-      const seen = new WeakSet();
-      return (key, value) => {
-        if (typeof value === 'object' && value !== null) {
-          if (seen.has(value)) {
-            return;
-          }
-          seen.add(value);
-        }
-        return value;
-      };
-    };
-
-    if (context.action.name == 'edit' && request.method === 'get') {
-      // await Promise.all(
-      //   manyReferences.map(async (reference: CustomResource) => {
-      //     await setResponseItems(context, response, reference);
-      //   }),
-      // );
-    }
 
     if (request.method === 'post' && record.isValid()) {
       const params = flat.unflatten(request.payload);
@@ -81,6 +58,7 @@ export const after = async (
           } else {
             ids = params[toResourceId] || [];
           }
+          console.log('toResourceId', toResourceId, 'ids', ids);
           if (!Array.isArray(ids) || ids.length === 0) { // 다대다 관계가 아니므로
             return;
           }
@@ -151,8 +129,16 @@ export const injectManyToManySupport = (
     if (!options.actions.edit) {
       options.actions.edit = {};
     }
-    options.actions.new.after = [after];
-    options.actions.edit.after = [after];
+    if (!options.actions.new.after) {
+      options.actions.new.after = [after];
+    } else if (Array.isArray(options.actions.new.after)) {
+      options.actions.new.after.push(after);
+    }
+    if (!options.actions.edit.after) {
+      options.actions.edit.after = [after];
+    } else if (Array.isArray(options.actions.edit.after)) {
+      options.actions.edit.after.push(after);
+    }
   });
   return options;
 };

@@ -17,20 +17,6 @@ export const after = async (response, request, context) => {
         const manyReferences = context.resource.getManyReferences();
         console.log('manyProperties', manyProperties);
         const { record, _admin } = context;
-        const getCircularReplacer = () => {
-            const seen = new WeakSet();
-            return (key, value) => {
-                if (typeof value === 'object' && value !== null) {
-                    if (seen.has(value)) {
-                        return;
-                    }
-                    seen.add(value);
-                }
-                return value;
-            };
-        };
-        if (context.action.name == 'edit' && request.method === 'get') {
-        }
         if (request.method === 'post' && record.isValid()) {
             const params = flat.unflatten(request.payload);
             await Promise.all(manyProperties.map(async (toResourceId) => {
@@ -44,6 +30,7 @@ export const after = async (response, request, context) => {
                 else {
                     ids = params[toResourceId] || [];
                 }
+                console.log('toResourceId', toResourceId, 'ids', ids);
                 if (!Array.isArray(ids) || ids.length === 0) {
                     return;
                 }
@@ -83,8 +70,18 @@ export const injectManyToManySupport = (options, properties) => {
         if (!options.actions.edit) {
             options.actions.edit = {};
         }
-        options.actions.new.after = [after];
-        options.actions.edit.after = [after];
+        if (!options.actions.new.after) {
+            options.actions.new.after = [after];
+        }
+        else if (Array.isArray(options.actions.new.after)) {
+            options.actions.new.after.push(after);
+        }
+        if (!options.actions.edit.after) {
+            options.actions.edit.after = [after];
+        }
+        else if (Array.isArray(options.actions.edit.after)) {
+            options.actions.edit.after.push(after);
+        }
     });
     return options;
 };
