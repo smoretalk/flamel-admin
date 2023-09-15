@@ -3,6 +3,7 @@ import React, { FC, lazy } from 'react'
 import { AsyncCreatableProps } from 'react-select/async-creatable'
 
 import { cssClass } from '@adminjs/design-system';
+import axios from "axios";
 
 const ReactAsyncSelect = lazy(() => import('react-select/async-creatable') as any) as any;
 
@@ -24,6 +25,8 @@ export const SelectAsyncCreatable: FC<SelectProps<unknown, boolean>> = (props) =
 
   const onCreateOption = (option: string) => {
     console.log('onCreate', option);
+    axios.post(`/api/collections/tags/CollectionKoTags/${option}`)
+      .then(() => {})
   };
 
   return (

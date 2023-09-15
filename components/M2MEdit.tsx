@@ -27,6 +27,8 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     throw new Error(`Cannot reference resource in property '${property.path}'`);
   }
 
+  console.log(record, property);
+
   const handleChange = (selected: any[]): void => {
     setSelectedOptions(selected);
     if (selected) {

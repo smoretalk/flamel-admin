@@ -10,6 +10,7 @@ const EditManyToManyInput = (props) => {
     if (!resourceId) {
         throw new Error(`Cannot reference resource in property '${property.path}'`);
     }
+    console.log(record, property);
     const handleChange = (selected) => {
         setSelectedOptions(selected);
         if (selected) {
