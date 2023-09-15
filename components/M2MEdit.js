@@ -34,7 +34,7 @@ const EditManyToManyInput = (props) => {
     if (property.path.includes('.')) {
         const middle = property.path.split('.')[0];
         const last = property.path.split('.')[1];
-        selectedValues = unflatten(record.params)[middle][last] || [];
+        selectedValues = unflatten(record.params)[middle]?.[last] || [];
     }
     else {
         selectedValues = unflatten(record.params)[property.path] || [];
