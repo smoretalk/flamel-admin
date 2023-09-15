@@ -42,6 +42,22 @@ export class CustomResource extends Resource {
   //   return new this.SequelizeModel(record.params, { isNewRecord: false });
   // }
 
+  // 일대다용도
+  async saveRecord(record, resourceId, ids) {
+    await this.manager.update({
+      where: { id: record.params.id },
+      data: {
+        [resourceId]: {
+          upsert: {
+            create: ids,
+            update: ids,
+          }
+        }
+      }
+    })
+  }
+
+  // 다대다용도
   async saveRecords(record, resourceId, ids: { id: string | number }[]) {
     console.log('record', record.params.id, 'resourceId', resourceId, 'ids', ids);
     if (resourceId.includes('.')) { // 중첩된 다대다관계이면

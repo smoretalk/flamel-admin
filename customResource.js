@@ -9,6 +9,19 @@ export class CustomResource extends Resource {
     }
     async findRelated(record, resource, options = {}) {
     }
+    async saveRecord(record, resourceId, ids) {
+        await this.manager.update({
+            where: { id: record.params.id },
+            data: {
+                [resourceId]: {
+                    upsert: {
+                        create: ids,
+                        update: ids,
+                    }
+                }
+            }
+        });
+    }
     async saveRecords(record, resourceId, ids) {
         console.log('record', record.params.id, 'resourceId', resourceId, 'ids', ids);
         if (resourceId.includes('.')) {
