@@ -4,6 +4,7 @@ interface SelectProps<Option = unknown, IsMulti extends boolean = false> extends
     value: Option;
     onChange?: (selected: any) => void;
     variant?: 'default' | 'filter';
+    reference?: string;
 }
 export declare const SelectAsyncCreatable: FC<SelectProps<unknown, boolean>>;
 export default SelectAsyncCreatable;

@@ -114,6 +114,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         isClearable
         isDisabled={property.isDisabled}
         isLoading={!!loadingRecord}
+        reference={property.reference}
         {...property.props}
       />
       <FormMessage>{error?.message}</FormMessage>

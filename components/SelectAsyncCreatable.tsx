@@ -14,10 +14,11 @@ interface SelectProps<Option = unknown, IsMulti extends boolean = false>
   value: Option
   onChange?: (selected) => void
   variant?: 'default' | 'filter'
+  reference?: string;
 }
 
 export const SelectAsyncCreatable: FC<SelectProps<unknown, boolean>> = (props) => {
-  const { value, onChange, variant, ...selectProps } = props
+  const { value, onChange, variant, reference, ...selectProps } = props
 
   const handleChange = (selected) => {
     if (typeof onChange === 'function') onChange(selected)
@@ -25,8 +26,10 @@ export const SelectAsyncCreatable: FC<SelectProps<unknown, boolean>> = (props) =
 
   const onCreateOption = (option: string) => {
     console.log('onCreate', option);
-    axios.post(`/api/collections/tags/CollectionKoTags/${option}`)
-      .then(() => {})
+    axios.post(`/api/collections/tags/${reference}/${option}`)
+      .then(() => {
+        console.log(`${option} 생성되었습니다.`)
+      })
   };
 
   return (
