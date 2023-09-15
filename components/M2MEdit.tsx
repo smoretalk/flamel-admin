@@ -3,7 +3,6 @@ import {
   FormGroup,
   FormMessage,
   Label,
-  SelectAsync,
 } from '@adminjs/design-system';
 import {
   ApiClient,
@@ -12,6 +11,7 @@ import {
   SelectRecord, useTranslation,
 } from 'adminjs';
 import { unflatten } from 'flat';
+import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
 
 type CombinedProps = EditPropertyPropsInArray;
 type SelectRecordEnhanced = SelectRecord & {
@@ -102,8 +102,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   return (
     <FormGroup error={Boolean(error)}>
       <Label>{translateProperty(property.label)}</Label>
-      <SelectAsync
-        // @ts-expect-error
+      <SelectAsyncCreatable
         isMulti={true}
         cacheOptions
         value={selectedOptions}

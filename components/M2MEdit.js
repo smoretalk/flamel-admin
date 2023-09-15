@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { FormGroup, FormMessage, Label, SelectAsync, } from '@adminjs/design-system';
+import { FormGroup, FormMessage, Label, } from '@adminjs/design-system';
 import { ApiClient, useTranslation, } from 'adminjs';
 import { unflatten } from 'flat';
+import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
 const EditManyToManyInput = (props) => {
     const { onChange, property, record } = props;
     const { reference: resourceId } = property;
@@ -68,7 +69,7 @@ const EditManyToManyInput = (props) => {
     }, [selectedValue, selectedId, resourceId]);
     return (React.createElement(FormGroup, { error: Boolean(error) },
         React.createElement(Label, null, translateProperty(property.label)),
-        React.createElement(SelectAsync, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, ...property.props }),
+        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, ...property.props }),
         React.createElement(FormMessage, null, error?.message)));
 };
 export default EditManyToManyInput;
