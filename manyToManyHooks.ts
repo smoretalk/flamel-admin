@@ -68,29 +68,6 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
       );
     }
   }
-  // if (request && request.method) {
-  //   const manyProperties = context.resource.getManyProperties();
-  //   if (context.action.name == 'edit' && request.method === 'get') {
-  //     // Load all linked data
-  //     await Promise.all(
-  //       manyProperties.map(async (toResourceId) => {
-  //         await setResponseItems(context, response, toResourceId);
-  //       }),
-  //     );
-  //   }
-  //   const { record } = context;
-  //   if (request.method === 'post' && record.isValid()) {
-  //     const params = unflatten(request.payload);
-  // await Promise.all(
-  //   manyProperties.map(async (toResourceId) => {
-  //     const ids = params[toResourceId]
-  //       ? params[toResourceId].map((v) => parseInt(v))
-  //       : [];
-  //     await context.resource.saveRecords(record, toResourceId, ids);
-  //   }),
-  // );
-  //   }
-  // }
   return response;
 };
 export const manyToManyComponent = (reference: string) => ({
@@ -132,12 +109,17 @@ export const injectManyToManySupport = (
     if (!options.actions.new.after) {
       options.actions.new.after = [after];
     } else if (Array.isArray(options.actions.new.after)) {
-      options.actions.new.after.push(after);
+      if (!options.actions.new.after.includes(after)) {
+        options.actions.new.after.push(after);
+      }
     }
     if (!options.actions.edit.after) {
       options.actions.edit.after = [after];
-    } else if (Array.isArray(options.actions.edit.after)) {
-      options.actions.edit.after.push(after);
+    }
+    else if (Array.isArray(options.actions.edit.after)) {
+      if (!options.actions.edit.after.includes(after)) {
+        options.actions.edit.after.push(after);
+      }
     }
   });
   return options;

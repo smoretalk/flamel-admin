@@ -74,13 +74,17 @@ export const injectManyToManySupport = (options, properties) => {
             options.actions.new.after = [after];
         }
         else if (Array.isArray(options.actions.new.after)) {
-            options.actions.new.after.push(after);
+            if (!options.actions.new.after.includes(after)) {
+                options.actions.new.after.push(after);
+            }
         }
         if (!options.actions.edit.after) {
             options.actions.edit.after = [after];
         }
         else if (Array.isArray(options.actions.edit.after)) {
-            options.actions.edit.after.push(after);
+            if (!options.actions.edit.after.includes(after)) {
+                options.actions.edit.after.push(after);
+            }
         }
     });
     return options;
