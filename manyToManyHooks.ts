@@ -41,7 +41,7 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
   if (request && request.method) {
     const manyProperties = context.resource.getManyProperties();
     const manyReferences = context.resource.getManyReferences();
-    console.log('manyProperties', manyProperties.map((v) => v.name()));
+    console.log('m2m manyProperties', manyProperties.map((v) => v.name()));
 
     const { record, _admin } = context;
 

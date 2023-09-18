@@ -15,7 +15,7 @@ export const after = async (response, request, context) => {
     if (request && request.method) {
         const manyProperties = context.resource.getManyProperties();
         const manyReferences = context.resource.getManyReferences();
-        console.log('manyProperties', manyProperties.map((v) => v.name()));
+        console.log('m2m manyProperties', manyProperties.map((v) => v.name()));
         const { record, _admin } = context;
         if (request.method === 'post' && record.isValid()) {
             const params = flat.unflatten(request.payload);
