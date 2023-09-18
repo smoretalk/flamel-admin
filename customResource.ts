@@ -114,6 +114,6 @@ export class CustomResource extends Resource {
       .filter((p: any) => {
         return p.type() === 'reference';
       })
-      .map((p) => p.name());
+      .map((p) => p);
   }
 }

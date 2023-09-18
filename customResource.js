@@ -75,7 +75,7 @@ export class CustomResource extends Resource {
             .filter((p) => {
             return p.type() === 'reference';
         })
-            .map((p) => p.name());
+            .map((p) => p);
     }
 }
 //# sourceMappingURL=customResource.js.map

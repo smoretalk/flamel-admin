@@ -10,5 +10,5 @@ export declare class CustomResource extends Resource {
     }[]): Promise<void>;
     primaryKeyField(): () => string;
     getManyReferences(): BaseResource[];
-    getManyProperties(): string[];
+    getManyProperties(): import("adminjs").PropertyDecorator[];
 }
