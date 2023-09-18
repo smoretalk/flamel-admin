@@ -14,6 +14,7 @@ export class CustomResource extends Resource {
         const create = {
             ...ids,
         };
+        delete update.id;
         delete create.id;
         if (resourceId === 'GenerationInfo') {
             delete create.imageId;
