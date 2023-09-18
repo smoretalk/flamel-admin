@@ -105,24 +105,16 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     axios.post<{ id: number, title: string }>(`/api/collections/tags/${property.reference}/${option}`)
       .then((response) => {
         console.log(`${option} 생성되었습니다.`, response);
-        setSelectedOptions((prev) => [...prev, {
-          value: response.data.id,
-          label: response.data.title,
-        }]);
-        setLoadingRecord((c) => c + 1);
-        const api = new ApiClient();
-        return api
-          .recordAction({
-            actionName: 'show',
-            resourceId,
-            recordId: selectedId,
-          })
-      })
-      .then(({ data }: any) => {
-        setLoadedRecord(data.record);
-      })
-      .finally(() => {
-        setLoadingRecord((c) => c - 1);
+        setSelectedOptions((prev) => {
+          handleChange([...prev, {
+            value: response.data.id,
+            label: response.data.title,
+          }].filter(Boolean));
+          return [...prev, {
+            value: response.data.id,
+            label: response.data.title,
+          }]
+        });
       });
   };
 
