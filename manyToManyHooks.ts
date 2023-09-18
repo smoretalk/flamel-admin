@@ -41,7 +41,7 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
   if (request && request.method) {
     const manyProperties = context.resource.getManyProperties();
     const manyReferences = context.resource.getManyReferences();
-    console.log('manyProperties', manyProperties);
+    console.log('manyProperties', manyProperties.map((v) => v.name()));
 
     const { record, _admin } = context;
 
@@ -50,7 +50,7 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
       await Promise.all(
         manyProperties.map(async (toResourceId: string) => {
           let ids = params || [];
-          if (toResourceId.includes('.')) { // 릴레이션이면
+          if (typeof toResourceId === 'string' && toResourceId.includes('.')) { // 릴레이션이면
             const relations = toResourceId.split('.');
             for (let i = 0; i < relations.length; i++) {
               ids = ids[relations[i]] || [];
