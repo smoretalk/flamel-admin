@@ -52,6 +52,7 @@ export class CustomResource extends Resource {
     delete create.id;
     if (resourceId === 'GenerationInfo') {
       delete create.imageId;
+      delete update.imageId;
     }
     await this.manager.update({
       where: { id: record.params.id },
