@@ -48,9 +48,10 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
     if (request.method === 'post' && record.isValid()) {
       const params = flat.unflatten(request.payload);
       await Promise.all(
-        manyProperties.map(async (toResourceId: string) => {
+        manyProperties.map(async (propertyDecorator) => {
+          const toResourceId = propertyDecorator.name();
           let ids = params || [];
-          if (typeof toResourceId === 'string' && toResourceId.includes('.')) { // 릴레이션이면
+          if (toResourceId.includes('.')) { // 릴레이션이면
             const relations = toResourceId.split('.');
             for (let i = 0; i < relations.length; i++) {
               ids = ids[relations[i]] || [];

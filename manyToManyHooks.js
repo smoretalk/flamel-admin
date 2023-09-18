@@ -19,9 +19,10 @@ export const after = async (response, request, context) => {
         const { record, _admin } = context;
         if (request.method === 'post' && record.isValid()) {
             const params = flat.unflatten(request.payload);
-            await Promise.all(manyProperties.map(async (toResourceId) => {
+            await Promise.all(manyProperties.map(async (propertyDecorator) => {
+                const toResourceId = propertyDecorator.name();
                 let ids = params || [];
-                if (typeof toResourceId === 'string' && toResourceId.includes('.')) {
+                if (toResourceId.includes('.')) {
                     const relations = toResourceId.split('.');
                     for (let i = 0; i < relations.length; i++) {
                         ids = ids[relations[i]] || [];
