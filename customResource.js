@@ -16,7 +16,7 @@ export class CustomResource extends Resource {
         };
         delete update.id;
         delete create.id;
-        if (resourceId === 'GenerationInfo') {
+        if (resourceId === 'GenerationInfo' || resourceId === 'CollectionInfo') {
             delete create.imageId;
             delete update.imageId;
         }

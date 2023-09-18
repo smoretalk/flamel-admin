@@ -58,7 +58,6 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
           } else {
             ids = params[toResourceId] || [];
           }
-          console.log('toResourceId', toResourceId, 'ids', ids);
           if (!Array.isArray(ids) || ids.length === 0) { // 다대다 관계가 아니므로
             return;
           }

@@ -30,7 +30,6 @@ export const after = async (response, request, context) => {
                 else {
                     ids = params[toResourceId] || [];
                 }
-                console.log('toResourceId', toResourceId, 'ids', ids);
                 if (!Array.isArray(ids) || ids.length === 0) {
                     return;
                 }
