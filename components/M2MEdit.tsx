@@ -100,11 +100,11 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     }
   }, [selectedValue, selectedId, resourceId]);
 
-  const onCreationOption = (option: string) => {
+  const onCreateOption = (option: string) => {
     console.log('onCreate', option);
     axios.post<{ id: number, title: string }>(`/api/collections/tags/${property.reference}/${option}`)
       .then((response) => {
-        console.log(`${option} 생성되었습니다.`)
+        console.log(`${option} 생성되었습니다.`, response);
         setSelectedOptions((prev) => [...prev, {
           value: response.data.id,
           label: response.data.title,
@@ -139,7 +139,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         isClearable
         isDisabled={property.isDisabled}
         isLoading={!!loadingRecord}
-        onCreationOption={onCreationOption}
+        onCreateOption={onCreateOption}
         {...property.props}
       />
       <FormMessage>{error?.message}</FormMessage>

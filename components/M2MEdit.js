@@ -69,11 +69,11 @@ const EditManyToManyInput = (props) => {
             });
         }
     }, [selectedValue, selectedId, resourceId]);
-    const onCreationOption = (option) => {
+    const onCreateOption = (option) => {
         console.log('onCreate', option);
         axios.post(`/api/collections/tags/${property.reference}/${option}`)
             .then((response) => {
-            console.log(`${option} 생성되었습니다.`);
+            console.log(`${option} 생성되었습니다.`, response);
             setSelectedOptions((prev) => [...prev, {
                     value: response.data.id,
                     label: response.data.title,
@@ -96,7 +96,7 @@ const EditManyToManyInput = (props) => {
     };
     return (React.createElement(FormGroup, { error: Boolean(error) },
         React.createElement(Label, null, translateProperty(property.label)),
-        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, onCreationOption: onCreationOption, ...property.props }),
+        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, onCreateOption: onCreateOption, ...property.props }),
         React.createElement(FormMessage, null, error?.message)));
 };
 export default EditManyToManyInput;

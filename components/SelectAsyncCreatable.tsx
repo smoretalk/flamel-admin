@@ -14,7 +14,7 @@ interface SelectProps<Option = unknown, IsMulti extends boolean = false>
   value: Option
   onChange?: (selected) => void
   variant?: 'default' | 'filter'
-  onCreationOption: (option: string) => void
+  onCreateOption: (option: string) => void
 }
 
 export const SelectAsyncCreatable: FC<SelectProps<unknown, boolean>> = (props) => {
