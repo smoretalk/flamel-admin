@@ -3,6 +3,7 @@ import { FormGroup, FormMessage, Label, } from '@adminjs/design-system';
 import { ApiClient, useTranslation, } from 'adminjs';
 import { unflatten } from 'flat';
 import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
+import axios from "axios";
 const EditManyToManyInput = (props) => {
     const { onChange, property, record } = props;
     const { reference: resourceId } = property;
@@ -68,9 +69,34 @@ const EditManyToManyInput = (props) => {
             });
         }
     }, [selectedValue, selectedId, resourceId]);
+    const onCreationOption = (option) => {
+        console.log('onCreate', option);
+        axios.post(`/api/collections/tags/${property.reference}/${option}`)
+            .then((response) => {
+            console.log(`${option} 생성되었습니다.`);
+            setSelectedOptions((prev) => [...prev, {
+                    value: response.data.id,
+                    label: response.data.title,
+                }]);
+            setLoadingRecord((c) => c + 1);
+            const api = new ApiClient();
+            return api
+                .recordAction({
+                actionName: 'show',
+                resourceId,
+                recordId: selectedId,
+            });
+        })
+            .then(({ data }) => {
+            setLoadedRecord(data.record);
+        })
+            .finally(() => {
+            setLoadingRecord((c) => c - 1);
+        });
+    };
     return (React.createElement(FormGroup, { error: Boolean(error) },
         React.createElement(Label, null, translateProperty(property.label)),
-        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, reference: property.reference, ...property.props }),
+        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, onCreationOption: onCreationOption, ...property.props }),
         React.createElement(FormMessage, null, error?.message)));
 };
 export default EditManyToManyInput;

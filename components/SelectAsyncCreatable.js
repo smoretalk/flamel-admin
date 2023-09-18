@@ -1,21 +1,13 @@
 import noop from 'lodash/noop.js';
 import React, { lazy } from 'react';
 import { cssClass } from '@adminjs/design-system';
-import axios from "axios";
 const ReactAsyncSelect = lazy(() => import('react-select/async-creatable'));
 const SelectAsyncComponent = ReactAsyncSelect.default || ReactAsyncSelect;
 export const SelectAsyncCreatable = (props) => {
-    const { value, onChange, variant, reference, ...selectProps } = props;
+    const { value, onChange, variant, onCreateOption, ...selectProps } = props;
     const handleChange = (selected) => {
         if (typeof onChange === 'function')
             onChange(selected);
-    };
-    const onCreateOption = (option) => {
-        console.log('onCreate', option);
-        axios.post(`/api/collections/tags/${reference}/${option}`)
-            .then(() => {
-            console.log(`${option} 생성되었습니다.`);
-        });
     };
     return (React.createElement(SelectAsyncComponent, { className: cssClass('Select'), value: value, onChange: handleChange, isClearable: true, onCreateOption: onCreateOption, ...selectProps }));
 };
