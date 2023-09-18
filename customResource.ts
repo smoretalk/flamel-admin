@@ -44,13 +44,18 @@ export class CustomResource extends Resource {
 
   // 일대다용도
   async saveRecord(record, resourceId, ids) {
+    const update = ids;
+    const create = {
+      ...ids,
+    };
+    delete create.id;
     await this.manager.update({
       where: { id: record.params.id },
       data: {
         [resourceId]: {
           upsert: {
-            create: ids,
-            update: ids,
+            create,
+            update,
           }
         }
       }

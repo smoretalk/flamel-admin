@@ -10,13 +10,18 @@ export class CustomResource extends Resource {
     async findRelated(record, resource, options = {}) {
     }
     async saveRecord(record, resourceId, ids) {
+        const update = ids;
+        const create = {
+            ...ids,
+        };
+        delete create.id;
         await this.manager.update({
             where: { id: record.params.id },
             data: {
                 [resourceId]: {
                     upsert: {
-                        create: ids,
-                        update: ids,
+                        create,
+                        update,
                     }
                 }
             }
