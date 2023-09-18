@@ -15,6 +15,9 @@ export class CustomResource extends Resource {
             ...ids,
         };
         delete create.id;
+        if (resourceId === 'GenerationInfo') {
+            delete create.imageId;
+        }
         await this.manager.update({
             where: { id: record.params.id },
             data: {
@@ -78,6 +81,7 @@ export class CustomResource extends Resource {
         return this.decorate()
             .getProperties({ where: 'edit' })
             .filter((p) => {
+            p.reference();
             return p.type() === 'reference';
         })
             .map((p) => p);

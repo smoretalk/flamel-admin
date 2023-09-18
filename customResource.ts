@@ -1,5 +1,5 @@
 import { Resource } from '@adminjs/prisma';
-import {BaseRecord, BaseResource} from 'adminjs';
+import {BaseRecord, BaseResource, PropertyDecorator} from 'adminjs';
 
 export class CustomResource extends Resource {
   titleField() {
@@ -49,6 +49,9 @@ export class CustomResource extends Resource {
       ...ids,
     };
     delete create.id;
+    if (resourceId === 'GenerationInfo') {
+      delete create.imageId;
+    }
     await this.manager.update({
       where: { id: record.params.id },
       data: {
@@ -107,7 +110,7 @@ export class CustomResource extends Resource {
   getManyReferences(): BaseResource[] {
     return this.decorate()
       .getProperties({ where: 'edit' })
-      .filter((p: any) => {
+      .filter((p: PropertyDecorator) => {
         return p.type() === 'reference';
       })
       .map((p) => p.reference());
@@ -116,7 +119,8 @@ export class CustomResource extends Resource {
   getManyProperties() {
     return this.decorate()
       .getProperties({ where: 'edit' })
-      .filter((p: any) => {
+      .filter((p: PropertyDecorator) => {
+        p.reference();
         return p.type() === 'reference';
       })
       .map((p) => p);

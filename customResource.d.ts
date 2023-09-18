@@ -1,5 +1,5 @@
 import { Resource } from '@adminjs/prisma';
-import { BaseResource } from 'adminjs';
+import { BaseResource, PropertyDecorator } from 'adminjs';
 export declare class CustomResource extends Resource {
     titleField(): string;
     wrapObjects(objects: any): any;
@@ -10,5 +10,5 @@ export declare class CustomResource extends Resource {
     }[]): Promise<void>;
     primaryKeyField(): () => string;
     getManyReferences(): BaseResource[];
-    getManyProperties(): import("adminjs").PropertyDecorator[];
+    getManyProperties(): PropertyDecorator[];
 }
