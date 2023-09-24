@@ -1,4 +1,4 @@
-import { Resource } from '@adminjs/prisma';
+import {Resource} from '@adminjs/prisma';
 import {BaseRecord, BaseResource, PropertyDecorator} from 'adminjs';
 
 export class CustomResource extends Resource {
@@ -55,7 +55,7 @@ export class CustomResource extends Resource {
       delete update.imageId;
     }
     await this.manager.update({
-      where: { id: record.params.id },
+      where: {id: record.params.id},
       data: {
         [resourceId]: {
           upsert: {
@@ -84,11 +84,12 @@ export class CustomResource extends Resource {
         }
       });
       if (result?.[middle]) {
+        console.log('insert nested m2m', middle, last);
         const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
         const middleId = result[middle].id;
         console.log(lowerCase(middle), middleId, last);
         await this.client[lowerCase(middle)].update({
-          where: { id: middleId },
+          where: {id: middleId},
           data: {
             [last]: {
               connect: ids.map((v) => ({
@@ -99,8 +100,14 @@ export class CustomResource extends Resource {
         })
       }
     } else {
-      await this.update(record.params.id, {
-        [resourceId]: ids.map((value) => ({ id: value.id })),
+      console.log('insert m2m', record.params.id, resourceId);
+      await this.manager.update({
+        where: {id: record.params.id},
+        data: {
+          [resourceId]: {
+            set: ids.map((value) => ({id: typeof value.id === 'string' ? parseInt(value.id) : value.id}))
+          }
+        }
       });
     }
   }
@@ -111,7 +118,7 @@ export class CustomResource extends Resource {
 
   getManyReferences(): BaseResource[] {
     return this.decorate()
-      .getProperties({ where: 'edit' })
+      .getProperties({where: 'edit'})
       .filter((p: PropertyDecorator) => {
         return p.type() === 'reference';
       })
@@ -120,7 +127,7 @@ export class CustomResource extends Resource {
 
   getManyProperties() {
     return this.decorate()
-      .getProperties({ where: 'edit' })
+      .getProperties({where: 'edit'})
       .filter((p: PropertyDecorator) => {
         p.reference();
         return p.type() === 'reference';

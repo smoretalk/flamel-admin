@@ -47,6 +47,7 @@ export class CustomResource extends Resource {
                 }
             });
             if (result?.[middle]) {
+                console.log('insert nested m2m', middle, last);
                 const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
                 const middleId = result[middle].id;
                 console.log(lowerCase(middle), middleId, last);
@@ -63,8 +64,14 @@ export class CustomResource extends Resource {
             }
         }
         else {
-            await this.update(record.params.id, {
-                [resourceId]: ids.map((value) => ({ id: value.id })),
+            console.log('insert m2m', record.params.id, resourceId);
+            await this.manager.update({
+                where: { id: record.params.id },
+                data: {
+                    [resourceId]: {
+                        set: ids.map((value) => ({ id: typeof value.id === 'string' ? parseInt(value.id) : value.id }))
+                    }
+                }
             });
         }
     }
