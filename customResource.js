@@ -55,7 +55,7 @@ export class CustomResource extends Resource {
                     where: { id: middleId },
                     data: {
                         [last]: {
-                            connect: ids.map((v) => ({
+                            set: ids.map((v) => ({
                                 id: typeof v.id === 'string' ? parseInt(v.id) : v.id,
                             }))
                         }
