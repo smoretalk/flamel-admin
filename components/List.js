@@ -2,7 +2,7 @@ import { Box, Pagination, Text } from '@adminjs/design-system';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 export const REFRESH_KEY = 'refresh';
-import { allowOverride, useRecords, useSelectedRecords, getActionElementCss, RecordsTable } from 'adminjs';
+import { useRecords, useSelectedRecords, getActionElementCss, RecordsTable } from 'adminjs';
 const List = ({ resource, setTag }) => {
     const { records, loading, direction, sortBy, page, total, fetchData, perPage, } = useRecords(resource.id);
     console.log('records', records);
@@ -36,6 +36,5 @@ const List = ({ resource, setTag }) => {
         React.createElement(Text, { mt: "xl", textAlign: "center" },
             React.createElement(Pagination, { page: page, perPage: perPage, total: total, onChange: handlePaginationChange }))));
 };
-const OverridableList = allowOverride(List, 'DefaultListAction');
-export default OverridableList;
+export default List;
 //# sourceMappingURL=List.js.map

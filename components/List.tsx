@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 export const REFRESH_KEY = 'refresh'
-import { ActionProps, allowOverride, useRecords, useSelectedRecords, getActionElementCss, RecordsTable } from 'adminjs';
+import { ActionProps, useRecords, useSelectedRecords, getActionElementCss, RecordsTable } from 'adminjs';
 
 const List: React.FC<ActionProps> = ({ resource, setTag }) => {
   const {
@@ -79,6 +79,4 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
   )
 }
 
-const OverridableList = allowOverride(List, 'DefaultListAction')
-
-export default OverridableList;
+export default List;
