@@ -21,7 +21,7 @@ export const Components = {
     path.resolve(__dirname, 'components', 'DisplayImageBig'),
   ),
   DisplayNestedImageBig: componentLoader.add(
-    'DisplayNesetedImageBig',
+    'DisplayNestedImageBig',
     path.resolve(__dirname, 'components', 'DisplayNestedImageBig'),
   ),
   IdQuerySaver: componentLoader.add('IdQuerySaver', path.resolve(__dirname, 'components', 'IdQuerySaver')),
