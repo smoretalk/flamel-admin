@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-const DisplayImage = (props) => {
+const DisplayImageBig = (props) => {
     const [errored, setErrored] = useState(false);
     const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/'));
     return (React.createElement("section", { style: { marginBottom: props.where === 'show' ? 24 : 0 } },
@@ -15,5 +15,5 @@ const DisplayImage = (props) => {
         React.createElement("div", null,
             React.createElement("img", { width: 512, id: "image", alt: props.record.params.originalPrompt, src: src }))));
 };
-export default DisplayImage;
+export default DisplayImageBig;
 //# sourceMappingURL=DisplayImageBig.js.map
