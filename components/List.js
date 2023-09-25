@@ -1,8 +1,9 @@
 import { Box, Pagination, Text } from '@adminjs/design-system';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 export const REFRESH_KEY = 'refresh';
-import { useRecords, useSelectedRecords, getActionElementCss, RecordsTable } from 'adminjs';
+import { useRecords, useSelectedRecords, RecordsTable } from 'adminjs';
+export const getActionElementCss = (resourceId, actionName, suffix) => `${resourceId}-${actionName}-${suffix}`;
 const List = ({ resource, setTag }) => {
     const { records, loading, direction, sortBy, page, total, fetchData, perPage, } = useRecords(resource.id);
     console.log('records', records);
@@ -10,6 +11,29 @@ const List = ({ resource, setTag }) => {
     console.log('selectedRecords', selectedRecords);
     const location = useLocation();
     const navigate = useNavigate();
+    const [newResource, setNewResource] = useState(resource);
+    function resourceFinder(list) {
+        const resourceList = [];
+        list.forEach((item) => {
+            resourceList.push(resource.properties[item]);
+        });
+        return resourceList;
+    }
+    useEffect(() => {
+        if (records.length) {
+            setTimeout(() => {
+                console.log('location.href', window.location.href);
+                const isCollection = new URLSearchParams(window.location.search).get('filters.Owner') === '0';
+                console.log('isCollection', isCollection);
+                if (isCollection) {
+                    setNewResource({
+                        ...resource,
+                        listProperties: resourceFinder(['idQuerySaver', 'displayImage', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.promptKo', 'CollectionInfo.promptEn', 'CollectionInfo.Theme', 'CollectionInfo.enabled']),
+                    });
+                }
+            }, 1000);
+        }
+    }, [records, location]);
     useEffect(() => {
         if (setTag) {
             setTag(total.toString());
