@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 const DisplayNestedImage = (props) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.Image.link.replace(/\/api\/users\//, '/api/admin/') +
+    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/') +
         '/thumb');
     const onError = () => {
         if (!errored) {
@@ -20,7 +20,7 @@ const DisplayNestedImage = (props) => {
                 fontWeight: 300,
             }, htmlFor: "image", className: "adminjs_Label" }, "\uBBF8\uB9AC\uBCF4\uAE30")),
         React.createElement("div", null,
-            React.createElement("img", { width: 100, id: "image", alt: props.record.params.Image.originalPrompt, onError: onError, src: src }))));
+            React.createElement("img", { width: 100, id: "image", alt: props.record.params.promptKo, onError: onError, src: src }))));
 };
 export default DisplayNestedImage;
 //# sourceMappingURL=DisplayNestedImage.js.map

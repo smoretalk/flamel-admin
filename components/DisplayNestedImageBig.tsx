@@ -5,7 +5,7 @@ const DisplayNestedImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'lis
   props,
 ) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.Image.link.replace(/\/api\/users\//, '/api/admin/'))
+    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/'))
 
   return (
     <section style={{ marginBottom: props.where === 'show' ? 24 : 0 }}>
@@ -30,7 +30,7 @@ const DisplayNestedImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'lis
         <img
           width={512}
           id="image"
-          alt={props.record.params.Image.originalPrompt}
+          alt={props.record.params.promptKo}
           src={src}
         />
       </div>

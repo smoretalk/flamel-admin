@@ -5,7 +5,7 @@ const DisplayNestedImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' 
   props,
 ) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.Image.link.replace(/\/api\/users\//, '/api/admin/') +
+    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/') +
         '/thumb')
 
     const onError = () => {
@@ -38,7 +38,7 @@ const DisplayNestedImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' 
         <img
           width={100}
           id="image"
-          alt={props.record.params.Image.originalPrompt}
+          alt={props.record.params.promptKo}
           onError={onError}
           src={
             src
