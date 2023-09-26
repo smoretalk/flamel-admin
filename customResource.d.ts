@@ -23,7 +23,7 @@ export declare class CustomResource extends BaseResource {
         depModels?: DMMF.Model[];
     });
     databaseName(): string;
-    databaseType(): any;
+    databaseType(): string;
     id(): string;
     properties(): Property[];
     property(path: any): Property;

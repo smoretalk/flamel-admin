@@ -1,5 +1,16 @@
-import {safeParseNumber} from "@adminjs/prisma/lib/utils/helpers.js";
 import {Property} from "./customProperty.js";
+
+export const isNumeric = (value) => {
+  const stringValue = (String(value)).replace(/,/g, '.');
+  if (isNaN(parseFloat(stringValue)))
+    return false;
+  return isFinite(Number(stringValue));
+};
+export const safeParseNumber = (value) => {
+  if (isNumeric(value))
+    return Number(value);
+  return value;
+};
 
 export const convertParam = (property: Property, fields, value, nested = false) => {
   const type = property.type();

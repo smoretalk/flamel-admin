@@ -37,8 +37,8 @@ export class CustomResource extends BaseResource {
   override databaseName() {
     return 'prisma';
   }
-  override databaseType() {
-    return this.client._engineConfig?.activeProvider ?? 'database';
+  override databaseType(): string {
+    return (this.client as any)._engineConfig?.activeProvider ?? 'database';
   }
   override id() {
     return this.model.name;
@@ -197,6 +197,7 @@ export class CustomResource extends BaseResource {
 
   prepareReturnValues(params) {
     const preparedValues = {};
+    console.log('params', params);
     for (const property of this.properties()) {
       const param = flat.get(params, property.path());
 
@@ -316,7 +317,7 @@ export class CustomResource extends BaseResource {
         const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
         const middleId = result[middle].id;
         console.log(lowerCase(middle), middleId, last);
-        await this.client[lowerCase(middle)].update({
+        await (this.client[lowerCase(middle)] as any).update({
           where: {id: middleId},
           data: {
             [last]: {
