@@ -1,5 +1,7 @@
 import { BaseRecord, BaseResource, flat } from 'adminjs';
-import { convertFilter, convertParam, getEnums } from "@adminjs/prisma";
+import { convertFilter, getEnums } from "@adminjs/prisma";
+import { Property } from "./customProperty.js";
+import { convertParam } from "./convertParam.js";
 export const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
 export class CustomResource extends BaseResource {
     model;
@@ -192,7 +194,7 @@ export class CustomResource extends BaseResource {
             if (!param && property.depModel && params?.[property.depModel]) {
                 preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
                 if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
-                    const idField = property.depModelObject.fields.find((field) => field.isId);
+                    const idField = property.depModelObject.fields.find((field) => field.isId)?.name;
                     preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[idField];
                 }
                 continue;

@@ -2,14 +2,16 @@ import { BaseRecord, BaseResource } from 'adminjs';
 import { type Enums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
 import { type PrismaClient } from '@prisma/client';
-import type Property from "@adminjs/prisma/lib/Property.js";
+import { Property } from "./customProperty.js";
 export declare const lowerCase: (name: any) => any;
 export declare class CustomResource extends BaseResource {
     model: DMMF.Model;
     client: PrismaClient;
     enums: Enums;
     manager: any;
-    propertiesObject: any;
+    propertiesObject: {
+        [key: string]: Property;
+    };
     include: any;
     depModels: any;
     depModelsObject: any;
@@ -24,7 +26,7 @@ export declare class CustomResource extends BaseResource {
     databaseType(): any;
     id(): string;
     properties(): Property[];
-    property(path: any): any;
+    property(path: any): Property;
     build(params: any): BaseRecord;
     count(filter: any): Promise<any>;
     find(filter: any, params?: {

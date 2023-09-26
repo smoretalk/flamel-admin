@@ -1,9 +1,9 @@
 import { BaseRecord, BaseResource, flat} from 'adminjs';
-import { convertFilter, convertParam, type Enums, getEnums } from "@adminjs/prisma";
+import { convertFilter, type Enums, getEnums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
 import { type PrismaClient } from '@prisma/client';
-// @ts-expect-error
-import type Property from "@adminjs/prisma/lib/Property.js";
+import { Property } from "./customProperty.js";
+import { convertParam } from "./convertParam.js";
 
 export const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
 
@@ -12,7 +12,7 @@ export class CustomResource extends BaseResource {
   client: PrismaClient;
   enums: Enums;
   manager;
-  propertiesObject;
+  propertiesObject: { [key: string]: Property };
   include;
   depModels;
   depModelsObject;
@@ -205,8 +205,8 @@ export class CustomResource extends BaseResource {
         // 중첩된 릴레이션의 값(ex: 'CollectionInfo.CollectionKoTags' = [...])
         preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
         if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
-          // 중첩된 릴레이션이 reference고 id가 있는 객체면
-          const idField = property.depModelObject.fields.find((field) => field.isId);
+          // 중첩된 릴레이션이 reference고 id가 있는 객체면 객체를 아이디로 교체
+          const idField = property.depModelObject.fields.find((field) => field.isId)?.name;
           preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[idField];
         }
         continue;

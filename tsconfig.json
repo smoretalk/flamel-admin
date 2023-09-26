@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@adminjs/prisma/*": ["node_modules/@adminjs/prisma/*.js"]
+      "@adminjs/prisma/*": ["node_modules/@adminjs/prisma/*"]
     },
     "jsx": "react",
     "module": "NodeNext",
