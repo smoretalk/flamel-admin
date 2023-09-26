@@ -272,13 +272,23 @@ export class CustomResource extends BaseResource {
 
   // 일대다용도
   async saveRecord(record, resourceId, ids) {
+    const update = ids;
+    const create = {
+      ...ids,
+    };
+    delete update.id;
+    delete create.id;
+    if (resourceId === 'GenerationInfo' || resourceId === 'CollectionInfo') {
+      delete create.imageId;
+      delete update.imageId;
+    }
     await this.manager.update({
-      where: { id: record.params.id },
+      where: {id: record.params.id},
       data: {
         [resourceId]: {
           upsert: {
-            create: ids,
-            update: ids,
+            create,
+            update,
           }
         }
       }
@@ -302,14 +312,15 @@ export class CustomResource extends BaseResource {
         }
       });
       if (result?.[middle]) {
+        console.log('insert nested m2m', middle, last);
         const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
         const middleId = result[middle].id;
         console.log(lowerCase(middle), middleId, last);
         await this.client[lowerCase(middle)].update({
-          where: { id: middleId },
+          where: {id: middleId},
           data: {
             [last]: {
-              connect: ids.map((v) => ({
+              set: ids.map((v) => ({
                 id: typeof v.id === 'string' ? parseInt(v.id) : v.id,
               }))
             }
@@ -317,8 +328,14 @@ export class CustomResource extends BaseResource {
         })
       }
     } else {
-      await this.update(record.params.id, {
-        [resourceId]: ids.map((value) => ({ id: value.id })),
+      console.log('insert m2m', record.params.id, resourceId);
+      await this.manager.update({
+        where: {id: record.params.id},
+        data: {
+          [resourceId]: {
+            set: ids.map((value) => ({id: typeof value.id === 'string' ? parseInt(value.id) : value.id}))
+          }
+        }
       });
     }
   }
@@ -329,8 +346,8 @@ export class CustomResource extends BaseResource {
 
   getManyReferences(): BaseResource[] {
     return this.decorate()
-      .getProperties({ where: 'edit' })
-      .filter((p: any) => {
+      .getProperties({where: 'edit'})
+      .filter((p) => {
         return p.type() === 'reference';
       })
       .map((p) => p.reference());
@@ -338,10 +355,11 @@ export class CustomResource extends BaseResource {
 
   getManyProperties() {
     return this.decorate()
-      .getProperties({ where: 'edit' })
-      .filter((p: any) => {
+      .getProperties({where: 'edit'})
+      .filter((p) => {
+        p.reference();
         return p.type() === 'reference';
       })
-      .map((p) => p.name());
+      .map((p) => p);
   }
 }

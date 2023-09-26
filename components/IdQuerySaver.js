@@ -1,5 +1,5 @@
 import React from 'react';
-const DisplayImage = (props) => {
+const IdQuerySaver = (props) => {
     console.log('href', location.href, props);
     if (!location.href.includes('actions/exportCsv')) {
         localStorage.setItem('query', new URLSearchParams(location.search).toString());
@@ -7,5 +7,5 @@ const DisplayImage = (props) => {
     return (React.createElement("section", null,
         React.createElement("div", null, props.record.params.id)));
 };
-export default DisplayImage;
+export default IdQuerySaver;
 //# sourceMappingURL=IdQuerySaver.js.map

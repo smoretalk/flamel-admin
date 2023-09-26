@@ -1,6 +1,6 @@
 import React from "react";
 import type { ShowPropertyProps } from 'adminjs';
-declare const DisplayImageBig: React.FC<ShowPropertyProps & {
+declare const DisplayNestedImageBig: React.FC<ShowPropertyProps & {
     where: 'show' | 'list';
 }>;
-export default DisplayImageBig;
+export default DisplayNestedImageBig;

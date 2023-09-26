@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-const DisplayImageBig = (props) => {
+const DisplayNestedImageBig = (props) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/'));
+    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/'));
     return (React.createElement("section", { style: { marginBottom: props.where === 'show' ? 24 : 0 } },
         props.where === 'show' && (React.createElement("label", { style: {
                 display: 'block',
@@ -13,7 +13,7 @@ const DisplayImageBig = (props) => {
                 fontWeight: 300,
             }, htmlFor: "image", className: "adminjs_Label" }, "\uBBF8\uB9AC\uBCF4\uAE30")),
         React.createElement("div", null,
-            React.createElement("img", { width: 512, id: "image", alt: props.record.params.originalPrompt, src: src }))));
+            React.createElement("img", { width: 512, id: "image", alt: props.record.params.promptKo, src: src }))));
 };
-export default DisplayImageBig;
-//# sourceMappingURL=DisplayImageBig.js.map
+export default DisplayNestedImageBig;
+//# sourceMappingURL=DisplayNestedImageBig.js.map

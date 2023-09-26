@@ -3,6 +3,7 @@ import { FormGroup, FormMessage, Label, } from '@adminjs/design-system';
 import { ApiClient, useTranslation, } from 'adminjs';
 import { unflatten } from 'flat';
 import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
+import axios from "axios";
 const EditManyToManyInput = (props) => {
     const { onChange, property, record } = props;
     const { reference: resourceId } = property;
@@ -68,9 +69,26 @@ const EditManyToManyInput = (props) => {
             });
         }
     }, [selectedValue, selectedId, resourceId]);
+    const onCreateOption = (option) => {
+        console.log('onCreate', option);
+        axios.post(`/api/collections/tags/${property.reference}/${option}`)
+            .then((response) => {
+            console.log(`${option} 생성되었습니다.`, response);
+            setSelectedOptions((prev) => {
+                handleChange([...prev, {
+                        value: response.data.id,
+                        label: response.data.title,
+                    }].filter(Boolean));
+                return [...prev, {
+                        value: response.data.id,
+                        label: response.data.title,
+                    }];
+            });
+        });
+    };
     return (React.createElement(FormGroup, { error: Boolean(error) },
         React.createElement(Label, null, translateProperty(property.label)),
-        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, reference: property.reference, ...property.props }),
+        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, onCreateOption: onCreateOption, ...property.props }),
         React.createElement(FormMessage, null, error?.message)));
 };
 export default EditManyToManyInput;

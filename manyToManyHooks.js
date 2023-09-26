@@ -15,11 +15,12 @@ export const after = async (response, request, context) => {
     if (request && request.method) {
         const manyProperties = context.resource.getManyProperties();
         const manyReferences = context.resource.getManyReferences();
-        console.log('manyProperties', manyProperties);
+        console.log('m2m manyProperties', manyProperties.map((v) => v.name()));
         const { record, _admin } = context;
         if (request.method === 'post' && record.isValid()) {
             const params = flat.unflatten(request.payload);
-            await Promise.all(manyProperties.map(async (toResourceId) => {
+            await Promise.all(manyProperties.map(async (propertyDecorator) => {
+                const toResourceId = propertyDecorator.name();
                 let ids = params || [];
                 if (toResourceId.includes('.')) {
                     const relations = toResourceId.split('.');
@@ -30,7 +31,6 @@ export const after = async (response, request, context) => {
                 else {
                     ids = params[toResourceId] || [];
                 }
-                console.log('toResourceId', toResourceId, 'ids', ids);
                 if (!Array.isArray(ids) || ids.length === 0) {
                     return;
                 }

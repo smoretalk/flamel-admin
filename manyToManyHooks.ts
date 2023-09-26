@@ -41,14 +41,15 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
   if (request && request.method) {
     const manyProperties = context.resource.getManyProperties();
     const manyReferences = context.resource.getManyReferences();
-    console.log('manyProperties', manyProperties);
+    console.log('m2m manyProperties', manyProperties.map((v) => v.name()));
 
     const { record, _admin } = context;
 
     if (request.method === 'post' && record.isValid()) {
       const params = flat.unflatten(request.payload);
       await Promise.all(
-        manyProperties.map(async (toResourceId: string) => {
+        manyProperties.map(async (propertyDecorator) => {
+          const toResourceId = propertyDecorator.name();
           let ids = params || [];
           if (toResourceId.includes('.')) { // 릴레이션이면
             const relations = toResourceId.split('.');
@@ -58,7 +59,6 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
           } else {
             ids = params[toResourceId] || [];
           }
-          console.log('toResourceId', toResourceId, 'ids', ids);
           if (!Array.isArray(ids) || ids.length === 0) { // 다대다 관계가 아니므로
             return;
           }

@@ -12,6 +12,7 @@ import {
 } from 'adminjs';
 import { unflatten } from 'flat';
 import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
+import axios from "axios";
 
 type CombinedProps = EditPropertyPropsInArray;
 type SelectRecordEnhanced = SelectRecord & {
@@ -68,8 +69,6 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     selectedValues = unflatten(record.params)[property.path] || [];
   }
 
-
-
   const selectedId = record?.params[property.path] as string | undefined;
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();
   const [loadingRecord, setLoadingRecord] = useState(0);
@@ -101,6 +100,24 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     }
   }, [selectedValue, selectedId, resourceId]);
 
+  const onCreateOption = (option: string) => {
+    console.log('onCreate', option);
+    axios.post<{ id: number, title: string }>(`/api/collections/tags/${property.reference}/${option}`)
+      .then((response) => {
+        console.log(`${option} 생성되었습니다.`, response);
+        setSelectedOptions((prev) => {
+          handleChange([...prev, {
+            value: response.data.id,
+            label: response.data.title,
+          }].filter(Boolean));
+          return [...prev, {
+            value: response.data.id,
+            label: response.data.title,
+          }]
+        });
+      });
+  };
+
   return (
     <FormGroup error={Boolean(error)}>
       <Label>{translateProperty(property.label)}</Label>
@@ -114,7 +131,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         isClearable
         isDisabled={property.isDisabled}
         isLoading={!!loadingRecord}
-        reference={property.reference}
+        onCreateOption={onCreateOption}
         {...property.props}
       />
       <FormMessage>{error?.message}</FormMessage>

@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import type { ShowPropertyProps } from 'adminjs';
 
-const DisplayImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
+const DisplayNestedImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/'))
+    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/') +
+        '/thumb')
+
+    const onError = () => {
+        if (!errored) {
+            setErrored(true);
+            setSrc((prev) => prev?.replace("/thumb", ""));
+        }
+    };
 
   return (
     <section style={{ marginBottom: props.where === 'show' ? 24 : 0 }}>
@@ -28,14 +36,17 @@ const DisplayImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> 
       )}
       <div>
         <img
-          width={512}
+          width={100}
           id="image"
-          alt={props.record.params.originalPrompt}
-          src={src}
+          alt={props.record.params.promptKo}
+          onError={onError}
+          src={
+            src
+          }
         />
       </div>
     </section>
   );
 };
 
-export default DisplayImageBig;
+export default DisplayNestedImage;

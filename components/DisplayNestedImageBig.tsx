@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import type { ShowPropertyProps } from 'adminjs';
 
-const DisplayImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
+const DisplayNestedImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/'))
+    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/'))
 
   return (
     <section style={{ marginBottom: props.where === 'show' ? 24 : 0 }}>
@@ -30,7 +30,7 @@ const DisplayImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> 
         <img
           width={512}
           id="image"
-          alt={props.record.params.originalPrompt}
+          alt={props.record.params.promptKo}
           src={src}
         />
       </div>
@@ -38,4 +38,4 @@ const DisplayImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> 
   );
 };
 
-export default DisplayImageBig;
+export default DisplayNestedImageBig;

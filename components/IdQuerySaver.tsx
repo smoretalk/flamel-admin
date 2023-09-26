@@ -1,7 +1,7 @@
 import React from 'react';
 import { type ShowPropertyProps } from 'adminjs';
 
-const DisplayImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
+const IdQuerySaver: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
   console.log('href', location.href, props);
@@ -18,4 +18,4 @@ const DisplayImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   );
 };
 
-export default DisplayImage;
+export default IdQuerySaver;
