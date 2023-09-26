@@ -153,7 +153,7 @@ export class CustomResource extends BaseResource {
     prepareDepModelProperties(model) {
         const { fields = [], name } = model;
         return fields.reduce((memo, field) => {
-            if (field.isReadOnly) {
+            if (field.isReadOnly && !this.isImageId(field) && !this.isUserId(field)) {
                 return memo;
             }
             const property = new Property(field, Object.keys(memo).length, this.enums);
