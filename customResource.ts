@@ -203,15 +203,21 @@ export class CustomResource extends BaseResource {
       const param = flat.get(params, property.path());
 
       const key = property.path();
-      if (!param && property.depModel && params?.[property.depModel]) {
-        // 중첩된 릴레이션의 값(ex: 'CollectionInfo.CollectionKoTags' = [...])
-        preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
-        if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
-          // 중첩된 릴레이션이 reference고 id가 있는 객체면 객체를 아이디로 교체
-          const idField = property.depModelObject.fields.find((field) => field.isId)?.name;
-          preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[idField];
+      if (property.depModel && params?.[property.depModel]) {
+        if (!param) {
+          // 중첩된 릴레이션의 값(ex: 'CollectionInfo.CollectionKoTags' = [...])
+          preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
+          if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
+            // 중첩된 릴레이션이 reference고 id가 있는 객체면 객체를 아이디로 교체
+            const idField = property.depModelObject.fields.find((field) => field.isId)?.name;
+            preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[idField];
+          }
+          continue;
         }
-        continue;
+        if (param) {
+          preparedValues[`${property.depModel}.${key}`] = params;
+          continue;
+        }
       }
       if (param !== undefined && property.type() !== 'reference') {
         preparedValues[key] = param;

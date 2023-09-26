@@ -192,13 +192,19 @@ export class CustomResource extends BaseResource {
         for (const property of this.properties()) {
             const param = flat.get(params, property.path());
             const key = property.path();
-            if (!param && property.depModel && params?.[property.depModel]) {
-                preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
-                if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
-                    const idField = property.depModelObject.fields.find((field) => field.isId)?.name;
-                    preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[idField];
+            if (property.depModel && params?.[property.depModel]) {
+                if (!param) {
+                    preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
+                    if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
+                        const idField = property.depModelObject.fields.find((field) => field.isId)?.name;
+                        preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[idField];
+                    }
+                    continue;
                 }
-                continue;
+                if (param) {
+                    preparedValues[`${property.depModel}.${key}`] = params;
+                    continue;
+                }
             }
             if (param !== undefined && property.type() !== 'reference') {
                 preparedValues[key] = param;
