@@ -23,14 +23,14 @@ export const after = async (response, request, context) => {
                 const toResourceId = propertyDecorator.name();
                 let ids = params || [];
                 let fromModel = context.resource.model.name;
-                let targetModel = toResourceId;
+                let targetModel = toResourceId.slice(0, -1);
                 if (toResourceId.includes('.')) {
                     const relations = toResourceId.split('.');
                     for (let i = 0; i < relations.length; i++) {
                         ids = ids[relations[i]] || [];
                     }
                     fromModel = relations[0];
-                    targetModel = relations[1];
+                    targetModel = relations[1].slice(0, -1);
                 }
                 else {
                     ids = params[toResourceId] || [];

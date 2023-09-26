@@ -53,14 +53,14 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
           const toResourceId = propertyDecorator.name();
           let ids = params || [];
           let fromModel = context.resource.model.name;
-          let targetModel = toResourceId;
+          let targetModel = toResourceId.slice(0, -1); // TODO: 현재는 CollectionKoTags를 CollectionKoTag로 바꾸는 정도
           if (toResourceId.includes('.')) { // 릴레이션이면
             const relations = toResourceId.split('.');
             for (let i = 0; i < relations.length; i++) {
               ids = ids[relations[i]] || [];
             }
             fromModel = relations[0];
-            targetModel = relations[1];
+            targetModel = relations[1].slice(0, -1);
           } else {
             ids = params[toResourceId] || [];
           }

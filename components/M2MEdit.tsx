@@ -51,6 +51,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
       resourceId,
       query: inputValue,
     });
+    console.log('resourceId', resourceId, 'inputValue', inputValue, 'optionRecords', optionRecords);
 
     return optionRecords.map((optionRecord: RecordJSON) => ({
       value: optionRecord.id,

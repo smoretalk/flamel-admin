@@ -27,6 +27,7 @@ const EditManyToManyInput = (props) => {
             resourceId,
             query: inputValue,
         });
+        console.log('resourceId', resourceId, 'inputValue', inputValue, 'optionRecords', optionRecords);
         return optionRecords.map((optionRecord) => ({
             value: optionRecord.id,
             label: optionRecord.title,
