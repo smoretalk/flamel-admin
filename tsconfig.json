@@ -1,11 +1,18 @@
 {
+  "exclude": ["prisma", "**/*.spec.ts"],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@adminjs/prisma/*": ["node_modules/@adminjs/prisma/*.js"]
+    },
     "jsx": "react",
     "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "esModuleInterop": true,
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
+    "allowJs": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "esnext",
