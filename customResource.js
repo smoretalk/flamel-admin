@@ -188,6 +188,7 @@ export class CustomResource extends BaseResource {
     }
     prepareReturnValues(params) {
         const preparedValues = {};
+        console.log('params', params);
         for (const property of this.properties()) {
             const param = flat.get(params, property.path());
             const key = property.path();

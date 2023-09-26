@@ -13,7 +13,7 @@ const IdQuerySaver: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   }
   return (
     <section>
-      <div>{props.record.params.id}</div>
+      <div>{props.record.params.userId || props.record.params.imageId}</div>
     </section>
   );
 };
