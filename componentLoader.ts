@@ -12,6 +12,10 @@ export const Components = {
       'DisplayImage',
     path.resolve(__dirname, 'components', 'DisplayImage'),
   ),
+  DisplayLink: componentLoader.add(
+    'DisplayLink',
+    path.resolve(__dirname, 'components', 'DisplayLink'),
+  ),
   DisplayNestedImage: componentLoader.add(
     'DisplayNestedImage',
     path.resolve(__dirname, 'components', 'DisplayNestedImage'),
@@ -19,6 +23,10 @@ export const Components = {
   DisplayImageBig: componentLoader.add(
     'DisplayImageBig',
     path.resolve(__dirname, 'components', 'DisplayImageBig'),
+  ),
+  DisplayLinkBig: componentLoader.add(
+    'DisplayLinkBig',
+    path.resolve(__dirname, 'components', 'DisplayLinkBig'),
   ),
   DisplayNestedImageBig: componentLoader.add(
     'DisplayNestedImageBig',

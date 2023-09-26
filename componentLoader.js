@@ -7,8 +7,10 @@ export const componentLoader = new ComponentLoader();
 export const Components = {
     Dashboard: componentLoader.add('Dashboard', path.resolve(__dirname, 'components', 'Dashboard')),
     DisplayImage: componentLoader.add('DisplayImage', path.resolve(__dirname, 'components', 'DisplayImage')),
+    DisplayLink: componentLoader.add('DisplayLink', path.resolve(__dirname, 'components', 'DisplayLink')),
     DisplayNestedImage: componentLoader.add('DisplayNestedImage', path.resolve(__dirname, 'components', 'DisplayNestedImage')),
     DisplayImageBig: componentLoader.add('DisplayImageBig', path.resolve(__dirname, 'components', 'DisplayImageBig')),
+    DisplayLinkBig: componentLoader.add('DisplayLinkBig', path.resolve(__dirname, 'components', 'DisplayLinkBig')),
     DisplayNestedImageBig: componentLoader.add('DisplayNestedImageBig', path.resolve(__dirname, 'components', 'DisplayNestedImageBig')),
     IdQuerySaver: componentLoader.add('IdQuerySaver', path.resolve(__dirname, 'components', 'IdQuerySaver')),
     ExportCsv: componentLoader.add('ExportCsv', path.resolve(__dirname, 'components', 'ExportCsv')),

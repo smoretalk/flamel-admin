@@ -3,8 +3,10 @@ export declare const componentLoader: ComponentLoader;
 export declare const Components: {
     Dashboard: string;
     DisplayImage: string;
+    DisplayLink: string;
     DisplayNestedImage: string;
     DisplayImageBig: string;
+    DisplayLinkBig: string;
     DisplayNestedImageBig: string;
     IdQuerySaver: string;
     ExportCsv: string;

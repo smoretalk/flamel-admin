@@ -52,6 +52,11 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
       }, 1000)
     }
   }, [records, location]);
+
+  useEffect(() => {
+    console.log('newResource changed', newResource);
+  }, [newResource]);
+
   useEffect(() => {
     if (setTag) {
       setTag(total.toString())

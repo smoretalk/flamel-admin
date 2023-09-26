@@ -35,6 +35,9 @@ const List = ({ resource, setTag }) => {
         }
     }, [records, location]);
     useEffect(() => {
+        console.log('newResource changed', newResource);
+    }, [newResource]);
+    useEffect(() => {
         if (setTag) {
             setTag(total.toString());
         }
