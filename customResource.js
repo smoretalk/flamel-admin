@@ -228,12 +228,6 @@ export class CustomResource extends BaseResource {
         const create = {
             ...ids,
         };
-        delete update.id;
-        delete create.id;
-        if (resourceId === 'GenerationInfo' || resourceId === 'CollectionInfo') {
-            delete create.imageId;
-            delete update.imageId;
-        }
         await this.manager.update({
             where: { id: record.params.id },
             data: {
