@@ -14,19 +14,23 @@ const setResponseItems = async (context, response, reference) => {
 export const after = async (response, request, context) => {
     if (request && request.method) {
         const manyProperties = context.resource.getManyProperties();
-        const manyReferences = context.resource.getManyReferences();
         console.log('m2m manyProperties', manyProperties.map((v) => v.name()));
         const { record, _admin } = context;
         if (request.method === 'post' && record.isValid()) {
+            console.log('request.payload', request.payload);
             const params = flat.unflatten(request.payload);
             await Promise.all(manyProperties.map(async (propertyDecorator) => {
                 const toResourceId = propertyDecorator.name();
                 let ids = params || [];
+                let fromModel = context.resource.model.name;
+                let targetModel = toResourceId;
                 if (toResourceId.includes('.')) {
                     const relations = toResourceId.split('.');
                     for (let i = 0; i < relations.length; i++) {
                         ids = ids[relations[i]] || [];
                     }
+                    fromModel = relations[0];
+                    targetModel = relations[1];
                 }
                 else {
                     ids = params[toResourceId] || [];
@@ -34,7 +38,10 @@ export const after = async (response, request, context) => {
                 if (!Array.isArray(ids) || ids.length === 0) {
                     return;
                 }
-                await context.resource.saveRecords(record, toResourceId, ids);
+                const idField = record.resource.client._runtimeDataModel.models[fromModel].fields.find((v) => v.isId);
+                const targetIdField = record.resource.client._runtimeDataModel.models[targetModel].fields.find((v) => v.isId);
+                console.log('idField', idField);
+                await context.resource.saveRecords(idField.name, ids[idField.name], toResourceId, targetIdField.name, ids);
             }));
         }
     }
