@@ -133,12 +133,16 @@ export class CustomResource extends BaseResource {
         const { model, client } = args;
         return !!model?.name && !!model?.fields.length && !!client?.[lowerCase(model.name)];
     }
+    isImageId(field) {
+        return ['CollectionInfo', 'UpscaleInfo', 'GenerationInfo'].includes(this.model.name) && field.name === 'imageId';
+    }
+    isUserId(field) {
+        return ['Enterprise'].includes(this.model.name) && field.name === 'userId';
+    }
     prepareProperties() {
         const { fields = [] } = this.model;
         return fields.reduce((memo, field) => {
-            if (field.isReadOnly &&
-                ((!['CollectionInfo', 'UpscaleInfo', 'GenerationInfo'].includes(this.model.name) && field.name === 'imageId') ||
-                    (!['Enterprise'].includes(this.model.name) && field.name === 'userId'))) {
+            if (field.isReadOnly && !this.isImageId(field) && !this.isUserId(field)) {
                 return memo;
             }
             const property = new Property(field, Object.keys(memo).length, this.enums);
