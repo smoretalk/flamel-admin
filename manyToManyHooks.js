@@ -41,7 +41,7 @@ export const after = async (response, request, context) => {
                 const idField = record.resource.client._runtimeDataModel.models[fromModel].fields.find((v) => v.isId);
                 const targetIdField = record.resource.client._runtimeDataModel.models[targetModel].fields.find((v) => v.isId);
                 console.log('idField', idField);
-                await context.resource.saveRecords(idField.name, record.params.id, toResourceId, targetIdField.name, ids);
+                await context.resource.saveRecords(idField.name, record.params[idField.name], toResourceId, targetIdField.name, ids);
             }));
         }
     }
