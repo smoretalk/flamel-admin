@@ -133,16 +133,10 @@ export class CustomResource extends BaseResource {
         const { model, client } = args;
         return !!model?.name && !!model?.fields.length && !!client?.[lowerCase(model.name)];
     }
-    isImageId(field) {
-        return ['CollectionInfo', 'UpscaleInfo', 'GenerationInfo'].includes(this.model.name) && field.name === 'imageId';
-    }
-    isUserId(field) {
-        return ['Enterprise'].includes(this.model.name) && field.name === 'userId';
-    }
     prepareProperties() {
         const { fields = [] } = this.model;
         return fields.reduce((memo, field) => {
-            if (field.isReadOnly && !this.isImageId(field) && !this.isUserId(field)) {
+            if (field.isReadOnly && !field.isId) {
                 return memo;
             }
             const property = new Property(field, Object.keys(memo).length, this.enums);
@@ -153,7 +147,7 @@ export class CustomResource extends BaseResource {
     prepareDepModelProperties(model) {
         const { fields = [], name } = model;
         return fields.reduce((memo, field) => {
-            if (field.isReadOnly && !this.isImageId(field) && !this.isUserId(field)) {
+            if (field.isReadOnly && !field.isId) {
                 return memo;
             }
             const property = new Property(field, Object.keys(memo).length, this.enums);

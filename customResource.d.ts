@@ -43,8 +43,6 @@ export declare class CustomResource extends BaseResource {
     update(pk: any, params?: {}): Promise<{}>;
     delete(id: any): Promise<void>;
     static isAdapterFor(args: any): boolean;
-    isImageId(field: DMMF.Field): boolean;
-    isUserId(field: DMMF.Field): boolean;
     prepareProperties(): {};
     prepareDepModelProperties(model: any): any;
     prepareParams(params: any): {};
