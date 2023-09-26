@@ -267,7 +267,7 @@ export class CustomResource extends BaseResource {
             if (result?.[middle]) {
                 console.log('insert nested m2m', middle, last);
                 const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
-                const middleId = result[middle].id;
+                const middleId = result[middle][key];
                 console.log(lowerCase(middle), middleId, last);
                 await this.client[lowerCase(middle)].update({
                     where: { [key]: middleId },
