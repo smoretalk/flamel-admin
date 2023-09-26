@@ -223,13 +223,17 @@ export class CustomResource extends BaseResource {
     }
     async findRelated(record, resource, options = {}) {
     }
-    async saveRecord(record, resourceId, ids) {
+    async saveRecord(where, resourceId, ids) {
         const update = ids;
         const create = {
             ...ids,
         };
+        if (resourceId === 'GenerationInfo' || resourceId === 'CollectionInfo' || resourceId === 'UpscaleInfo') {
+            delete create.imageId;
+            delete update.imageId;
+        }
         await this.manager.update({
-            where: { id: record.params.id },
+            where,
             data: {
                 [resourceId]: {
                     upsert: {
@@ -240,15 +244,15 @@ export class CustomResource extends BaseResource {
             }
         });
     }
-    async saveRecords(record, resourceId, ids) {
-        console.log('record', record.params.id, 'resourceId', resourceId, 'ids', ids);
+    async saveRecords(key, idValue, resourceId, targetKey, ids) {
+        console.log('record', key, idValue, 'resourceId', resourceId, 'ids', ids);
         if (resourceId.includes('.')) {
             const split = resourceId.split('.');
             const middle = split[0];
             const last = split[1];
             const result = await this.manager.findFirst({
                 where: {
-                    id: record.params.id,
+                    [key]: idValue,
                 },
                 include: {
                     [middle]: true,
@@ -260,24 +264,30 @@ export class CustomResource extends BaseResource {
                 const middleId = result[middle].id;
                 console.log(lowerCase(middle), middleId, last);
                 await this.client[lowerCase(middle)].update({
-                    where: { id: middleId },
+                    where: { [key]: middleId },
                     data: {
                         [last]: {
-                            set: ids.map((v) => ({
-                                id: typeof v.id === 'string' ? parseInt(v.id) : v.id,
-                            }))
+                            set: ids.map((v) => {
+                                const value = v[targetKey];
+                                return ({
+                                    [targetKey]: typeof value === 'string' ? parseInt(value) : value,
+                                });
+                            })
                         }
                     }
                 });
             }
         }
         else {
-            console.log('insert m2m', record.params.id, resourceId);
+            console.log('insert m2m', key, idValue, resourceId);
             await this.manager.update({
-                where: { id: record.params.id },
+                where: { [key]: idValue },
                 data: {
                     [resourceId]: {
-                        set: ids.map((value) => ({ id: typeof value.id === 'string' ? parseInt(value.id) : value.id }))
+                        set: ids.map((v) => {
+                            const value = v[targetKey];
+                            return ({ [targetKey]: typeof value === 'string' ? parseInt(value) : value });
+                        })
                     }
                 }
             });
