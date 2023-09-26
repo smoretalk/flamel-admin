@@ -53,7 +53,7 @@ export declare class CustomResource extends BaseResource {
     findRelated(record: any, resource: CustomResource, options?: {}): Promise<void>;
     saveRecord(where: any, resourceId: any, ids: any): Promise<void>;
     saveRecords(key: any, idValue: any, resourceId: any, targetKey: any, ids: {
-        [key: string]: string | number;
+        id: string | number;
     }[]): Promise<void>;
     primaryKeyField(): () => string;
     getManyReferences(): BaseResource[];

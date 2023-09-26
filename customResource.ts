@@ -302,7 +302,7 @@ export class CustomResource extends BaseResource {
   }
 
   // 다대다용도
-  async saveRecords(key, idValue, resourceId, targetKey, ids: { [key: string]: string | number }[]) {
+  async saveRecords(key, idValue, resourceId, targetKey, ids: { id: string | number }[]) {
     console.log('record', key, idValue, 'resourceId', resourceId, 'ids', ids);
     if (resourceId.includes('.')) { // 중첩된 다대다관계이면
       // 중첩된 리소스로 타고 들어가서 다대다 수행
@@ -327,7 +327,7 @@ export class CustomResource extends BaseResource {
           data: {
             [last]: {
               set: ids.map((v) => {
-                const value = v[targetKey];
+                const value = v.id;
                 return ({
                   [targetKey]: typeof value === 'string' ? parseInt(value) : value,
                 })
@@ -343,7 +343,7 @@ export class CustomResource extends BaseResource {
         data: {
           [resourceId]: {
             set: ids.map((v) => {
-              const value = v[targetKey];
+              const value = v.id;
               return ({[targetKey]: typeof value === 'string' ? parseInt(value) : value})
             })
           }

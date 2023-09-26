@@ -274,7 +274,7 @@ export class CustomResource extends BaseResource {
                     data: {
                         [last]: {
                             set: ids.map((v) => {
-                                const value = v[targetKey];
+                                const value = v.id;
                                 return ({
                                     [targetKey]: typeof value === 'string' ? parseInt(value) : value,
                                 });
@@ -291,7 +291,7 @@ export class CustomResource extends BaseResource {
                 data: {
                     [resourceId]: {
                         set: ids.map((v) => {
-                            const value = v[targetKey];
+                            const value = v.id;
                             return ({ [targetKey]: typeof value === 'string' ? parseInt(value) : value });
                         })
                     }

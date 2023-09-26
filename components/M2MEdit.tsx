@@ -103,16 +103,16 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
 
   const onCreateOption = (option: string) => {
     console.log('onCreate', option);
-    axios.post<{ id: number, title: string }>(`/api/collections/tags/${property.reference}/${option}`)
+    axios.post<{ enTagId: number, koTagId: number, title: string }>(`/api/collections/tags/${property.reference}/${option}`)
       .then((response) => {
         console.log(`${option} 생성되었습니다.`, response);
         setSelectedOptions((prev) => {
           handleChange([...prev, {
-            value: response.data.id,
+            value: response.data.enTagId || response.data.koTagId,
             label: response.data.title,
           }].filter(Boolean));
           return [...prev, {
-            value: response.data.id,
+            value: response.data.enTagId || response.data.koTagId,
             label: response.data.title,
           }]
         });

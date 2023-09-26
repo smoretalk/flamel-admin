@@ -70,7 +70,7 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
           const idField = record.resource.client._runtimeDataModel.models[fromModel].fields.find((v) => v.isId);
           const targetIdField = record.resource.client._runtimeDataModel.models[targetModel].fields.find((v) => v.isId);
           console.log('idField', idField);
-          await context.resource.saveRecords(idField.name, ids[idField.name], toResourceId, targetIdField.name, ids);
+          await context.resource.saveRecords(idField.name, record.params.id, toResourceId, targetIdField.name, ids);
           // await context.resource.getRoles(record);
         }),
       );

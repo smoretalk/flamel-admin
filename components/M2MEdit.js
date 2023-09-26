@@ -77,11 +77,11 @@ const EditManyToManyInput = (props) => {
             console.log(`${option} 생성되었습니다.`, response);
             setSelectedOptions((prev) => {
                 handleChange([...prev, {
-                        value: response.data.id,
+                        value: response.data.enTagId || response.data.koTagId,
                         label: response.data.title,
                     }].filter(Boolean));
                 return [...prev, {
-                        value: response.data.id,
+                        value: response.data.enTagId || response.data.koTagId,
                         label: response.data.title,
                     }];
             });
