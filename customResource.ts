@@ -209,13 +209,13 @@ export class CustomResource extends BaseResource {
           preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
           if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
             // 중첩된 릴레이션이 reference고 id가 있는 객체면 객체를 아이디로 교체
-            const idField = property.depModelObject.fields.find((field) => field.isId)?.name;
-            preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[idField];
+            const foreignKey = property.foreignColumnName();
+            preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[foreignKey];
           }
           continue;
         }
         if (param) {
-          preparedValues[`${property.depModel}.${key}`] = params;
+          preparedValues[`${property.depModel}.${key}`] = params[key];
           continue;
         }
       }

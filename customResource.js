@@ -196,13 +196,13 @@ export class CustomResource extends BaseResource {
                 if (!param) {
                     preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
                     if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
-                        const idField = property.depModelObject.fields.find((field) => field.isId)?.name;
-                        preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[idField];
+                        const foreignKey = property.foreignColumnName();
+                        preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[foreignKey];
                     }
                     continue;
                 }
                 if (param) {
-                    preparedValues[`${property.depModel}.${key}`] = params;
+                    preparedValues[`${property.depModel}.${key}`] = params[key];
                     continue;
                 }
             }
