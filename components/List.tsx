@@ -40,7 +40,7 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
     if (records.length) {
       setTimeout(() => {
         console.log('location.href', window.location.href);
-        const isCollection = new URLSearchParams(window.location.search).get('filters.Owner') === '0';
+        const isCollection = new URLSearchParams(window.location.search).get('filters.CollectionInfo.enabled');
         console.log('isCollection', isCollection);
 
         if (isCollection) {
@@ -87,7 +87,7 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
   return (
     <Box variant="container" data-css={contentTag}>
       <RecordsTable
-        resource={resource}
+        resource={newResource}
         records={records}
         actionPerformed={handleActionPerformed}
         onSelect={handleSelect}

@@ -23,7 +23,7 @@ const List = ({ resource, setTag }) => {
         if (records.length) {
             setTimeout(() => {
                 console.log('location.href', window.location.href);
-                const isCollection = new URLSearchParams(window.location.search).get('filters.Owner') === '0';
+                const isCollection = new URLSearchParams(window.location.search).get('filters.CollectionInfo.enabled');
                 console.log('isCollection', isCollection);
                 if (isCollection) {
                     setNewResource({
@@ -59,7 +59,7 @@ const List = ({ resource, setTag }) => {
     };
     const contentTag = getActionElementCss(resource.id, 'list', 'table-wrapper');
     return (React.createElement(Box, { variant: "container", "data-css": contentTag },
-        React.createElement(RecordsTable, { resource: resource, records: records, actionPerformed: handleActionPerformed, onSelect: handleSelect, onSelectAll: handleSelectAll, selectedRecords: selectedRecords, direction: direction, sortBy: sortBy, isLoading: loading }),
+        React.createElement(RecordsTable, { resource: newResource, records: records, actionPerformed: handleActionPerformed, onSelect: handleSelect, onSelectAll: handleSelectAll, selectedRecords: selectedRecords, direction: direction, sortBy: sortBy, isLoading: loading }),
         React.createElement(Text, { mt: "xl", textAlign: "center" },
             React.createElement(Pagination, { page: page, perPage: perPage, total: total, onChange: handlePaginationChange }))));
 };
