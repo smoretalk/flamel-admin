@@ -251,7 +251,7 @@ export class CustomResource extends BaseResource {
         });
     }
     async saveRecords(key, idValue, resourceId, targetKey, ids) {
-        console.log('record', key, idValue, 'resourceId', resourceId, 'ids', ids);
+        console.log('record', key, idValue, 'resourceId', resourceId, targetKey, 'ids', ids);
         if (resourceId.includes('.')) {
             const split = resourceId.split('.');
             const middle = split[0];
@@ -274,7 +274,8 @@ export class CustomResource extends BaseResource {
                     data: {
                         [last]: {
                             set: ids.map((v) => {
-                                const value = v.id;
+                                const value = v.id || v[targetKey];
+                                console.log('value', value, 'targetKey', targetKey, 'v', v);
                                 return ({
                                     [targetKey]: typeof value === 'string' ? parseInt(value) : value,
                                 });
@@ -291,7 +292,7 @@ export class CustomResource extends BaseResource {
                 data: {
                     [resourceId]: {
                         set: ids.map((v) => {
-                            const value = v.id;
+                            const value = v.id || v[targetKey];
                             return ({ [targetKey]: typeof value === 'string' ? parseInt(value) : value });
                         })
                     }
