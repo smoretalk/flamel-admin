@@ -43,7 +43,8 @@ const List = ({ resource, setTag }) => {
     useEffect(() => {
         let modelName = location.pathname.split('/').at(-1);
         const query = localStorage.getItem(`query-${modelName}`);
-        if (query) {
+        if (query && !location.search) {
+            console.log(`query ${query} found, navigating...`);
             navigate(`${location.pathname}?${query}`, {
                 replace: true,
             });
