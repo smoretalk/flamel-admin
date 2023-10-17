@@ -41,11 +41,12 @@ const List = ({ resource, setTag }) => {
         }
     }, [total]);
     useEffect(() => {
-        const model = localStorage.getItem('model');
-        const query = localStorage.getItem('query');
-        console.log('model', model);
-        if (model === location.pathname.split('/').at(-1) && query) {
-            navigate(`${location.pathname}?${query}`);
+        let modelName = location.pathname.split('/').at(-1);
+        const query = localStorage.getItem(`query-${modelName}`);
+        if (query) {
+            navigate(`${location.pathname}?${query}`, {
+                replace: true,
+            });
         }
     }, [location]);
     useEffect(() => {

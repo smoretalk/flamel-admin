@@ -63,15 +63,14 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
   }, [total])
 
   useEffect(() => {
-    const model = localStorage.getItem(
-      'model',
-    );
+    let modelName = location.pathname.split('/').at(-1);
     const query = localStorage.getItem(
-      'query',
+      `query-${modelName}`,
     );
-    console.log('model', model);
-    if (model === location.pathname.split('/').at(-1) && query) {
-      navigate(`${location.pathname}?${query}`);
+    if (query) {
+      navigate(`${location.pathname}?${query}`, {
+        replace: true,
+      });
     }
 
   }, [location]);

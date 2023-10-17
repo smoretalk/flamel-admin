@@ -5,13 +5,10 @@ const IdQuerySaver: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
   if (!location.href.includes('actions/exportCsv')) {
+    const model = location.pathname.split('/').at(-1);
     localStorage.setItem(
-      'query',
+      `query-${model}`,
       new URLSearchParams(location.search).toString(),
-    );
-    localStorage.setItem(
-      'model',
-      location.pathname.split('/').at(-1)
     );
   }
   return (
