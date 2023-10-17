@@ -12,7 +12,7 @@ const IdQuerySaver: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
     );
     localStorage.setItem(
       'model',
-      location.href.split('/').at(-1)
+      location.pathname.split('/').at(-1)
     );
   }
   return (
