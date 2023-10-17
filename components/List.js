@@ -6,9 +6,7 @@ import { useRecords, useSelectedRecords, RecordsTable } from 'adminjs';
 export const getActionElementCss = (resourceId, actionName, suffix) => `${resourceId}-${actionName}-${suffix}`;
 const List = ({ resource, setTag }) => {
     const { records, loading, direction, sortBy, page, total, fetchData, perPage, } = useRecords(resource.id);
-    console.log('records', records);
     const { selectedRecords, handleSelect, handleSelectAll, setSelectedRecords, } = useSelectedRecords(records);
-    console.log('selectedRecords', selectedRecords);
     const location = useLocation();
     const navigate = useNavigate();
     const [newResource, setNewResource] = useState(resource);
