@@ -43,6 +43,14 @@ const List = ({ resource, setTag }) => {
         }
     }, [total]);
     useEffect(() => {
+        const model = localStorage.getItem('model');
+        const query = localStorage.getItem('query');
+        console.log('model', model);
+        if (model === location.pathname.split('/').at(-1) && query) {
+            navigate(`${location.pathname}?${query}`);
+        }
+    }, [location]);
+    useEffect(() => {
         setSelectedRecords([]);
     }, [resource.id]);
     useEffect(() => {
@@ -51,7 +59,10 @@ const List = ({ resource, setTag }) => {
             setSelectedRecords([]);
         }
     }, [location.search]);
-    const handleActionPerformed = () => fetchData();
+    const handleActionPerformed = () => {
+        console.log('action performed');
+        return fetchData();
+    };
     const handlePaginationChange = (pageNumber) => {
         const search = new URLSearchParams(location.search);
         search.set('page', pageNumber.toString());

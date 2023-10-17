@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 export const REFRESH_KEY = 'refresh'
 import { ActionProps, useRecords, useSelectedRecords, RecordsTable } from 'adminjs';
+import * as querystring from "querystring";
 export const getActionElementCss = (resourceId: string, actionName: string, suffix: string) => `${resourceId}-${actionName}-${suffix}`
 
 const List: React.FC<ActionProps> = ({ resource, setTag }) => {
@@ -64,6 +65,20 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
   }, [total])
 
   useEffect(() => {
+    const model = localStorage.getItem(
+      'model',
+    );
+    const query = localStorage.getItem(
+      'query',
+    );
+    console.log('model', model);
+    if (model === location.pathname.split('/').at(-1) && query) {
+      navigate(`${location.pathname}?${query}`);
+    }
+
+  }, [location]);
+
+  useEffect(() => {
     setSelectedRecords([])
   }, [resource.id])
 
@@ -74,7 +89,10 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
     }
   }, [location.search])
 
-  const handleActionPerformed = (): any => fetchData()
+  const handleActionPerformed = (): any => {
+    console.log('action performed');
+    return fetchData();
+  }
 
   const handlePaginationChange = (pageNumber: number): void => {
     const search = new URLSearchParams(location.search)

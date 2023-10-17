@@ -10,6 +10,10 @@ const IdQuerySaver: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
       'query',
       new URLSearchParams(location.search).toString(),
     );
+    localStorage.setItem(
+      'model',
+      location.href.split('/').at(-1)
+    );
   }
   return (
     <section>
