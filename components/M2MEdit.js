@@ -48,9 +48,10 @@ const EditManyToManyInput = (props) => {
     const [loadingRecord, setLoadingRecord] = useState(0);
     const selectedValue = record?.populated[property.path] ?? loadedRecord;
     const selectedValuesToOptions = selectedValues.map((selectedValue) => ({
-        value: selectedValue.id,
+        value: selectedValue.id || selectedValue.enTagId || selectedValue.koTagId,
         label: selectedValue.title,
     }));
+    console.log('selectedValuesToOptions', selectedValuesToOptions);
     const [selectedOptions, setSelectedOptions] = useState(selectedValuesToOptions);
     useEffect(() => {
         if (!selectedValue && selectedId) {
