@@ -30,9 +30,9 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
 
   console.log(record, property);
 
-  const handleChange = (selected: any[]): void => {
+  const handleChange = (selected: { label: string, value: number }[]): void => {
     setSelectedOptions(selected);
-    if (selected) {
+    if (selected && Array.isArray(selected)) {
       onChange(
         property.path,
         selected.map((option) => ({ id: option.value })),
@@ -60,21 +60,21 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   };
   const error = record?.errors[property.path];
 
-  let selectedValues;
+  let selectedValues: Array<{ id: number, enTagId: number, koTagId: number, title: string }> = [];
   if (property.path.includes('.')) {
     // 중첩된 경로면
     const middle = property.path.split('.')[0];
     const last = property.path.split('.')[1];
-    selectedValues = unflatten(record.params)[middle]?.[last] || [];
+    selectedValues = (unflatten(record.params) as Record<string, Record<string, typeof selectedValues>>)[middle]?.[last] || [];
   } else {
-    selectedValues = unflatten(record.params)[property.path] || [];
+    selectedValues = (unflatten(record.params) as Record<string, typeof selectedValues>)[property.path] || [];
   }
 
   const selectedId = record?.params[property.path] as string | undefined;
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();
   const [loadingRecord, setLoadingRecord] = useState(0);
   const selectedValue = record?.populated[property.path] ?? loadedRecord;
-  const selectedValuesToOptions = selectedValues.map((selectedValue) => ({
+  const selectedValuesToOptions: Array<{value: number, label: string }> = selectedValues.map((selectedValue) => ({
     value: selectedValue.id || selectedValue.enTagId || selectedValue.koTagId,
     label: selectedValue.title,
   }));
@@ -129,7 +129,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         value={selectedOptions}
         defaultOptions
         loadOptions={loadOptions}
-        onChange={handleChange}
+        onChange={handleChange as (v: unknown) => void}
         isClearable
         isDisabled={property.isDisabled}
         isLoading={!!loadingRecord}

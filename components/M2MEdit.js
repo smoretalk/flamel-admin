@@ -14,7 +14,7 @@ const EditManyToManyInput = (props) => {
     console.log(record, property);
     const handleChange = (selected) => {
         setSelectedOptions(selected);
-        if (selected) {
+        if (selected && Array.isArray(selected)) {
             onChange(property.path, selected.map((option) => ({ id: option.value })));
         }
         else {
@@ -34,7 +34,7 @@ const EditManyToManyInput = (props) => {
         }));
     };
     const error = record?.errors[property.path];
-    let selectedValues;
+    let selectedValues = [];
     if (property.path.includes('.')) {
         const middle = property.path.split('.')[0];
         const last = property.path.split('.')[1];

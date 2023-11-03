@@ -1,45 +1,20 @@
 import {
   RecordActionResponse,
-  ActionRequest,
-  ActionContext,
-  ResourceOptions, After, ActionResponse,
+  ResourceOptions, After, PropertyDecorator,
 } from 'adminjs';
 import flat from 'flat';
 import { CustomResource } from './customResource.js';
 import { Components } from './componentLoader.js';
+import type { DMMF } from '@prisma/client/runtime/library.js';
 
-//Role
-const setResponseItems = async (
-  context,
-  response,
-  reference: CustomResource,
-) => {
-  const { _admin, resource, record } = context;
-  const toResource = reference;
-  // const toResource = _admin.resources.find(resource: CustomResource => resource.getPropertyByKey() )
-  const options = { order: [toResource.titleField()] };
-  const throughItems = await resource.findRelated(record, reference, options);
-  const items = toResource.wrapObjects(throughItems);
-  if (items.length !== 0) {
-    const primaryKeyField = toResource.primaryKeyField();
-    console.log(
-      '🚀 ~ file: many-to-many.hook.ts:20 ~ primaryKeyField',
-      primaryKeyField,
-    );
-    // response.record.populated[reference] = items;
-    // response.record.params[reference] = items.map(
-    //   (v) => v.params[primaryKeyField || 'id'],
-    // );
-  }
-};
-
-export const after: After<ActionResponse> & After<RecordActionResponse> = async (
+export const after: After<RecordActionResponse> = async (
   response,
   request,
-  context: any,
+  context,
 ) => {
   if (request && request.method) {
-    const manyProperties = context.resource.getManyProperties();
+    const resource = context.resource as CustomResource;
+    const manyProperties: PropertyDecorator[] = resource.getManyProperties();
 
     console.log('m2m manyProperties', manyProperties.map((v) => v.name()));
 
@@ -47,12 +22,12 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
 
     if (request.method === 'post' && record.isValid()) {
       console.log('request.payload', request.payload);
-      const params = flat.unflatten(request.payload);
+      const params: { [k: string]: object } = flat.unflatten(request.payload);
       await Promise.all(
         manyProperties.map(async (propertyDecorator) => {
           const toResourceId = propertyDecorator.name();
-          let ids = params || [];
-          let fromModel = context.resource.model.name;
+          let ids: any = params || [];
+          let fromModel = resource.model.name;
           let targetModel = toResourceId.slice(0, -1); // TODO: 현재는 CollectionKoTags를 CollectionKoTag로 바꾸는 정도
           if (toResourceId.includes('.')) { // 릴레이션이면
             const relations = toResourceId.split('.');
@@ -67,10 +42,10 @@ export const after: After<ActionResponse> & After<RecordActionResponse> = async 
           if (!Array.isArray(ids) || ids.length === 0) { // 다대다 관계가 아니므로
             return;
           }
-          const idField = record.resource.client._runtimeDataModel.models[fromModel].fields.find((v) => v.isId);
-          const targetIdField = record.resource.client._runtimeDataModel.models[targetModel].fields.find((v) => v.isId);
+          const idField = (resource.client._runtimeDataModel.models[fromModel].fields as DMMF.Field[]).find((v) => v.isId);
+          const targetIdField = (resource.client._runtimeDataModel.models[targetModel].fields as DMMF.Field[]).find((v) => v.isId);
           console.log('idField', idField);
-          await context.resource.saveRecords(idField.name, record.params[idField.name], toResourceId, targetIdField.name, ids);
+          await resource.saveRecords(idField.name, record.params[idField.name], toResourceId, targetIdField.name, ids);
           // await context.resource.getRoles(record);
         }),
       );
@@ -117,16 +92,18 @@ export const injectManyToManySupport = (
     if (!options.actions.new.after) {
       options.actions.new.after = [after];
     } else if (Array.isArray(options.actions.new.after)) {
-      if (!options.actions.new.after.includes(after)) {
-        options.actions.new.after.push(after);
+      const newAfter = options.actions.new.after as After<RecordActionResponse>[];
+      if (!newAfter.includes(after)) {
+        newAfter.push(after);
       }
     }
     if (!options.actions.edit.after) {
       options.actions.edit.after = [after];
     }
     else if (Array.isArray(options.actions.edit.after)) {
-      if (!options.actions.edit.after.includes(after)) {
-        options.actions.edit.after.push(after);
+      const editAfter = options.actions.edit.after as After<RecordActionResponse>[];
+      if (!editAfter.includes(after)) {
+        editAfter.push(after);
       }
     }
   });

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { AsyncCreatableProps } from 'react-select/async-creatable';
 interface SelectProps<Option = unknown, IsMulti extends boolean = false> extends AsyncCreatableProps<Option, IsMulti, any> {
     value: Option;
-    onChange?: (selected: any) => void;
+    onChange?: (selected: unknown) => void;
     variant?: 'default' | 'filter';
     onCreateOption: (option: string) => void;
 }

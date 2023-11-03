@@ -5,7 +5,6 @@ import {
   H2,
   H5, Icon,
   Illustration,
-  IllustrationProps,
   Text
 } from "@adminjs/design-system";
 import { styled } from '@adminjs/design-system/styled-components';
@@ -63,56 +62,32 @@ type BoxType = {
   href: string;
 };
 
-const boxes = ({ translateMessage }): Array<BoxType> => [
-  {
-    variant: 'Planet',
-    title: translateMessage('addingResources_title'),
-    subtitle: translateMessage('addingResources_subtitle'),
-    href: 'https://adminjs.co/tutorial-passing-resources.html',
+type Props = {
+  theme: {
+    colors: {
+      grey100: string,
+      primary100: string
+    },
+    shadows: {
+      cardHover: string
+    }
+    space: {
+      md: string,
+    },
   },
-  {
-    variant: 'DocumentCheck',
-    title: translateMessage('customizeResources_title'),
-    subtitle: translateMessage('customizeResources_subtitle'),
-    href: 'https://adminjs.co/tutorial-customizing-resources.html',
-  },
-  {
-    variant: 'DocumentSearch',
-    title: translateMessage('customizeActions_title'),
-    subtitle: translateMessage('customizeActions_subtitle'),
-    href: 'https://adminjs.co/tutorial-actions.html',
-  },
-  {
-    variant: 'FlagInCog',
-    title: translateMessage('writeOwnComponents_title'),
-    subtitle: translateMessage('writeOwnComponents_subtitle'),
-    href: 'https://adminjs.co/tutorial-writing-react-components.html',
-  },
-  {
-    variant: 'Folders',
-    title: translateMessage('customDashboard_title'),
-    subtitle: translateMessage('customDashboard_subtitle'),
-    href: 'https://adminjs.co/tutorial-custom-dashboard.html',
-  },
-  {
-    variant: 'Astronaut',
-    title: translateMessage('roleBasedAccess_title'),
-    subtitle: translateMessage('roleBasedAccess_subtitle'),
-    href: 'https://adminjs.co/tutorial-rbac.html',
-  },
-];
-
+  flex: boolean,
+}
 const Card = styled(Box)`
-  display: ${({ flex }): string => (flex ? 'flex' : 'block')};
-  color: ${({ theme }) => theme.colors.grey100};
+  display: ${({ flex }: Props): string => (flex ? 'flex' : 'block')};
+  color: ${({ theme }: Props) => theme.colors.grey100};
   height: 100%;
   text-decoration: none;
   border: 1px solid transparent;
-  border-radius: ${({ theme }) => theme.space.md};
+  border-radius: ${({ theme }: Props) => theme.space.md};
   transition: all 0.1s ease-in;
   &:hover {
-    border: 1px solid ${({ theme }) => theme.colors.primary100};
-    box-shadow: ${({ theme }) => theme.shadows.cardHover};
+    border: 1px solid ${({ theme }: Props) => theme.colors.primary100};
+    box-shadow: ${({ theme }: Props) => theme.shadows.cardHover};
   }
 `;
 

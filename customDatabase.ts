@@ -2,11 +2,14 @@
 import { Prisma } from '@prisma/client';
 import { BaseDatabase } from 'adminjs';
 import { CustomResource } from './customResource.js';
+import type { DMMF } from '@prisma/client/runtime/library.js';
+
+type ClientModule = { Prisma: { dmmf: DMMF.Document } };
 export class Database extends BaseDatabase {
   client;
   clientModule;
-  rest: any[];
-  constructor(args) {
+  rest: object;
+  constructor(args: { client: any, clientModule: ClientModule }) {
     super(args);
     const { client, clientModule, ...rest } = args;
     this.client = client;
@@ -14,7 +17,7 @@ export class Database extends BaseDatabase {
     this.rest = rest;
   }
   override resources() {
-    const dmmf = this.clientModule?.Prisma.dmmf.datamodel ?? (Prisma as any).dmmf.datamodel;
+    const dmmf: DMMF.Document['datamodel'] = this.clientModule?.Prisma.dmmf.datamodel ?? (Prisma as any).dmmf.datamodel;
     if (!dmmf?.models)
       return [];
     return dmmf.models.map((model) => {
@@ -23,7 +26,7 @@ export class Database extends BaseDatabase {
     });
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static override isAdapterFor(args) {
+  static override isAdapterFor(args: { clientModule: ClientModule }) {
     const { clientModule } = args;
     const dmmf = clientModule?.Prisma.dmmf.datamodel ?? (Prisma as any).dmmf.datamodel;
     return dmmf?.models?.length > 0;

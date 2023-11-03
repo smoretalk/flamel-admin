@@ -1,5 +1,5 @@
-import { RecordActionResponse, ResourceOptions, After, ActionResponse } from 'adminjs';
-export declare const after: After<ActionResponse> & After<RecordActionResponse>;
+import { RecordActionResponse, ResourceOptions, After } from 'adminjs';
+export declare const after: After<RecordActionResponse>;
 export declare const manyToManyComponent: (reference: string) => {
     isVisible: {
         list: boolean;

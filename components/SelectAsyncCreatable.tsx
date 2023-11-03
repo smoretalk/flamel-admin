@@ -12,7 +12,7 @@ const SelectAsyncComponent: typeof import('react-select/async-creatable').defaul
 interface SelectProps<Option = unknown, IsMulti extends boolean = false>
   extends AsyncCreatableProps<Option, IsMulti, any> {
   value: Option
-  onChange?: (selected) => void
+  onChange?: (selected: unknown) => void
   variant?: 'default' | 'filter'
   onCreateOption: (option: string) => void
 }
@@ -20,7 +20,7 @@ interface SelectProps<Option = unknown, IsMulti extends boolean = false>
 export const SelectAsyncCreatable: FC<SelectProps<unknown, boolean>> = (props) => {
   const { value, onChange, variant, onCreateOption, ...selectProps } = props
 
-  const handleChange = (selected) => {
+  const handleChange = (selected: unknown) => {
     if (typeof onChange === 'function') onChange(selected)
   }
 

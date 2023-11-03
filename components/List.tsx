@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 export const REFRESH_KEY = 'refresh'
-import { ActionProps, useRecords, useSelectedRecords, RecordsTable } from 'adminjs';
+import {ActionProps, useRecords, useSelectedRecords, RecordsTable, BasePropertyJSON} from 'adminjs';
 import * as querystring from "querystring";
 export const getActionElementCss = (resourceId: string, actionName: string, suffix: string) => `${resourceId}-${actionName}-${suffix}`
 
@@ -28,8 +28,8 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
   const navigate = useNavigate()
   const [newResource, setNewResource] = useState(resource);
 
-  function resourceFinder(list) {
-    const resourceList = [];
+  function resourceFinder(list: string[]) {
+    const resourceList: BasePropertyJSON[] = [];
     list.forEach((item) => {
       resourceList.push(resource.properties[item]);
     })

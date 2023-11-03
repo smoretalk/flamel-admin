@@ -18,44 +18,6 @@ export const DashboardHeader = () => {
                 React.createElement(H2, null, translateMessage('welcomeOnBoard_title')),
                 React.createElement(Text, { opacity: 0.8 }, translateMessage('welcomeOnBoard_subtitle'))))));
 };
-const boxes = ({ translateMessage }) => [
-    {
-        variant: 'Planet',
-        title: translateMessage('addingResources_title'),
-        subtitle: translateMessage('addingResources_subtitle'),
-        href: 'https://adminjs.co/tutorial-passing-resources.html',
-    },
-    {
-        variant: 'DocumentCheck',
-        title: translateMessage('customizeResources_title'),
-        subtitle: translateMessage('customizeResources_subtitle'),
-        href: 'https://adminjs.co/tutorial-customizing-resources.html',
-    },
-    {
-        variant: 'DocumentSearch',
-        title: translateMessage('customizeActions_title'),
-        subtitle: translateMessage('customizeActions_subtitle'),
-        href: 'https://adminjs.co/tutorial-actions.html',
-    },
-    {
-        variant: 'FlagInCog',
-        title: translateMessage('writeOwnComponents_title'),
-        subtitle: translateMessage('writeOwnComponents_subtitle'),
-        href: 'https://adminjs.co/tutorial-writing-react-components.html',
-    },
-    {
-        variant: 'Folders',
-        title: translateMessage('customDashboard_title'),
-        subtitle: translateMessage('customDashboard_subtitle'),
-        href: 'https://adminjs.co/tutorial-custom-dashboard.html',
-    },
-    {
-        variant: 'Astronaut',
-        title: translateMessage('roleBasedAccess_title'),
-        subtitle: translateMessage('roleBasedAccess_subtitle'),
-        href: 'https://adminjs.co/tutorial-rbac.html',
-    },
-];
 const Card = styled(Box) `
   display: ${({ flex }) => (flex ? 'flex' : 'block')};
   color: ${({ theme }) => theme.colors.grey100};

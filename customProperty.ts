@@ -1,4 +1,4 @@
-import { BaseProperty } from 'adminjs';
+import {BaseProperty, PropertyType} from 'adminjs';
 import type { DMMF } from '@prisma/client/runtime/library.js';
 
 const DATA_TYPES = {
@@ -19,7 +19,7 @@ export class Property extends BaseProperty {
   depModel: string;
   depModelObject: DMMF.Model;
   // eslint-disable-next-line default-param-last
-  constructor(column, columnPosition = 0, enums) {
+  constructor(column: DMMF.Field, columnPosition = 0, enums: { [k: string]: { values: { name: string }[] } }) {
     const path = column.name;
     super({ path });
     this.column = column;
@@ -73,7 +73,7 @@ export class Property extends BaseProperty {
     return this.column.kind === 'enum';
   }
   override type() {
-    let type = DATA_TYPES[this.column.type];
+    let type = DATA_TYPES[this.column.type as keyof typeof DATA_TYPES] as PropertyType;
     if (this.reference()) {
       type = 'reference';
     }

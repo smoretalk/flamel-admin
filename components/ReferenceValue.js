@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import { styled } from '@adminjs/design-system/styled-components';
 import { Link } from 'react-router-dom';
 import { Button } from '@adminjs/design-system';
 import { ViewHelpers } from 'adminjs';

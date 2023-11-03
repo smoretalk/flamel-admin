@@ -194,10 +194,10 @@ export class CustomResource extends BaseResource {
             const key = property.path();
             if (property.depModel && params?.[property.depModel]) {
                 if (!param) {
-                    preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
-                    if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
+                    preparedValues[`${property.depModel}.${key}`] = (params?.[property.depModel])[key];
+                    if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject((params?.[property.depModel])[key])) {
                         const foreignKey = property.foreignColumnName();
-                        preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[foreignKey];
+                        preparedValues[`${property.depModel}.${key}`] = (params?.[property.depModel])[key]?.[foreignKey];
                     }
                     continue;
                 }
@@ -226,8 +226,6 @@ export class CustomResource extends BaseResource {
     }
     wrapObjects(objects) {
         return objects.map((sequelizeObject) => new BaseRecord(sequelizeObject.toJSON(), this));
-    }
-    async findRelated(record, resource, options = {}) {
     }
     async saveRecord(where, resourceId, ids) {
         const update = ids;
@@ -266,7 +264,6 @@ export class CustomResource extends BaseResource {
             });
             if (result?.[middle]) {
                 console.log('insert nested m2m', middle, last);
-                const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
                 const middleId = result[middle][key];
                 console.log(lowerCase(middle), middleId, last);
                 await this.client[lowerCase(middle)].update({

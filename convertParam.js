@@ -13,7 +13,7 @@ export const convertParam = (property, fields, value, nested = false) => {
     const type = property.type();
     if (type === 'mixed')
         return value;
-    if (type === 'number') {
+    if (type === 'number' && (typeof value === 'string' || typeof value === 'number')) {
         return safeParseNumber(value);
     }
     if (type === 'boolean') {
@@ -31,11 +31,15 @@ export const convertParam = (property, fields, value, nested = false) => {
                 return { disconnect: true };
             if (foreignColumnType === 'String')
                 return { connect: { id: String(value) } };
-            return { connect: { id: safeParseNumber(value) } };
+            if (typeof value === 'string' || typeof value === 'number') {
+                return { connect: { id: safeParseNumber(value) } };
+            }
         }
         if (foreignColumnType === 'String')
             return String(value);
-        return safeParseNumber(value);
+        if (typeof value === 'string' || typeof value === 'number') {
+            return safeParseNumber(value);
+        }
     }
     return value;
 };

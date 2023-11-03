@@ -1,22 +1,22 @@
 import {Property} from "./customProperty.js";
 
-export const isNumeric = (value) => {
+export const isNumeric = (value: string | number): value is string => {
   const stringValue = (String(value)).replace(/,/g, '.');
   if (isNaN(parseFloat(stringValue)))
     return false;
   return isFinite(Number(stringValue));
 };
-export const safeParseNumber = (value) => {
+export const safeParseNumber = (value: string | number) => {
   if (isNumeric(value))
     return Number(value);
   return value;
 };
 
-export const convertParam = (property: Property, fields, value, nested = false) => {
+export const convertParam = (property: Property, fields: { name: string, type: string }[], value: unknown, nested = false) => {
   const type = property.type();
   if (type === 'mixed')
     return value;
-  if (type === 'number') {
+  if (type === 'number' && (typeof value === 'string' || typeof value === 'number')) {
     return safeParseNumber(value);
   }
   if (type === 'boolean') {
@@ -34,11 +34,15 @@ export const convertParam = (property: Property, fields, value, nested = false) 
         return { disconnect: true };
       if (foreignColumnType === 'String')
         return { connect: { id: String(value) } };
-      return { connect: { id: safeParseNumber(value) } };
+      if (typeof value === 'string' || typeof value === 'number') {
+        return { connect: { id: safeParseNumber(value) } };
+      }
     }
     if (foreignColumnType === 'String')
       return String(value);
-    return safeParseNumber(value);
+    if (typeof value === 'string' || typeof value === 'number') {
+      return safeParseNumber(value);
+    }
   }
   return value;
 };

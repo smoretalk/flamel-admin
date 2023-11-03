@@ -1,12 +1,13 @@
-import { BaseRecord, BaseResource, flat} from 'adminjs';
+import {BaseRecord, BaseResource, Filter, flat, FlattenParams, ParamsType} from 'adminjs';
 import { convertFilter, type Enums, getEnums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
 import { type PrismaClient } from '@prisma/client';
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
 
-export const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
+export const lowerCase = (name: string) => name.substring(0, 1).toLowerCase() + name.substring(1);
 
+type Args = { model: DMMF.Model, client: PrismaClient, clientModule?: any, include?: object, depModels?: DMMF.Model[]};
 export class CustomResource extends BaseResource {
   model: DMMF.Model;
   client: PrismaClient;
@@ -16,7 +17,7 @@ export class CustomResource extends BaseResource {
   include;
   depModels;
   depModelsObject;
-  constructor(args: { model: DMMF.Model, client: PrismaClient, clientModule?: any, include?: object, depModels?: DMMF.Model[]}) {
+  constructor(args: Args) {
     super(args);
     const { model, client, clientModule, include, depModels } = args;
     this.model = model;
@@ -46,22 +47,22 @@ export class CustomResource extends BaseResource {
   override properties(): Property[] {
     return [...Object.values(this.propertiesObject)];
   }
-  override property(path) {
+  override property(path: string) {
     return this.propertiesObject[path] ?? null;
   }
-  override build(params) {
+  override build(params: object): BaseRecord {
     return new BaseRecord(flat.unflatten(params), this);
   }
-  override async count(filter) {
+  override async count(filter: Filter) {
     return this.manager.count({ where: convertFilter(this.model.fields, filter) });
   }
-  override async find(filter, params: { limit?: number, offset?: number, sort?: { direction?: string, sortBy?: string } } = {}) {
+  override async find(filter: Filter, params: { limit?: number, offset?: number, sort?: { direction?: string, sortBy?: string } } = {}): Promise<BaseRecord[]> {
     console.log('find called', this.include);
     const { limit = 10, offset = 0, sort = {} } = params;
     const { direction, sortBy } = sort;
     const where = convertFilter(this.model.fields, filter);
     console.log('where', where);
-    const results = await this.manager.findMany({
+    const results: FlattenParams[] = await this.manager.findMany({
       where,
       skip: offset,
       take: limit,
@@ -72,7 +73,7 @@ export class CustomResource extends BaseResource {
     });
     return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
   }
-  override async findOne(id) {
+  override async findOne(id: string): Promise<BaseRecord> {
     console.log('findOne called');
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
@@ -87,12 +88,12 @@ export class CustomResource extends BaseResource {
       return null;
     return new BaseRecord(this.prepareReturnValues(result), this);
   }
-  override async findMany(ids) {
+  override async findMany(ids: string[]): Promise<BaseRecord[]> {
     console.log('findMany called');
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
       return [];
-    const results = await this.manager.findMany({
+    const results: FlattenParams[] = await this.manager.findMany({
       where: {
         [idProperty.path()]: {
           in: ids.map((id) => convertParam(idProperty, this.model.fields, id)),
@@ -102,12 +103,12 @@ export class CustomResource extends BaseResource {
     });
     return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
   }
-  override async create(params) {
+  override async create(params: FlattenParams) {
     const preparedParams = this.prepareParams(params);
     const result = await this.manager.create({ data: preparedParams });
     return this.prepareReturnValues(result);
   }
-  override async update(pk, params = {}) {
+  override async update(pk: unknown, params = {}) {
     console.log('update');
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
@@ -123,7 +124,7 @@ export class CustomResource extends BaseResource {
     console.log('udpate result', result);
     return this.prepareReturnValues(result);
   }
-  override async delete(id) {
+  override async delete(id: string) {
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
       return;
@@ -133,14 +134,14 @@ export class CustomResource extends BaseResource {
       },
     });
   }
-  static override isAdapterFor(args) {
+  static override isAdapterFor(args: Args) {
     const { model, client } = args;
     return !!model?.name && !!model?.fields.length && !!client?.[lowerCase(model.name)];
   }
 
   prepareProperties() {
     const { fields = [] } = this.model;
-    return fields.reduce((memo, field) => {
+    return fields.reduce((memo: { [k: string]: Property }, field) => {
       if (field.isReadOnly && !field.isId) {
         return memo;
       }
@@ -149,9 +150,9 @@ export class CustomResource extends BaseResource {
       return memo;
     }, {});
   }
-  prepareDepModelProperties(model) {
+  prepareDepModelProperties(model: DMMF.Model) {
     const { fields = [], name } = model;
-    return fields.reduce((memo, field) => {
+    return fields.reduce((memo: { [k: string]: Property }, field) => {
       if (field.isReadOnly && !field.isId) {
         return memo;
       }
@@ -162,11 +163,11 @@ export class CustomResource extends BaseResource {
       return memo;
     }, {});
   }
-  prepareParams(params) {
+  prepareParams(params: FlattenParams) {
     console.log('prepareParams', params);
-    const preparedParams = {};
+    const preparedParams: { [k: string]: unknown } = {};
     for (const property of this.properties()) {
-      const param = flat.get(params, property.path());
+      const param: object[] = flat.get(params, property.path());
       const key = property.path();
 
       // eslint-disable-next-line no-continue
@@ -192,12 +193,12 @@ export class CustomResource extends BaseResource {
     return preparedParams;
   }
 
-  isNonArrayObject(target) {
+  isNonArrayObject(target: object) {
     return typeof target === 'object' && !Array.isArray(target);
   }
 
-  prepareReturnValues(params) {
-    const preparedValues = {};
+  prepareReturnValues(params: FlattenParams) {
+    const preparedValues: { [k: string]: unknown } = {};
     console.log('params', params);
     for (const property of this.properties()) {
       const param = flat.get(params, property.path());
@@ -206,11 +207,11 @@ export class CustomResource extends BaseResource {
       if (property.depModel && params?.[property.depModel]) {
         if (!param) {
           // 중첩된 릴레이션의 값(ex: 'CollectionInfo.CollectionKoTags' = [...])
-          preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key];
-          if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject(params?.[property.depModel][key])) {
+          preparedValues[`${property.depModel}.${key}`] = (params?.[property.depModel] as Record<string, object>)[key];
+          if (property.type() === 'reference' && property.depModelObject.fields && this.isNonArrayObject((params?.[property.depModel] as Record<string, object>)[key])) {
             // 중첩된 릴레이션이 reference고 id가 있는 객체면 객체를 아이디로 교체
             const foreignKey = property.foreignColumnName();
-            preparedValues[`${property.depModel}.${key}`] = params?.[property.depModel][key]?.[foreignKey];
+            preparedValues[`${property.depModel}.${key}`] = (params?.[property.depModel] as Record<string, Record<string, object>>)[key]?.[foreignKey];
           }
           continue;
         }
@@ -242,44 +243,13 @@ export class CustomResource extends BaseResource {
     return this.decorate().titleProperty().name();
   }
 
-  wrapObjects(objects) {
+  wrapObjects(objects: { toJSON(): ParamsType }[]) {
     return objects.map(
       (sequelizeObject) => new BaseRecord(sequelizeObject.toJSON(), this),
     );
   }
-
-  // async getRoles(record) {
-  //   const result = await this.findOne(record.params.id);
-  //   console.log(
-  //     '🚀 ~ file: admin.resource.ts:22 ~ CustomResource ~ getRoles ~ result',
-  //     result,
-  //   );
-  // }
-
-  async findRelated(record, resource: CustomResource, options = {}) {
-    // resource.find(
-    //   {
-    //     relations: true,
-    //   },
-    //   {},
-    // );
-    // const instance = this.getInstance(record);
-    // const association = this.getAssociationsByResourceId(resource)[0];
-    // return await instance[association.accessors.get](options);
-  }
-
-  // getAssociationsByResourceId(resourceId) {
-  //   return Object.values(this.SequelizeModel.associations).filter(
-  //     (association) => association.target.name === resourceId,
-  //   );
-  // }
-
-  // getInstance(record) {
-  //   return new this.SequelizeModel(record.params, { isNewRecord: false });
-  // }
-
   // 일대다용도
-  async saveRecord(where, resourceId, ids) {
+  async saveRecord(where: object, resourceId: string, ids: { imageId: number }) {
     const update = ids;
     const create = {
       ...ids,
@@ -302,7 +272,7 @@ export class CustomResource extends BaseResource {
   }
 
   // 다대다용도
-  async saveRecords(key, idValue, resourceId, targetKey, ids: { id: string | number }[]) {
+  async saveRecords(key: string, idValue: string, resourceId: string, targetKey: string, ids: { id: string | number }[]) {
     console.log('record', key, idValue, 'resourceId', resourceId, targetKey, 'ids', ids);
     if (resourceId.includes('.')) { // 중첩된 다대다관계이면
       // 중첩된 리소스로 타고 들어가서 다대다 수행
@@ -319,7 +289,6 @@ export class CustomResource extends BaseResource {
       });
       if (result?.[middle]) {
         console.log('insert nested m2m', middle, last);
-        const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
         const middleId = result[middle][key]; // TODO: 다른 아이디도 가능하게 만들기
         console.log(lowerCase(middle), middleId, last);
         await (this.client[lowerCase(middle)] as any).update({
@@ -327,7 +296,7 @@ export class CustomResource extends BaseResource {
           data: {
             [last]: {
               set: ids.map((v) => {
-                const value = v.id || v[targetKey];
+                const value = v.id || v[targetKey as 'id'];
                 console.log('value', value, 'targetKey', targetKey, 'v', v);
                 return ({
                   [targetKey]: typeof value === 'string' ? parseInt(value) : value,
@@ -344,7 +313,7 @@ export class CustomResource extends BaseResource {
         data: {
           [resourceId]: {
             set: ids.map((v) => {
-              const value = v.id || v[targetKey];
+              const value = v.id || v[targetKey as 'id'];
               return ({[targetKey]: typeof value === 'string' ? parseInt(value) : value})
             })
           }

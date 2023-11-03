@@ -36,7 +36,7 @@ export default class ManyToManyList extends React.PureComponent<Props> {
       isDraggable: false,
     });
 
-    const items = flat.get(record.params, property.path) || [];
+    const items: object[] = flat.get(record.params, property.path) || [];
 
     return (
       <>

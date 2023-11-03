@@ -1,22 +1,34 @@
-import { BaseProperty } from 'adminjs';
+import { BaseProperty, PropertyType } from 'adminjs';
 import type { DMMF } from '@prisma/client/runtime/library.js';
 export declare class Property extends BaseProperty {
-    column: any;
-    enums: any;
-    columnPosition: any;
+    column: DMMF.Field;
+    enums: {
+        [k: string]: {
+            values: {
+                name: string;
+            }[];
+        };
+    };
+    columnPosition: number;
     depModel: string;
     depModelObject: DMMF.Model;
-    constructor(column: any, columnPosition: number, enums: any);
+    constructor(column: DMMF.Field, columnPosition: number, enums: {
+        [k: string]: {
+            values: {
+                name: string;
+            }[];
+        };
+    });
     isEditable(): boolean;
     isId(): boolean;
-    name(): any;
-    isRequired(): any;
+    name(): string;
+    isRequired(): boolean;
     isSortable(): boolean;
-    reference(): any;
+    reference(): string;
     referencedColumnName(): any;
-    foreignColumnName(): any;
-    availableValues(): any;
-    position(): any;
+    foreignColumnName(): string;
+    availableValues(): string[];
+    position(): number;
     isEnum(): boolean;
-    type(): any;
+    type(): PropertyType;
 }
