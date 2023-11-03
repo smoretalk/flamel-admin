@@ -7,10 +7,10 @@ import { convertParam } from "./convertParam.js";
 
 export const lowerCase = (name: string) => name.substring(0, 1).toLowerCase() + name.substring(1);
 
-type Args = { model: DMMF.Model, client: PrismaClient, clientModule?: any, include?: object, depModels?: DMMF.Model[]};
+type Args = { model: DMMF.Model, client: any, clientModule?: { Prisma: { dmmf: DMMF.Document } }, include?: object, depModels?: DMMF.Model[]};
 export class CustomResource extends BaseResource {
   model: DMMF.Model;
-  client: PrismaClient;
+  client: any;
   enums: Enums;
   manager;
   propertiesObject: { [key: string]: Property };

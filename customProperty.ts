@@ -1,5 +1,6 @@
 import {BaseProperty, PropertyType} from 'adminjs';
 import type { DMMF } from '@prisma/client/runtime/library.js';
+import {Enums} from "@adminjs/prisma";
 
 const DATA_TYPES = {
   String: 'string',
@@ -19,7 +20,7 @@ export class Property extends BaseProperty {
   depModel: string;
   depModelObject: DMMF.Model;
   // eslint-disable-next-line default-param-last
-  constructor(column: DMMF.Field, columnPosition = 0, enums: { [k: string]: { values: { name: string }[] } }) {
+  constructor(column: DMMF.Field, columnPosition = 0, enums: Enums) {
     const path = column.name;
     super({ path });
     this.column = column;

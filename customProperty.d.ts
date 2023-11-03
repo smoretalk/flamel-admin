@@ -1,24 +1,13 @@
 import { BaseProperty, PropertyType } from 'adminjs';
 import type { DMMF } from '@prisma/client/runtime/library.js';
+import { Enums } from "@adminjs/prisma";
 export declare class Property extends BaseProperty {
     column: DMMF.Field;
-    enums: {
-        [k: string]: {
-            values: {
-                name: string;
-            }[];
-        };
-    };
+    enums: Enums;
     columnPosition: number;
     depModel: string;
     depModelObject: DMMF.Model;
-    constructor(column: DMMF.Field, columnPosition: number, enums: {
-        [k: string]: {
-            values: {
-                name: string;
-            }[];
-        };
-    });
+    constructor(column: DMMF.Field, columnPosition: number, enums: Enums);
     isEditable(): boolean;
     isId(): boolean;
     name(): string;

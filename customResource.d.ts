@@ -1,19 +1,22 @@
 import { BaseRecord, BaseResource, Filter, FlattenParams, ParamsType } from 'adminjs';
 import { type Enums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
-import { type PrismaClient } from '@prisma/client';
 import { Property } from "./customProperty.js";
 export declare const lowerCase: (name: string) => string;
 type Args = {
     model: DMMF.Model;
-    client: PrismaClient;
-    clientModule?: any;
+    client: any;
+    clientModule?: {
+        Prisma: {
+            dmmf: DMMF.Document;
+        };
+    };
     include?: object;
     depModels?: DMMF.Model[];
 };
 export declare class CustomResource extends BaseResource {
     model: DMMF.Model;
-    client: PrismaClient;
+    client: any;
     enums: Enums;
     manager: any;
     propertiesObject: {
