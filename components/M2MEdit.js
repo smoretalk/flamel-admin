@@ -87,6 +87,7 @@ const EditManyToManyInput = (props) => {
     };
     const onCopyTag = (e) => {
         e.preventDefault();
+        e.stopPropagation();
         const value = e.currentTarget.copyTarget.value;
         if (!value) {
             alert('아이디를 입력하세요.');

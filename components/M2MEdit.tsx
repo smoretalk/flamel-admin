@@ -128,6 +128,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
 
   const onCopyTag: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const value = e.currentTarget.copyTarget.value;
     if (!value) {
       alert('아이디를 입력하세요.');
@@ -172,7 +173,8 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         {...property.props}
       />
       <FormMessage>{error?.message}</FormMessage>
-      <form onSubmit={onCopyTag}><input id="copyTarget" placeholder="태그를 복사할 이미지 아이디를 넣으세요."/>
+      <form onSubmit={onCopyTag}>
+        <input id="copyTarget" placeholder="태그를 복사할 이미지 아이디를 넣으세요."/>
         <button>복사</button>
       </form>
     </FormGroup>
