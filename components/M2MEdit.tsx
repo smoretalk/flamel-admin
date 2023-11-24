@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect, FormEventHandler} from 'react';
+import React, {FC, useState, useEffect, FormEventHandler, MouseEventHandler, ChangeEventHandler} from 'react';
 import {
   FormGroup,
   FormMessage,
@@ -28,12 +28,17 @@ type KoTag = {
   title: string
 };
 const EditManyToManyInput: FC<CombinedProps> = (props) => {
+  const [copyTarget, setCopyTarget] = useState('');
   const {onChange, property, record} = props;
   const {reference: resourceId} = property;
   const {translateProperty} = useTranslation();
 
   if (!resourceId) {
     throw new Error(`Cannot reference resource in property '${property.path}'`);
+  }
+
+  const onChangeCopyTarget: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setCopyTarget(e.target.value);
   }
 
   console.log(record, property);
@@ -126,10 +131,10 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
       });
   };
 
-  const onCopyTag: FormEventHandler<HTMLFormElement> = (e) => {
+  const onCopyTag: MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    const value = e.currentTarget.copyTarget.value;
+    const value = copyTarget;
     if (!value) {
       alert('아이디를 입력하세요.');
       return;
@@ -173,10 +178,10 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         {...property.props}
       />
       <FormMessage>{error?.message}</FormMessage>
-      <form onSubmit={onCopyTag}>
-        <input id="copyTarget" placeholder="태그를 복사할 이미지 아이디를 넣으세요."/>
-        <button>복사</button>
-      </form>
+      <div>
+        <input id="copyTarget" value={copyTarget} onChange={onChangeCopyTarget} placeholder="태그를 복사할 이미지 아이디를 넣으세요."/>
+        <button onClick={onCopyTag}>복사</button>
+      </div>
     </FormGroup>
   );
 };

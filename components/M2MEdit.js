@@ -5,12 +5,16 @@ import { unflatten } from 'flat';
 import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
 import axios from "axios";
 const EditManyToManyInput = (props) => {
+    const [copyTarget, setCopyTarget] = useState('');
     const { onChange, property, record } = props;
     const { reference: resourceId } = property;
     const { translateProperty } = useTranslation();
     if (!resourceId) {
         throw new Error(`Cannot reference resource in property '${property.path}'`);
     }
+    const onChangeCopyTarget = (e) => {
+        setCopyTarget(e.target.value);
+    };
     console.log(record, property);
     const handleChange = (selected) => {
         setSelectedOptions(selected);
@@ -88,7 +92,7 @@ const EditManyToManyInput = (props) => {
     const onCopyTag = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const value = e.currentTarget.copyTarget.value;
+        const value = copyTarget;
         if (!value) {
             alert('아이디를 입력하세요.');
             return;
@@ -114,9 +118,9 @@ const EditManyToManyInput = (props) => {
         React.createElement(Label, null, translateProperty(property.label)),
         React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, onCreateOption: onCreateOption, ...property.props }),
         React.createElement(FormMessage, null, error?.message),
-        React.createElement("form", { onSubmit: onCopyTag },
-            React.createElement("input", { id: "copyTarget", placeholder: "\uD0DC\uADF8\uB97C \uBCF5\uC0AC\uD560 \uC774\uBBF8\uC9C0 \uC544\uC774\uB514\uB97C \uB123\uC73C\uC138\uC694." }),
-            React.createElement("button", null, "\uBCF5\uC0AC"))));
+        React.createElement("div", null,
+            React.createElement("input", { id: "copyTarget", value: copyTarget, onChange: onChangeCopyTarget, placeholder: "\uD0DC\uADF8\uB97C \uBCF5\uC0AC\uD560 \uC774\uBBF8\uC9C0 \uC544\uC774\uB514\uB97C \uB123\uC73C\uC138\uC694." }),
+            React.createElement("button", { onClick: onCopyTag }, "\uBCF5\uC0AC"))));
 };
 export default EditManyToManyInput;
 //# sourceMappingURL=M2MEdit.js.map
