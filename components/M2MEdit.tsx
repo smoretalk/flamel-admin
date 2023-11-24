@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, {FC, useState, useEffect, FormEventHandler} from 'react';
 import {
   FormGroup,
   FormMessage,
@@ -120,6 +120,18 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
       });
   };
 
+  const onCopyTag: FormEventHandler<HTMLFormElement> = (e) => {
+    const value = e.currentTarget.copyTarget.value;
+    if (!value) {
+      alert('아이디를 입력하세요.');
+      return;
+    }
+    axios.get<{ CollectionInfo: { CollectionEnTags: [], CollectionKoTags: [] } }>(`/api/admin/images/${value}`)
+      .then((response) => {
+        console.log(response);
+      });
+  }
+
   return (
     <FormGroup error={Boolean(error)}>
       <Label>{translateProperty(property.label)}</Label>
@@ -137,6 +149,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         {...property.props}
       />
       <FormMessage>{error?.message}</FormMessage>
+      <form onSubmit={onCopyTag}><input id="copyTarget" placeholder="태그를 복사할 이미지 아이디를 넣으세요." /><button>복사</button></form>
     </FormGroup>
   );
 };
