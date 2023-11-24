@@ -76,22 +76,42 @@ const EditManyToManyInput = (props) => {
         axios.post(`/api/collections/tags/${property.reference}/${option}`)
             .then((response) => {
             console.log(`${option} 생성되었습니다.`, response);
-            setSelectedOptions((prev) => {
-                handleChange([...prev, {
-                        value: response.data.enTagId || response.data.koTagId,
-                        label: response.data.title,
-                    }].filter(Boolean));
-                return [...prev, {
-                        value: response.data.enTagId || response.data.koTagId,
-                        label: response.data.title,
-                    }];
-            });
+            handleChange([...selectedOptions, {
+                    value: property.reference === 'CollectionEnTag' ? response.data.enTagId : response.data.koTagId,
+                    label: response.data.title,
+                }].filter(Boolean));
+        });
+    };
+    const onCopyTag = (e) => {
+        const value = e.currentTarget.copyTarget.value;
+        if (!value) {
+            alert('아이디를 입력하세요.');
+            return;
+        }
+        axios.get(`/api/admin/images/${value}`)
+            .then((response) => {
+            console.log(response);
+            if (property.reference === 'CollectionEnTag') {
+                handleChange(response.data.CollectionInfo.CollectionEnTags.map((v) => ({
+                    value: v.enTagId,
+                    label: v.title,
+                })));
+            }
+            else if (property.reference === 'CollectionKoTag') {
+                handleChange(response.data.CollectionInfo.CollectionKoTags.map((v) => ({
+                    value: v.koTagId,
+                    label: v.title,
+                })));
+            }
         });
     };
     return (React.createElement(FormGroup, { error: Boolean(error) },
         React.createElement(Label, null, translateProperty(property.label)),
         React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, onCreateOption: onCreateOption, ...property.props }),
-        React.createElement(FormMessage, null, error?.message)));
+        React.createElement(FormMessage, null, error?.message),
+        React.createElement("form", { onSubmit: onCopyTag },
+            React.createElement("input", { id: "copyTarget", placeholder: "\uD0DC\uADF8\uB97C \uBCF5\uC0AC\uD560 \uC774\uBBF8\uC9C0 \uC544\uC774\uB514\uB97C \uB123\uC73C\uC138\uC694." }),
+            React.createElement("button", null, "\uBCF5\uC0AC"))));
 };
 export default EditManyToManyInput;
 //# sourceMappingURL=M2MEdit.js.map

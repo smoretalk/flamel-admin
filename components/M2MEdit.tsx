@@ -10,7 +10,7 @@ import {
   RecordJSON,
   SelectRecord, useTranslation,
 } from 'adminjs';
-import { unflatten } from 'flat';
+import {unflatten} from 'flat';
 import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
 import axios from "axios";
 
@@ -20,9 +20,9 @@ type SelectRecordEnhanced = SelectRecord & {
 };
 
 const EditManyToManyInput: FC<CombinedProps> = (props) => {
-  const { onChange, property, record } = props;
-  const { reference: resourceId } = property;
-  const { translateProperty } = useTranslation();
+  const {onChange, property, record} = props;
+  const {reference: resourceId} = property;
+  const {translateProperty} = useTranslation();
 
   if (!resourceId) {
     throw new Error(`Cannot reference resource in property '${property.path}'`);
@@ -35,7 +35,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     if (selected && Array.isArray(selected)) {
       onChange(
         property.path,
-        selected.map((option) => ({ id: option.value })),
+        selected.map((option) => ({id: option.value})),
       );
     } else {
       onChange(property.path, null);
@@ -74,7 +74,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();
   const [loadingRecord, setLoadingRecord] = useState(0);
   const selectedValue = record?.populated[property.path] ?? loadedRecord;
-  const selectedValuesToOptions: Array<{value: number, label: string }> = selectedValues.map((selectedValue) => ({
+  const selectedValuesToOptions: Array<{ value: number, label: string }> = selectedValues.map((selectedValue) => ({
     value: selectedValue.id || selectedValue.enTagId || selectedValue.koTagId,
     label: selectedValue.title,
   }));
@@ -93,7 +93,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
           resourceId,
           recordId: selectedId,
         })
-        .then(({ data }: any) => {
+        .then(({data}: any) => {
           setLoadedRecord(data.record);
         })
         .finally(() => {
@@ -104,19 +104,17 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
 
   const onCreateOption = (option: string) => {
     console.log('onCreate', option);
-    axios.post<{ enTagId: number, koTagId: number, title: string }>(`/api/collections/tags/${property.reference}/${option}`)
+    axios.post<{
+      enTagId: number,
+      koTagId: number,
+      title: string
+    }>(`/api/collections/tags/${property.reference}/${option}`)
       .then((response) => {
         console.log(`${option} 생성되었습니다.`, response);
-        setSelectedOptions((prev) => {
-          handleChange([...prev, {
-            value: response.data.enTagId || response.data.koTagId,
-            label: response.data.title,
-          }].filter(Boolean));
-          return [...prev, {
-            value: response.data.enTagId || response.data.koTagId,
-            label: response.data.title,
-          }]
-        });
+        handleChange([...selectedOptions, {
+          value: property.reference === 'CollectionEnTag' ? response.data.enTagId : response.data.koTagId,
+          label: response.data.title,
+        }].filter(Boolean));
       });
   };
 
@@ -126,9 +124,25 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
       alert('아이디를 입력하세요.');
       return;
     }
-    axios.get<{ CollectionInfo: { CollectionEnTags: [], CollectionKoTags: [] } }>(`/api/admin/images/${value}`)
+    axios.get<{
+      CollectionInfo: {
+        CollectionEnTags: { enTagId: number, title: string }[],
+        CollectionKoTags: { koTagId: number, title: string }[]
+      }
+    }>(`/api/admin/images/${value}`)
       .then((response) => {
         console.log(response);
+        if (property.reference === 'CollectionEnTag') {
+          handleChange(response.data.CollectionInfo.CollectionEnTags.map((v) => ({
+            value: v.enTagId,
+            label: v.title,
+          })))
+        } else if (property.reference === 'CollectionKoTag') {
+          handleChange(response.data.CollectionInfo.CollectionKoTags.map((v) => ({
+            value: v.koTagId,
+            label: v.title,
+          })))
+        }
       });
   }
 
@@ -149,7 +163,9 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         {...property.props}
       />
       <FormMessage>{error?.message}</FormMessage>
-      <form onSubmit={onCopyTag}><input id="copyTarget" placeholder="태그를 복사할 이미지 아이디를 넣으세요." /><button>복사</button></form>
+      <form onSubmit={onCopyTag}><input id="copyTarget" placeholder="태그를 복사할 이미지 아이디를 넣으세요."/>
+        <button>복사</button>
+      </form>
     </FormGroup>
   );
 };
