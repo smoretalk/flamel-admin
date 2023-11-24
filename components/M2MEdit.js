@@ -71,18 +71,22 @@ const EditManyToManyInput = (props) => {
             });
         }
     }, [selectedValue, selectedId, resourceId]);
+    const isEnTag = (type, data) => {
+        return type === 'CollectionEnTag';
+    };
     const onCreateOption = (option) => {
         console.log('onCreate', option);
         axios.post(`/api/collections/tags/${property.reference}/${option}`)
             .then((response) => {
             console.log(`${option} 생성되었습니다.`, response);
             handleChange([...selectedOptions, {
-                    value: property.reference === 'CollectionEnTag' ? response.data.enTagId : response.data.koTagId,
+                    value: isEnTag(property.reference, response.data) ? response.data.enTagId : response.data.koTagId,
                     label: response.data.title,
                 }].filter(Boolean));
         });
     };
     const onCopyTag = (e) => {
+        e.preventDefault();
         const value = e.currentTarget.copyTarget.value;
         if (!value) {
             alert('아이디를 입력하세요.');

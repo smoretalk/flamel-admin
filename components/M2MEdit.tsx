@@ -19,6 +19,14 @@ type SelectRecordEnhanced = SelectRecord & {
   // record: RecordJSON;
 };
 
+type EnTag = {
+  enTagId: number,
+  title: string
+};
+type KoTag = {
+  koTagId: number,
+  title: string
+};
 const EditManyToManyInput: FC<CombinedProps> = (props) => {
   const {onChange, property, record} = props;
   const {reference: resourceId} = property;
@@ -102,23 +110,24 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     }
   }, [selectedValue, selectedId, resourceId]);
 
+  const isEnTag = (type: 'CollectionEnTag' | 'CollectionKoTag', data: EnTag | KoTag): data is EnTag => {
+    return type === 'CollectionEnTag';
+  }
+
   const onCreateOption = (option: string) => {
     console.log('onCreate', option);
-    axios.post<{
-      enTagId: number,
-      koTagId: number,
-      title: string
-    }>(`/api/collections/tags/${property.reference}/${option}`)
+    axios.post<EnTag | KoTag>(`/api/collections/tags/${property.reference}/${option}`)
       .then((response) => {
         console.log(`${option} 생성되었습니다.`, response);
         handleChange([...selectedOptions, {
-          value: property.reference === 'CollectionEnTag' ? response.data.enTagId : response.data.koTagId,
+          value: isEnTag(property.reference as 'CollectionEnTag' | 'CollectionKoTag', response.data) ? response.data.enTagId : response.data.koTagId,
           label: response.data.title,
         }].filter(Boolean));
       });
   };
 
   const onCopyTag: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
     const value = e.currentTarget.copyTarget.value;
     if (!value) {
       alert('아이디를 입력하세요.');
@@ -126,8 +135,8 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     }
     axios.get<{
       CollectionInfo: {
-        CollectionEnTags: { enTagId: number, title: string }[],
-        CollectionKoTags: { koTagId: number, title: string }[]
+        CollectionEnTags: EnTag[],
+        CollectionKoTags: KoTag[]
       }
     }>(`/api/admin/images/${value}`)
       .then((response) => {
