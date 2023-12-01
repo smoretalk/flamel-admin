@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 const DisplayImage = (props) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/') +
+    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/').replace(/\/api\/collections\//, `/api/admin/${props.record.params.ownerId}/images/`) +
         '/thumb');
     const onError = () => {
         if (!errored) {

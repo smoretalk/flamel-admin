@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import type { ShowPropertyProps } from 'adminjs';
+import React, {useState} from "react";
+import type {ShowPropertyProps} from 'adminjs';
 
 const DisplayImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
-    const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/'))
+  const [errored, setErrored] = useState(false);
+  const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/').replace(/\/api\/collections\//, `/api/admin/${props.record.params.ownerId}/images/`))
 
   return (
-    <section style={{ marginBottom: props.where === 'show' ? 24 : 0 }}>
+    <section style={{marginBottom: props.where === 'show' ? 24 : 0}}>
       {props.where === 'show' && (
         <label
           style={{
