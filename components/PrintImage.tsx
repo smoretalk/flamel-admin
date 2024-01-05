@@ -40,9 +40,9 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
       <style dangerouslySetInnerHTML={{__html: `
         @media print {
           #print-root-hide { display: none }
-          #print-root-visible { display: block; width: 100%; height: 100%; position: absolute; top: 0, left: 0 }
+          #print-root-visible { display: flex; width: 100%; height: 100%; position: absolute; top: 0, left: 0, justify-content: center }
           
-          #print-root-visible img {
+          #print-img {
             width: 282px;
             height: 282px;
             top: 127px;
@@ -61,7 +61,10 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
         <button onClick={onClose}>닫기</button>
       </div>
       <div id="print-root-visible">
-        <img src="" alt=""/>
+        <img src="https://flamel.app/api/collections/flamel-logo.png/theme" width={70} alt=""/>
+        <img src="https://flamel.app/api/collections/image-slogan.png/theme" width={42} alt=""/>
+        <img id="print-image" src={record.params.link.replaceAll('users', 'admin')} alt="이미지"/>
+        <img src="https://flamel.app/api/collections/CES2024.png/theme" width={15} alt=""/>
         <canvas id="qr"></canvas>
       </div>
     </div>

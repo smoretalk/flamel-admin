@@ -23,9 +23,9 @@ const PrintImage = ({ record }) => {
         React.createElement("style", { dangerouslySetInnerHTML: { __html: `
         @media print {
           #print-root-hide { display: none }
-          #print-root-visible { display: block; width: 100%; height: 100%; position: absolute; top: 0, left: 0 }
+          #print-root-visible { display: flex; width: 100%; height: 100%; position: absolute; top: 0, left: 0, justify-content: center }
           
-          #print-root-visible img {
+          #print-img {
             width: 282px;
             height: 282px;
             top: 127px;
@@ -40,7 +40,10 @@ const PrintImage = ({ record }) => {
             React.createElement("button", { onClick: printImage }, "\uD504\uB9B0\uD2B8"),
             React.createElement("button", { onClick: onClose }, "\uB2EB\uAE30")),
         React.createElement("div", { id: "print-root-visible" },
-            React.createElement("img", { src: "", alt: "" }),
+            React.createElement("img", { src: "https://flamel.app/api/collections/flamel-logo.png/theme", width: 70, alt: "" }),
+            React.createElement("img", { src: "https://flamel.app/api/collections/image-slogan.png/theme", width: 42, alt: "" }),
+            React.createElement("img", { id: "print-image", src: record.params.link.replaceAll('users', 'admin'), alt: "\uC774\uBBF8\uC9C0" }),
+            React.createElement("img", { src: "https://flamel.app/api/collections/CES2024.png/theme", width: 15, alt: "" }),
             React.createElement("canvas", { id: "qr" }))));
 };
 export default PrintImage;
