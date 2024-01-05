@@ -20,6 +20,10 @@ export const Components = {
     'DisplayNestedImage',
     path.resolve(__dirname, 'components', 'DisplayNestedImage'),
   ),
+  PrintImage: componentLoader.add(
+    'PrintImage',
+    path.resolve(__dirname, 'components', 'PrintImage'),
+  ),
   DisplayImageBig: componentLoader.add(
     'DisplayImageBig',
     path.resolve(__dirname, 'components', 'DisplayImageBig'),
