@@ -96,7 +96,8 @@ Card.defaultProps = {
   boxShadow: 'card',
 };
 
-export const Dashboard: React.FC = () => {
+export const Dashboard: React.FC = (props) => {
+  console.log('dashboard props', props);
   const { translateMessage, translateButton } = useTranslation();
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [themeFiles, setThemeFiles] = useState<File[]>([])

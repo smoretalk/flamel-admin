@@ -35,7 +35,8 @@ Card.defaultProps = {
     variant: 'container',
     boxShadow: 'card',
 };
-export const Dashboard = () => {
+export const Dashboard = (props) => {
+    console.log('dashboard props', props);
     const { translateMessage, translateButton } = useTranslation();
     const [imageFiles, setImageFiles] = useState([]);
     const [themeFiles, setThemeFiles] = useState([]);
