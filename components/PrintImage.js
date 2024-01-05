@@ -8,7 +8,7 @@ const PrintImage = ({ record }) => {
     useEffect(() => {
         const qr2 = new QRious({
             element: document.getElementById("qr"),
-            size: 86
+            size: 92
         });
         qr2.set({
             foreground: "white",
@@ -56,16 +56,16 @@ const PrintImage = ({ record }) => {
         }
         #print-root-visible canvas {
           position: absolute;
-          bottom: 12px;
+          bottom: 13px;
           right: 19px;
-          width: 75px;
-          height: 75px;
+          width: 63px;
+          height: 63px;
         }
         ` } }),
         React.createElement("div", { id: "print-root-hide" },
             React.createElement("button", { onClick: printImage }, "\uD504\uB9B0\uD2B8"),
-            React.createElement("button", { onClick: onClose }, "\uB2EB\uAE30"),
-            React.createElement("button", { onClick: resizeCanvas }, "\uB9AC\uC0AC\uC774\uC988")),
+            React.createElement("button", { onClick: resizeCanvas }, "QR\uB9AC\uC0AC\uC774\uC988"),
+            React.createElement("button", { onClick: onClose }, "\uB2EB\uAE30")),
         React.createElement("div", { id: "print-root-visible" },
             React.createElement("img", { src: "https://flamel.app/api/collections/ces-image.png/theme", width: "100%", alt: "" }),
             React.createElement("img", { id: "print-image", src: record.params.link.replaceAll('users', 'admin'), alt: "\uC774\uBBF8\uC9C0" }),

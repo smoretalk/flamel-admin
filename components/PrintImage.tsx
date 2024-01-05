@@ -11,7 +11,7 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
   useEffect(() => {
     const qr2 = new QRious({
       element: document.getElementById("qr"),
-      size: 86
+      size: 92
     });
     qr2.set({
       foreground: "white",
@@ -74,10 +74,10 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
         }
         #print-root-visible canvas {
           position: absolute;
-          bottom: 12px;
+          bottom: 13px;
           right: 19px;
-          width: 75px;
-          height: 75px;
+          width: 63px;
+          height: 63px;
         }
         `}}
       />
@@ -85,8 +85,8 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
         <button onClick={printImage}>
           프린트
         </button>
+        <button onClick={resizeCanvas}>QR리사이즈</button>
         <button onClick={onClose}>닫기</button>
-        <button onClick={resizeCanvas}>리사이즈</button>
       </div>
       <div id="print-root-visible">
         <img src="https://flamel.app/api/collections/ces-image.png/theme" width="100%" alt=""/>
