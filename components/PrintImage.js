@@ -8,7 +8,7 @@ const PrintImage = ({ record }) => {
     useEffect(() => {
         const qr2 = new QRious({
             element: document.getElementById("qr"),
-            size: 90
+            size: 86
         });
         qr2.set({
             foreground: "white",
@@ -30,13 +30,13 @@ const PrintImage = ({ record }) => {
         #print-image {
           position: absolute;
           top: 145px;
-          width: 347px;
-          height: 347px;
+          width: 346px;
+          height: 346px;
         }
         #print-root-visible canvas {
           position: absolute;
           bottom: 12px;
-          right: 20px;
+          right: 19px;
           width: 75px;
           height: 75px;
         }
