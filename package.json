@@ -21,6 +21,7 @@
     "@adminjs/prisma": "^5.0.1",
     "adminjs": "^7.2.1",
     "file-saver": "^2.0.5",
+    "qrious": "^4.0.2",
     "react": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "typescript": "^5.2.2"
