@@ -8,7 +8,7 @@ const PrintImage = ({ record }) => {
     useEffect(() => {
         const qr2 = new QRious({
             element: document.getElementById("qr"),
-            size: 225
+            size: 250
         });
         qr2.set({
             foreground: "white",
@@ -34,18 +34,21 @@ const PrintImage = ({ record }) => {
           left: 15px;
         }
         #print-root-visible canvas {
-          width: 36px;
-          height: 36px;
+          position: absolute;
+          bottom: 40px;
+          right: 60px;
+          width: 200px;
+          height: 200px;
         }
         ` } }),
         React.createElement("div", { id: "print-root-hide" },
             React.createElement("button", { onClick: printImage }, "\uD504\uB9B0\uD2B8"),
             React.createElement("button", { onClick: onClose }, "\uB2EB\uAE30")),
         React.createElement("div", { id: "print-root-visible" },
-            React.createElement("img", { src: "https://flamel.app/api/collections/flamel-logo.png/theme", width: 840, alt: "" }),
-            React.createElement("img", { src: "https://flamel.app/api/collections/image-slogan.png/theme", width: 512, alt: "" }),
-            React.createElement("img", { id: "print-image", src: record.params.link.replaceAll('users', 'admin'), alt: "\uC774\uBBF8\uC9C0" }),
-            React.createElement("img", { src: "https://flamel.app/api/collections/CES2024.png/theme", width: 189, alt: "" }),
+            React.createElement("img", { src: "https://flamel.app/api/collections/flamel-logo.png/theme", style: { marginTop: 32, marginBottom: 16 }, width: 280, alt: "" }),
+            React.createElement("img", { src: "https://flamel.app/api/collections/image-slogan.png/theme", style: { marginBottom: 16 }, width: 170, alt: "" }),
+            React.createElement("img", { id: "print-image", src: record.params.link.replaceAll('users', 'admin'), style: { marginBottom: 16 }, alt: "\uC774\uBBF8\uC9C0" }),
+            React.createElement("img", { src: "https://flamel.app/api/collections/CES2024.png/theme", width: 142, alt: "" }),
             React.createElement("canvas", { id: "qr" }))));
 };
 export default PrintImage;
