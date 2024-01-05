@@ -19,13 +19,34 @@ const PrintImage = ({ record }) => {
     const onClose = () => {
         history.back();
     };
+    const resizeCanvas = () => {
+        const size = parseInt(prompt('픽셀'));
+        const qr2 = new QRious({
+            element: document.getElementById("qr"),
+            size,
+        });
+        qr2.set({
+            foreground: "white",
+            background: "#171717",
+            value: `https://flamel-global.framer.website/`
+        });
+    };
     return (React.createElement("div", { id: "print-root" },
         React.createElement("style", { dangerouslySetInnerHTML: { __html: `
-        #print-root-visible { position: absolute; top: 30px }
-        #print-root-visible { display: flex; flex-direction: column; width: 100%; height: 100%; left: 0; align-items: center }
+        #print-root-visible {
+          position: absolute;
+          top: 30px;
+          display: flex;
+          flex-direction: column;
+          width: 384px;
+          height: 576px;
+          border: 1px solid black;
+          left: 0;
+          align-items: center
+        }
         @media print {
           #print-root-hide { display: none }
-          #print-root-visible { top: 0 }
+          #print-root-visible { top: 0; border: none }
         }
         #print-image {
           position: absolute;
@@ -43,10 +64,11 @@ const PrintImage = ({ record }) => {
         ` } }),
         React.createElement("div", { id: "print-root-hide" },
             React.createElement("button", { onClick: printImage }, "\uD504\uB9B0\uD2B8"),
-            React.createElement("button", { onClick: onClose }, "\uB2EB\uAE30")),
+            React.createElement("button", { onClick: onClose }, "\uB2EB\uAE30"),
+            React.createElement("button", { onClick: resizeCanvas }, "\uB9AC\uC0AC\uC774\uC988")),
         React.createElement("div", { id: "print-root-visible" },
             React.createElement("img", { src: "https://flamel.app/api/collections/ces-image.png/theme", width: "100%", alt: "" }),
-            React.createElement("img", { id: "print-image", src: record.params.link.replaceAll('users', 'admin'), style: { marginBottom: 16 }, alt: "\uC774\uBBF8\uC9C0" }),
+            React.createElement("img", { id: "print-image", src: record.params.link.replaceAll('users', 'admin'), alt: "\uC774\uBBF8\uC9C0" }),
             React.createElement("canvas", { id: "qr" }))));
 };
 export default PrintImage;

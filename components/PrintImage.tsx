@@ -35,14 +35,36 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
     history.back();
   };
 
+  const resizeCanvas = () => {
+    const size = parseInt(prompt('픽셀'));
+    const qr2 = new QRious({
+      element: document.getElementById("qr"),
+      size,
+    });
+    qr2.set({
+      foreground: "white",
+      background: "#171717",
+      value: `https://flamel-global.framer.website/`
+    });
+  }
+
   return (
     <div id="print-root">
       <style dangerouslySetInnerHTML={{__html: `
-        #print-root-visible { position: absolute; top: 30px }
-        #print-root-visible { display: flex; flex-direction: column; width: 100%; height: 100%; left: 0; align-items: center }
+        #print-root-visible {
+          position: absolute;
+          top: 30px;
+          display: flex;
+          flex-direction: column;
+          width: 384px;
+          height: 576px;
+          border: 1px solid black;
+          left: 0;
+          align-items: center
+        }
         @media print {
           #print-root-hide { display: none }
-          #print-root-visible { top: 0 }
+          #print-root-visible { top: 0; border: none }
         }
         #print-image {
           position: absolute;
@@ -64,10 +86,11 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
           프린트
         </button>
         <button onClick={onClose}>닫기</button>
+        <button onClick={resizeCanvas}>리사이즈</button>
       </div>
       <div id="print-root-visible">
         <img src="https://flamel.app/api/collections/ces-image.png/theme" width="100%" alt=""/>
-        <img id="print-image" src={record.params.link.replaceAll('users', 'admin')} style={{ marginBottom: 16 }} alt="이미지"/>
+        <img id="print-image" src={record.params.link.replaceAll('users', 'admin')} alt="이미지"/>
         <canvas id="qr"></canvas>
       </div>
     </div>
