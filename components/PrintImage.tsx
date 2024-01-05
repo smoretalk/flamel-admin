@@ -11,7 +11,7 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
   useEffect(() => {
     const qr2 = new QRious({
       element: document.getElementById("qr"),
-      size: 250
+      size: 75
     });
     qr2.set({
       foreground: "white",
@@ -45,17 +45,17 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
           #print-root-visible { top: 0 }
         }
         #print-image {
-          width: 900px;
-          height: 900px;
-          top: 127px;
-          left: 15px;
+          position: absolute;
+          top: 180px;
+          width: 336px;
+          height: 336px;
         }
         #print-root-visible canvas {
           position: absolute;
           bottom: 40px;
           right: 60px;
-          width: 200px;
-          height: 200px;
+          width: 75px;
+          height: 75px;
         }
         `}}
       />
@@ -66,10 +66,8 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
         <button onClick={onClose}>닫기</button>
       </div>
       <div id="print-root-visible">
-        <img src="https://flamel.app/api/collections/flamel-logo.png/theme" style={{ marginTop: 32, marginBottom: 16 }} width={280} alt=""/>
-        <img src="https://flamel.app/api/collections/image-slogan.png/theme" style={{ marginBottom: 16 }} width={170} alt=""/>
+        <img src="https://flamel.app/api/collections/ces-image/theme" style={{ marginTop: 32, marginBottom: 16 }} width="100%" alt=""/>
         <img id="print-image" src={record.params.link.replaceAll('users', 'admin')} style={{ marginBottom: 16 }} alt="이미지"/>
-        <img src="https://flamel.app/api/collections/CES2024.png/theme" width={142} alt=""/>
         <canvas id="qr"></canvas>
       </div>
     </div>
