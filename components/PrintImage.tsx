@@ -74,10 +74,10 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
         }
         #print-root-visible canvas {
           position: absolute;
-          bottom: 13px;
+          bottom: 34px;
           right: 19px;
-          width: 63px;
-          height: 63px;
+          width: 45px;
+          height: 45px;
         }
         `}}
       />
