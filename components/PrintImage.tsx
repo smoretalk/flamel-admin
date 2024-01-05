@@ -38,20 +38,22 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
   return (
     <div id="print-root">
       <style dangerouslySetInnerHTML={{__html: `
+        #print-root-visible { position: absolute; top: 30px }
+        #print-root-visible { display: flex; flex-direction: column; width: 100%; height: 100%; left: 0; align-items: center }
         @media print {
           #print-root-hide { display: none }
-          #print-root-visible { display: flex; width: 100%; height: 100%; position: absolute; top: 0, left: 0, justify-content: center }
-          
-          #print-img {
-            width: 282px;
-            height: 282px;
-            top: 127px;
-            left: 15px;
-          }
-          #print-root-visible canvas {
-            width: 36px;
-            height: 36px;
-          }
+          #print-root-visible { top: 0 }
+        }
+        #print-image {
+          width: 900px;
+          height: 900px;
+          top: 127px;
+          left: 15px;
+        }
+        #print-root-visible canvas {
+          width: 36px;
+          height: 36px;
+        }
         `}}
       />
       <div id="print-root-hide">
@@ -61,10 +63,10 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
         <button onClick={onClose}>닫기</button>
       </div>
       <div id="print-root-visible">
-        <img src="https://flamel.app/api/collections/flamel-logo.png/theme" width={70} alt=""/>
-        <img src="https://flamel.app/api/collections/image-slogan.png/theme" width={42} alt=""/>
+        <img src="https://flamel.app/api/collections/flamel-logo.png/theme" width={840} alt=""/>
+        <img src="https://flamel.app/api/collections/image-slogan.png/theme" width={512} alt=""/>
         <img id="print-image" src={record.params.link.replaceAll('users', 'admin')} alt="이미지"/>
-        <img src="https://flamel.app/api/collections/CES2024.png/theme" width={15} alt=""/>
+        <img src="https://flamel.app/api/collections/CES2024.png/theme" width={189} alt=""/>
         <canvas id="qr"></canvas>
       </div>
     </div>
