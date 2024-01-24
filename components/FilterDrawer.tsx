@@ -4,18 +4,16 @@ import pickBy from 'lodash/pickBy.js'
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-// @ts-ignore
-import { useTranslation } from 'adminjs/lib/frontend/hooks/index.js'
-// @ts-ignore
-import { useFilterDrawer } from 'adminjs/lib/frontend/hooks/use-filter-drawer.js'
-// @ts-ignore
-import { useQueryParams } from 'adminjs/lib/frontend/hooks/use-query-params.js'
-// @ts-ignore
-import { RecordJSON, ResourceJSON } from 'adminjs/lib/frontend/interfaces/index.js'
-// @ts-ignore
-import { getResourceElementCss } from 'adminjs/lib/frontend/utils/index.js'
-// @ts-ignore
-import BasePropertyComponent from 'adminjs/lib/frontend/components/property-type/index.js'
+import {
+  useTranslation,
+  RecordJSON,
+  ResourceJSON,
+  getResourceElementCss,
+  BasePropertyComponent,
+  useQueryParams,
+  useFilterDrawer,
+  BasePropertyJSON,
+} from 'adminjs'
 
 export type FilterProps = {
   resource: ResourceJSON
@@ -102,7 +100,7 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
           </Button>
         </Box>
         <Box my="x3">
-          {properties.map((property: { propertyPath: string }) => (
+          {properties.map((property: BasePropertyJSON) => (
             <BasePropertyComponent
               key={property.propertyPath}
               where="filter"

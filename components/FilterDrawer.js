@@ -3,11 +3,7 @@ import isNil from 'lodash/isNil.js';
 import pickBy from 'lodash/pickBy.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useTranslation } from 'adminjs/lib/frontend/hooks/index.js';
-import { useFilterDrawer } from 'adminjs/lib/frontend/hooks/use-filter-drawer.js';
-import { useQueryParams } from 'adminjs/lib/frontend/hooks/use-query-params.js';
-import { getResourceElementCss } from 'adminjs/lib/frontend/utils/index.js';
-import BasePropertyComponent from 'adminjs/lib/frontend/components/property-type/index.js';
+import { useTranslation, getResourceElementCss, BasePropertyComponent, useQueryParams, useFilterDrawer, } from 'adminjs';
 const FilterDrawer = (props) => {
     const { resource } = props;
     const properties = resource.filterProperties;

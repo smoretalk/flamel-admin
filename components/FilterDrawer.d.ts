@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResourceJSON } from 'adminjs/lib/frontend/interfaces/index.js';
+import { ResourceJSON } from 'adminjs';
 export type FilterProps = {
     resource: ResourceJSON;
 };
