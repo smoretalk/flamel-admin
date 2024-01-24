@@ -67,10 +67,19 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
       throw new Error('you can not pass RecordJSON to filters')
     }
     console.log('propertyName', propertyName, value);
-    setFilter({
+    const newData = {
       ...filter,
       [propertyName as string]: typeof value === 'string' && !value.length ? undefined : value,
-    })
+    };
+    if ((propertyName as string).includes('.')) {
+      // 중첩된 값이면
+      const keys = (propertyName as string).split('.');
+      if (!newData[keys[0]]) {
+        newData[keys[0]] = {};
+      }
+      newData[keys[0]][keys[1]] = typeof value === 'string' && !value.length ? undefined : value;
+    }
+    setFilter(newData);
   }
 
   const contentTag = getResourceElementCss(resource.id, 'filter-drawer')

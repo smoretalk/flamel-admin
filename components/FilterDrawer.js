@@ -43,10 +43,18 @@ const FilterDrawer = (props) => {
             throw new Error('you can not pass RecordJSON to filters');
         }
         console.log('propertyName', propertyName, value);
-        setFilter({
+        const newData = {
             ...filter,
             [propertyName]: typeof value === 'string' && !value.length ? undefined : value,
-        });
+        };
+        if (propertyName.includes('.')) {
+            const keys = propertyName.split('.');
+            if (!newData[keys[0]]) {
+                newData[keys[0]] = {};
+            }
+            newData[keys[0]][keys[1]] = typeof value === 'string' && !value.length ? undefined : value;
+        }
+        setFilter(newData);
     };
     const contentTag = getResourceElementCss(resource.id, 'filter-drawer');
     const cssContent = getResourceElementCss(resource.id, 'filter-drawer-content');
