@@ -6,6 +6,7 @@ export declare class Property extends BaseProperty {
     enums: Enums;
     columnPosition: number;
     depModel: string;
+    depModelAlias: string;
     depModelObject: DMMF.Model;
     constructor(column: DMMF.Field, columnPosition: number, enums: Enums);
     isEditable(): boolean;

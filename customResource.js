@@ -145,16 +145,19 @@ export class CustomResource extends BaseResource {
             return memo;
         }, {});
     }
-    prepareDepModelProperties(model) {
+    prepareDepModelProperties(modelObj) {
+        const { model } = modelObj;
         const { fields = [], name } = model;
         return fields.reduce((memo, field) => {
+            console.log('prepareDepModelProperties', field);
             if (field.isReadOnly && !field.isId) {
                 return memo;
             }
             const property = new Property(field, Object.keys(memo).length, this.enums);
             property.depModel = name;
+            property.depModelAlias = modelObj.alias;
             property.depModelObject = model;
-            memo[`${name}.${property.path()}`] = property;
+            memo[`${modelObj.alias}.${property.path()}`] = property;
             return memo;
         }, {});
     }

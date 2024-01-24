@@ -14,6 +14,7 @@ export class Property extends BaseProperty {
     enums;
     columnPosition;
     depModel;
+    depModelAlias;
     depModelObject;
     constructor(column, columnPosition = 0, enums) {
         const path = column.name;

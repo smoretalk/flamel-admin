@@ -12,7 +12,10 @@ type Args = {
         };
     };
     include?: object;
-    depModels?: DMMF.Model[];
+    depModels?: {
+        alias: string;
+        model: DMMF.Model;
+    }[];
 };
 export declare class CustomResource extends BaseResource {
     model: DMMF.Model;
@@ -23,7 +26,10 @@ export declare class CustomResource extends BaseResource {
         [key: string]: Property;
     };
     include: object;
-    depModels: DMMF.Model[];
+    depModels: {
+        alias: string;
+        model: DMMF.Model;
+    }[];
     depModelsObject: {
         [k: string]: Property;
     }[];
@@ -56,7 +62,10 @@ export declare class CustomResource extends BaseResource {
     prepareProperties(): {
         [k: string]: Property;
     };
-    prepareDepModelProperties(model: DMMF.Model): {
+    prepareDepModelProperties(modelObj: {
+        alias: string;
+        model: DMMF.Model;
+    }): {
         [k: string]: Property;
     };
     prepareParams(params: FlattenParams): {

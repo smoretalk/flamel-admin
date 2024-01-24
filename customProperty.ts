@@ -18,6 +18,7 @@ export class Property extends BaseProperty {
   enums;
   columnPosition;
   depModel: string;
+  depModelAlias: string;
   depModelObject: DMMF.Model;
   // eslint-disable-next-line default-param-last
   constructor(column: DMMF.Field, columnPosition = 0, enums: Enums) {

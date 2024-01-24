@@ -7,7 +7,7 @@ import { convertFilter } from './convertFilter.js';
 
 export const lowerCase = (name: string) => name.substring(0, 1).toLowerCase() + name.substring(1);
 
-type Args = { model: DMMF.Model, client: any, clientModule?: { Prisma: { dmmf: DMMF.Document } }, include?: object, depModels?: DMMF.Model[]};
+type Args = { model: DMMF.Model, client: any, clientModule?: { Prisma: { dmmf: DMMF.Document } }, include?: object, depModels?: { alias: string, model: DMMF.Model}[] };
 export class CustomResource extends BaseResource {
   model: DMMF.Model;
   client: any;
@@ -150,16 +150,19 @@ export class CustomResource extends BaseResource {
       return memo;
     }, {});
   }
-  prepareDepModelProperties(model: DMMF.Model) {
+  prepareDepModelProperties(modelObj: { alias: string, model: DMMF.Model }) {
+    const { model } = modelObj;
     const { fields = [], name } = model;
     return fields.reduce((memo: { [k: string]: Property }, field) => {
+      console.log('prepareDepModelProperties', field);
       if (field.isReadOnly && !field.isId) {
         return memo;
       }
       const property = new Property(field, Object.keys(memo).length, this.enums);
       property.depModel = name;
+      property.depModelAlias = modelObj.alias;
       property.depModelObject = model;
-      memo[`${name}.${property.path()}`] = property;
+      memo[`${modelObj.alias}.${property.path()}`] = property;
       return memo;
     }, {});
   }
