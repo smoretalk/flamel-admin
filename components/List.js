@@ -29,6 +29,27 @@ const List = ({ resource, setTag }) => {
                         listProperties: resourceFinder(['idQuerySaver', 'displayImage', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.promptKo', 'CollectionInfo.promptEn', 'CollectionInfo.Theme', 'CollectionInfo.enabled']),
                     });
                 }
+                else {
+                    setNewResource({
+                        ...resource,
+                        listProperties: resourceFinder([
+                            'idQuerySaver',
+                            'displayImage',
+                            'referenceImage',
+                            'createdAt',
+                            'Owner',
+                            'model',
+                            'GenerationInfo.super',
+                            'GenerationInfo.main',
+                            'GenerationInfo.sub',
+                            'resolution',
+                            'GenerationInfo.originalPrompt',
+                            'GenerationInfo.translatedPrompt',
+                            'GenerationInfo.fullPrompt',
+                            'GenerationInfo.preset',
+                        ]),
+                    });
+                }
             }, 1000);
         }
     }, [records, location]);

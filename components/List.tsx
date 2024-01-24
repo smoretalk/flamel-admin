@@ -1,13 +1,14 @@
-import { Box, Pagination, Text } from '@adminjs/design-system'
-import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import {Box, Pagination, Text} from '@adminjs/design-system'
+import React, {useEffect, useState} from 'react'
+import {useLocation, useNavigate} from 'react-router'
 
 export const REFRESH_KEY = 'refresh'
 import {ActionProps, useRecords, useSelectedRecords, RecordsTable, BasePropertyJSON} from 'adminjs';
 import * as querystring from "querystring";
+
 export const getActionElementCss = (resourceId: string, actionName: string, suffix: string) => `${resourceId}-${actionName}-${suffix}`
 
-const List: React.FC<ActionProps> = ({ resource, setTag }) => {
+const List: React.FC<ActionProps> = ({resource, setTag}) => {
   const {
     records,
     loading,
@@ -35,6 +36,7 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
     })
     return resourceList;
   }
+
   useEffect(() => {
     if (records.length) {
       setTimeout(() => {
@@ -46,6 +48,26 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
           setNewResource({
             ...resource,
             listProperties: resourceFinder(['idQuerySaver', 'displayImage', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.promptKo', 'CollectionInfo.promptEn', 'CollectionInfo.Theme', 'CollectionInfo.enabled']),
+          })
+        } else {
+          setNewResource({
+            ...resource,
+            listProperties: resourceFinder([
+              'idQuerySaver',
+              'displayImage',
+              'referenceImage',
+              'createdAt',
+              'Owner',
+              'model',
+              'GenerationInfo.super',
+              'GenerationInfo.main',
+              'GenerationInfo.sub',
+              'resolution',
+              'GenerationInfo.originalPrompt',
+              'GenerationInfo.translatedPrompt',
+              'GenerationInfo.fullPrompt',
+              'GenerationInfo.preset',
+            ]),
           })
         }
       }, 1000)
@@ -95,7 +117,7 @@ const List: React.FC<ActionProps> = ({ resource, setTag }) => {
   const handlePaginationChange = (pageNumber: number): void => {
     const search = new URLSearchParams(location.search)
     search.set('page', pageNumber.toString())
-    navigate({ search: search.toString() })
+    navigate({search: search.toString()})
   }
 
   const contentTag = getActionElementCss(resource.id, 'list', 'table-wrapper')
