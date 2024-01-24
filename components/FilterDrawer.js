@@ -15,7 +15,7 @@ const FilterDrawer = (props) => {
     const initialLoad = useRef(true);
     const { isVisible, toggleFilter } = useFilterDrawer();
     const { storeParams, clearParams, filters } = useQueryParams();
-    console.log('filterResource', resource);
+    console.log('filterResource', properties, filter);
     useEffect(() => {
         if (initialLoad.current) {
             initialLoad.current = false;
