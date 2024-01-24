@@ -46,6 +46,7 @@ export const convertFilter = (modelFields: DMMF.Model['fields'], filterObject: F
       } else {
         where[names[0]][names[1]] = { contains: filter.value.toString() };
       }
+      return where;
     }
     if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property.type())) {
       where[name] = safeParseJSON(filter.value as string);

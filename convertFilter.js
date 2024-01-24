@@ -44,6 +44,7 @@ export const convertFilter = (modelFields, filterObject) => {
             else {
                 where[names[0]][names[1]] = { contains: filter.value.toString() };
             }
+            return where;
         }
         if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property.type())) {
             where[name] = safeParseJSON(filter.value);
