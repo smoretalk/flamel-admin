@@ -66,6 +66,7 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
     if ((propertyName as RecordJSON).params) {
       throw new Error('you can not pass RecordJSON to filters')
     }
+    console.log('propertyName', propertyName, value);
     setFilter({
       ...filter,
       [propertyName as string]: typeof value === 'string' && !value.length ? undefined : value,
