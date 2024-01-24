@@ -8,12 +8,14 @@ import {
   useTranslation,
   RecordJSON,
   ResourceJSON,
-  getResourceElementCss,
   BasePropertyComponent,
   useQueryParams,
   useFilterDrawer,
   BasePropertyJSON,
 } from 'adminjs'
+
+export const getDataCss = (...args: string[]) => args.join('-');
+export const getResourceElementCss = (resourceId: string, suffix: string) => getDataCss(resourceId, suffix);
 
 export type FilterProps = {
   resource: ResourceJSON
