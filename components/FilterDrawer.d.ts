@@ -4,4 +4,4 @@ export type FilterProps = {
     resource: ResourceJSON;
 };
 declare const FilterDrawer: React.FC<FilterProps>;
-export { FilterDrawer };
+export default FilterDrawer;

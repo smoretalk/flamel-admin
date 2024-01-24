@@ -126,4 +126,4 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
   )
 }
 
-export { FilterDrawer };
+export default FilterDrawer;

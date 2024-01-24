@@ -65,5 +65,5 @@ const FilterDrawer = (props) => {
             React.createElement(Button, { type: "button", variant: "light", onClick: handleReset, "data-css": cssButtonReset }, translateButton('resetFilter', resource.id)),
             React.createElement(Button, { type: "submit", variant: "contained", "data-css": cssButtonApply }, translateButton('applyChanges', resource.id)))));
 };
-export { FilterDrawer };
+export default FilterDrawer;
 //# sourceMappingURL=FilterDrawer.js.map
