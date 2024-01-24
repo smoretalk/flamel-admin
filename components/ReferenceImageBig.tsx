@@ -6,7 +6,7 @@ const ReferenceImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }
 ) => {
   const [errored, setErrored] = useState(false);
   const [src, setSrc] = useState(() => {
-    const referenceLink = props.record.params.GenerationInfo?.referenceLink;
+    const referenceLink = props.record.params['GenerationInfo.referenceLink'];
     if (referenceLink) {
       return `/api/admin/${referenceLink.split('/')[0]}/images/${referenceLink.split('/')[1]}`
     }
