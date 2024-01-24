@@ -1,7 +1,8 @@
 import { BaseRecord, BaseResource, flat } from 'adminjs';
-import { convertFilter, getEnums } from "@adminjs/prisma";
+import { getEnums } from "@adminjs/prisma";
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
+import { convertFilter } from './convertFilter.js';
 export const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
 export class CustomResource extends BaseResource {
     model;

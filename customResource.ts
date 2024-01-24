@@ -1,9 +1,9 @@
 import {BaseRecord, BaseResource, Filter, flat, FlattenParams, ParamsType} from 'adminjs';
-import { convertFilter, type Enums, getEnums } from "@adminjs/prisma";
+import { type Enums, getEnums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
-import { type PrismaClient } from '@prisma/client';
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
+import { convertFilter } from './convertFilter.js';
 
 export const lowerCase = (name: string) => name.substring(0, 1).toLowerCase() + name.substring(1);
 
