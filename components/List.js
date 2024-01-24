@@ -45,7 +45,6 @@ const List = ({ resource, setTag }) => {
                             'resolution',
                             'GenerationInfo.originalPrompt',
                             'GenerationInfo.translatedPrompt',
-                            'GenerationInfo.fullPrompt',
                             'GenerationInfo.preset',
                         ]),
                     });
