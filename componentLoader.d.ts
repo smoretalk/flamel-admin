@@ -2,11 +2,13 @@ import { ComponentLoader } from 'adminjs';
 export declare const componentLoader: ComponentLoader;
 export declare const Components: {
     Dashboard: string;
-    DisplayImage: string;
     DisplayLink: string;
     DisplayNestedImage: string;
     PrintImage: string;
+    DisplayImage: string;
     DisplayImageBig: string;
+    ReferenceImage: string;
+    ReferenceImageBig: string;
     DisplayLinkBig: string;
     DisplayNestedImageBig: string;
     IdQuerySaver: string;

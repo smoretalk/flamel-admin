@@ -8,10 +8,6 @@ export const componentLoader = new ComponentLoader()
 
 export const Components = {
   Dashboard: componentLoader.add('Dashboard', path.resolve(__dirname, 'components', 'Dashboard')),
-  DisplayImage: componentLoader.add(
-      'DisplayImage',
-    path.resolve(__dirname, 'components', 'DisplayImage'),
-  ),
   DisplayLink: componentLoader.add(
     'DisplayLink',
     path.resolve(__dirname, 'components', 'DisplayLink'),
@@ -24,9 +20,21 @@ export const Components = {
     'PrintImage',
     path.resolve(__dirname, 'components', 'PrintImage'),
   ),
+  DisplayImage: componentLoader.add(
+    'DisplayImage',
+    path.resolve(__dirname, 'components', 'DisplayImage'),
+  ),
   DisplayImageBig: componentLoader.add(
     'DisplayImageBig',
     path.resolve(__dirname, 'components', 'DisplayImageBig'),
+  ),
+  ReferenceImage: componentLoader.add(
+    'ReferenceImage',
+    path.resolve(__dirname, 'components', 'ReferenceImage'),
+  ),
+  ReferenceImageBig: componentLoader.add(
+    'ReferenceImageBig',
+    path.resolve(__dirname, 'components', 'ReferenceImageBig'),
   ),
   DisplayLinkBig: componentLoader.add(
     'DisplayLinkBig',
