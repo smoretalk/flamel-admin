@@ -29,7 +29,7 @@ const ReferenceImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }
           htmlFor="image"
           className="adminjs_Label"
         >
-          미리보기
+          레퍼런스
         </label>
       )}
       <div>

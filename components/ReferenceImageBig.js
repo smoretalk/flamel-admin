@@ -17,7 +17,7 @@ const ReferenceImageBig = (props) => {
                 color: 'rgb(137, 138, 154)',
                 marginBottom: 4,
                 fontWeight: 300,
-            }, htmlFor: "image", className: "adminjs_Label" }, "\uBBF8\uB9AC\uBCF4\uAE30")),
+            }, htmlFor: "image", className: "adminjs_Label" }, "\uB808\uD37C\uB7F0\uC2A4")),
         React.createElement("div", null,
             React.createElement("img", { width: 512, id: "image", alt: props.record.params.originalPrompt, src: src }))));
 };
