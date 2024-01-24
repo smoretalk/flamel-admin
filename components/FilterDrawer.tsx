@@ -78,6 +78,7 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
         newData[keys[0]] = {};
       }
       newData[keys[0]][keys[1]] = typeof value === 'string' && !value.length ? undefined : value;
+      delete filter[propertyName as string];
     }
     setFilter(newData);
   }
