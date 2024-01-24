@@ -55,6 +55,7 @@ const FilterDrawer = (props) => {
             newData[keys[0]][keys[1]] = typeof value === 'string' && !value.length ? undefined : value;
             delete filter[propertyName];
         }
+        console.log('newData', newData);
         setFilter(newData);
     };
     const contentTag = getResourceElementCss(resource.id, 'filter-drawer');
