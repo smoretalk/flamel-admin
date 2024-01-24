@@ -1,5 +1,12 @@
-import { safeParseJSON } from "@adminjs/prisma/lib/utils/helpers.js";
 import { convertParam } from "./convertParam.js";
+export const safeParseJSON = (json) => {
+    try {
+        return JSON.parse(json);
+    }
+    catch (e) {
+        return null;
+    }
+};
 export const convertFilter = (modelFields, filterObject) => {
     if (!filterObject)
         return {};

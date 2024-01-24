@@ -1,8 +1,16 @@
-import {safeParseJSON} from "@adminjs/prisma/lib/utils/helpers.js";
 import {Filter} from "adminjs";
 import type { DMMF } from '@prisma/client/runtime/library.js';
 import {Property} from "./customProperty.js";
 import {convertParam} from "./convertParam.js";
+
+export const safeParseJSON = (json: string) => {
+  try {
+    return JSON.parse(json);
+  }
+  catch (e) {
+    return null;
+  }
+};
 
 export const convertFilter = (modelFields: DMMF.Model['fields'], filterObject: Filter): Record<string, any> => {
   if (!filterObject) return {};
