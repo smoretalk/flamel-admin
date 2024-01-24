@@ -58,7 +58,15 @@ const FilterDrawer = (props) => {
                 React.createElement(H3, null, translateLabel('filters', resource.id)),
                 React.createElement(Button, { type: "button", variant: "light", size: "icon", rounded: true, color: "text", onClick: toggleFilter },
                     React.createElement(Icon, { icon: "X" }))),
-            React.createElement(Box, { my: "x3" }, properties.map((property) => (React.createElement(BasePropertyComponent, { key: property.propertyPath, where: "filter", onChange: handleChange, property: property, filter: filter, resource: resource }))))),
+            React.createElement(Box, { my: "x3" }, properties.map((property) => {
+                if (property.propertyPath.includes('.')) {
+                    const keys = property.propertyPath.split('.');
+                    if (filter[keys[0]]?.[keys[1]]) {
+                        filter[property.propertyPath] = filter[keys[0]][keys[1]];
+                    }
+                }
+                return (React.createElement(BasePropertyComponent, { key: property.propertyPath, where: "filter", onChange: handleChange, property: property, filter: filter, resource: resource }));
+            }))),
         React.createElement(DrawerFooter, { "data-css": cssFooter },
             React.createElement(Button, { type: "button", variant: "light", onClick: handleReset, "data-css": cssButtonReset }, translateButton('resetFilter', resource.id)),
             React.createElement(Button, { type: "submit", variant: "contained", "data-css": cssButtonApply }, translateButton('applyChanges', resource.id)))));

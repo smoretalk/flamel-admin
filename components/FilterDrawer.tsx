@@ -1,8 +1,8 @@
-import { Box, Button, Drawer, DrawerContent, DrawerFooter, H3, Icon } from '@adminjs/design-system'
+import {Box, Button, Drawer, DrawerContent, DrawerFooter, H3, Icon} from '@adminjs/design-system'
 import isNil from 'lodash/isNil.js'
 import pickBy from 'lodash/pickBy.js'
-import React, { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, {useEffect, useRef, useState} from 'react'
+import {useParams} from 'react-router-dom'
 
 import {
   useTranslation,
@@ -26,15 +26,15 @@ type MatchProps = {
 }
 
 const FilterDrawer: React.FC<FilterProps> = (props) => {
-  const { resource } = props
+  const {resource} = props
   const properties = resource.filterProperties;
 
-  const [filter, setFilter] = useState<Record<string, unknown>>({})
+  const [filter, setFilter] = useState<Record<string, any>>({})
   const params = useParams<MatchProps>()
-  const { translateButton, translateLabel } = useTranslation()
+  const {translateButton, translateLabel} = useTranslation()
   const initialLoad = useRef(true)
-  const { isVisible, toggleFilter } = useFilterDrawer()
-  const { storeParams, clearParams, filters } = useQueryParams()
+  const {isVisible, toggleFilter} = useFilterDrawer()
+  const {storeParams, clearParams, filters} = useQueryParams()
 
   console.log('filterResource', properties, filter);
   useEffect(() => {
@@ -47,7 +47,7 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
 
   const handleSubmit = (event: SubmitEvent) => {
     event.preventDefault()
-    storeParams({ filters: pickBy(filter, (v) => !isNil(v)), page: '1' })
+    storeParams({filters: pickBy(filter, (v) => !isNil(v)), page: '1'})
   }
 
   const handleReset = (event: SubmitEvent) => {
@@ -98,20 +98,28 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
             color="text"
             onClick={toggleFilter}
           >
-            <Icon icon="X" />
+            <Icon icon="X"/>
           </Button>
         </Box>
         <Box my="x3">
-          {properties.map((property: BasePropertyJSON) => (
-            <BasePropertyComponent
-              key={property.propertyPath}
-              where="filter"
-              onChange={handleChange}
-              property={property}
-              filter={filter}
-              resource={resource}
-            />
-          ))}
+          {properties.map((property: BasePropertyJSON) => {
+            if (property.propertyPath.includes('.')) {
+              const keys = property.propertyPath.split('.');
+              if (filter[keys[0]]?.[keys[1]]) {
+                filter[property.propertyPath] = filter[keys[0]][keys[1]];
+              }
+            }
+            return (
+              <BasePropertyComponent
+                key={property.propertyPath}
+                where="filter"
+                onChange={handleChange}
+                property={property}
+                filter={filter}
+                resource={resource}
+              />
+            );
+          })}
         </Box>
       </DrawerContent>
       <DrawerFooter data-css={cssFooter}>
