@@ -10,12 +10,13 @@ const FilterDrawer = (props) => {
     const { resource } = props;
     const properties = resource.filterProperties;
     const [filter, setFilter] = useState({});
+    console.log('filter', filter);
     const params = useParams();
     const { translateButton, translateLabel } = useTranslation();
     const initialLoad = useRef(true);
     const { isVisible, toggleFilter } = useFilterDrawer();
     const { storeParams, clearParams, filters } = useQueryParams();
-    console.log('filterResource', properties, filter);
+    console.log('filterResource', properties);
     useEffect(() => {
         if (initialLoad.current) {
             initialLoad.current = false;
@@ -72,9 +73,11 @@ const FilterDrawer = (props) => {
             React.createElement(Box, { my: "x3" }, properties.map((property) => {
                 if (property.propertyPath.includes('.')) {
                     const keys = property.propertyPath.split('.');
-                    if (filter[keys[0]]?.[keys[1]]) {
-                        filter[property.propertyPath] = filter[keys[0]][keys[1]];
+                    const newFilter = { ...filter };
+                    if (newFilter[keys[0]]?.[keys[1]]) {
+                        newFilter[property.propertyPath] = newFilter[keys[0]][keys[1]];
                     }
+                    return (React.createElement(BasePropertyComponent, { key: property.propertyPath, where: "filter", onChange: handleChange, property: property, filter: newFilter, resource: resource }));
                 }
                 return (React.createElement(BasePropertyComponent, { key: property.propertyPath, where: "filter", onChange: handleChange, property: property, filter: filter, resource: resource }));
             }))),

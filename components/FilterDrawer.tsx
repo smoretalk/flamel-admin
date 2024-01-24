@@ -30,13 +30,14 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
   const properties = resource.filterProperties;
 
   const [filter, setFilter] = useState<Record<string, any>>({})
+  console.log('filter', filter);
   const params = useParams<MatchProps>()
   const {translateButton, translateLabel} = useTranslation()
   const initialLoad = useRef(true)
   const {isVisible, toggleFilter} = useFilterDrawer()
   const {storeParams, clearParams, filters} = useQueryParams()
 
-  console.log('filterResource', properties, filter);
+  console.log('filterResource', properties);
   useEffect(() => {
     if (initialLoad.current) {
       initialLoad.current = false
@@ -117,9 +118,20 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
           {properties.map((property: BasePropertyJSON) => {
             if (property.propertyPath.includes('.')) {
               const keys = property.propertyPath.split('.');
-              if (filter[keys[0]]?.[keys[1]]) {
-                filter[property.propertyPath] = filter[keys[0]][keys[1]];
+              const newFilter = {...filter};
+              if (newFilter[keys[0]]?.[keys[1]]) {
+                newFilter[property.propertyPath] = newFilter[keys[0]][keys[1]];
               }
+              return (
+                <BasePropertyComponent
+                  key={property.propertyPath}
+                  where="filter"
+                  onChange={handleChange}
+                  property={property}
+                  filter={newFilter}
+                  resource={resource}
+                />
+              );
             }
             return (
               <BasePropertyComponent
