@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 export const componentLoader = new ComponentLoader();
+componentLoader.override('FilterDrawer', path.resolve(__dirname, 'components', 'FilterDrawer'));
 export const Components = {
     Dashboard: componentLoader.add('Dashboard', path.resolve(__dirname, 'components', 'Dashboard')),
     DisplayLink: componentLoader.add('DisplayLink', path.resolve(__dirname, 'components', 'DisplayLink')),
