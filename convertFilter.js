@@ -13,7 +13,6 @@ export const convertFilter = (modelFields, filterObject) => {
     const uuidRegex = /^[0-9A-F]{8}-[0-9A-F]{4}-[5|4|3|2|1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
     const { filters = {} } = filterObject;
     return Object.entries(filters).reduce((where, [name, filter]) => {
-        console.log('convertFilter.js', name, filters, filter);
         if (name.includes('.')) {
             const names = name.split('.');
             where[names[0]] = {
