@@ -183,7 +183,7 @@ export const Dashboard: React.FC = (props) => {
           <Card
             as="a"
             flex
-            href="https://adminjs.page.link/slack"
+            href="https://smoretalk-io.slack.com/ssb/redirect"
             target="_blank"
           >
             <Box flexShrink={0}>
@@ -199,7 +199,7 @@ export const Dashboard: React.FC = (props) => {
           <Card
             as="a"
             flex
-            href="https://github.com/SoftwareBrothers/adminjs/issues"
+            href="https://github.com/smoretalk/alchemist-back/issues"
             target="_blank"
           >
             <Box flexShrink={0}>
