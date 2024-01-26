@@ -23,7 +23,7 @@ const List = ({ resource, setTag }) => {
                 console.log('location.href', window.location.href);
                 const isCollection = new URLSearchParams(window.location.search).get('filters.CollectionInfo.enabled');
                 console.log('isCollection', isCollection);
-                if (isCollection) {
+                if (isCollection && isCollection !== 'false') {
                     setNewResource({
                         ...resource,
                         listProperties: resourceFinder(['idQuerySaver', 'displayImage', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.promptKo', 'CollectionInfo.promptEn', 'CollectionInfo.Theme', 'CollectionInfo.enabled']),
