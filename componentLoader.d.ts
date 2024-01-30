@@ -17,4 +17,6 @@ export declare const Components: {
     ManyToManyShow: string;
     ManyToManyList: string;
     ImageList: string;
+    EditJSONB: string;
+    ShowJSONB: string;
 };

@@ -58,5 +58,7 @@ export const Components = {
     'ManyToManyList',
     path.resolve(__dirname, 'components', 'M2MList'),
   ),
-  ImageList: componentLoader.add('ImageList', path.resolve(__dirname, 'components', 'List'))
+  ImageList: componentLoader.add('ImageList', path.resolve(__dirname, 'components', 'List')),
+  EditJSONB: componentLoader.add('EditJSONB', path.resolve(__dirname, 'components', 'EditJSONB')),
+  ShowJSONB: componentLoader.add('ShowJSONB', path.resolve(__dirname, 'components', 'ShowJSONB')),
 }
