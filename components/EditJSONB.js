@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Box, Label } from '@adminjs/design-system';
-import ReactJson from 'react18-json-view';
-import 'react18-json-view/src/style.css';
+import ReactJson from 'react-json-view';
 import * as _ from 'lodash';
 import { unflatten } from 'flat';
 const EditJSONB = (props) => {
