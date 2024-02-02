@@ -1,4 +1,4 @@
-import React, {FC, useState, useEffect, FormEventHandler, MouseEventHandler, ChangeEventHandler} from 'react';
+import React, {FC, useState, useEffect, MouseEventHandler, ChangeEventHandler} from 'react';
 import {
   FormGroup,
   FormMessage,
@@ -10,7 +10,7 @@ import {
   RecordJSON,
   SelectRecord, useTranslation,
 } from 'adminjs';
-import {unflatten} from 'flat';
+import {unflatten, flatten} from 'flat';
 import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
 import axios from "axios";
 

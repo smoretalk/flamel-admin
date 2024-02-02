@@ -13,6 +13,7 @@ import {
   useFilterDrawer,
   BasePropertyJSON,
 } from 'adminjs'
+import flat from "flat";
 
 export const getDataCss = (...args: string[]) => args.join('-');
 export const getResourceElementCss = (resourceId: string, suffix: string) => getDataCss(resourceId, suffix);
@@ -68,19 +69,10 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
       throw new Error('you can not pass RecordJSON to filters')
     }
     console.log('propertyName', propertyName, value);
-    const newData = {
+    const newData = flat.unflatten({
       ...filter,
       [propertyName as string]: typeof value === 'string' && !value.length ? undefined : value,
-    };
-    if ((propertyName as string).includes('.')) {
-      // 중첩된 값이면
-      const keys = (propertyName as string).split('.');
-      if (!newData[keys[0]]) {
-        newData[keys[0]] = {};
-      }
-      newData[keys[0]][keys[1]] = typeof value === 'string' && !value.length ? undefined : value;
-      delete newData[propertyName as string];
-    }
+    }, { overwrite: true });
     console.log('newData', newData);
     setFilter(newData);
   }
@@ -115,35 +107,16 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
           </Button>
         </Box>
         <Box my="x3">
-          {properties.map((property: BasePropertyJSON) => {
-            if (property.propertyPath.includes('.')) {
-              const keys = property.propertyPath.split('.');
-              const newFilter = {...filter};
-              if (newFilter[keys[0]]?.[keys[1]]) {
-                newFilter[property.propertyPath] = newFilter[keys[0]][keys[1]];
-              }
-              return (
-                <BasePropertyComponent
-                  key={property.propertyPath}
-                  where="filter"
-                  onChange={handleChange}
-                  property={property}
-                  filter={newFilter}
-                  resource={resource}
-                />
-              );
-            }
-            return (
-              <BasePropertyComponent
-                key={property.propertyPath}
-                where="filter"
-                onChange={handleChange}
-                property={property}
-                filter={filter}
-                resource={resource}
-              />
-            );
-          })}
+          {properties.map((property: BasePropertyJSON) => (
+            <BasePropertyComponent
+              key={property.propertyPath}
+              where="filter"
+              onChange={handleChange}
+              property={property}
+              filter={flat.flatten(filter)}
+              resource={resource}
+            />
+          ))}
         </Box>
       </DrawerContent>
       <DrawerFooter data-css={cssFooter}>

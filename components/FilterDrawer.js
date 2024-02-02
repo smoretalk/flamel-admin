@@ -4,6 +4,7 @@ import pickBy from 'lodash/pickBy.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation, BasePropertyComponent, useQueryParams, useFilterDrawer, } from 'adminjs';
+import flat from "flat";
 export const getDataCss = (...args) => args.join('-');
 export const getResourceElementCss = (resourceId, suffix) => getDataCss(resourceId, suffix);
 const FilterDrawer = (props) => {
@@ -44,18 +45,10 @@ const FilterDrawer = (props) => {
             throw new Error('you can not pass RecordJSON to filters');
         }
         console.log('propertyName', propertyName, value);
-        const newData = {
+        const newData = flat.unflatten({
             ...filter,
             [propertyName]: typeof value === 'string' && !value.length ? undefined : value,
-        };
-        if (propertyName.includes('.')) {
-            const keys = propertyName.split('.');
-            if (!newData[keys[0]]) {
-                newData[keys[0]] = {};
-            }
-            newData[keys[0]][keys[1]] = typeof value === 'string' && !value.length ? undefined : value;
-            delete newData[propertyName];
-        }
+        }, { overwrite: true });
         console.log('newData', newData);
         setFilter(newData);
     };
@@ -70,17 +63,7 @@ const FilterDrawer = (props) => {
                 React.createElement(H3, null, translateLabel('filters', resource.id)),
                 React.createElement(Button, { type: "button", variant: "light", size: "icon", rounded: true, color: "text", onClick: toggleFilter },
                     React.createElement(Icon, { icon: "X" }))),
-            React.createElement(Box, { my: "x3" }, properties.map((property) => {
-                if (property.propertyPath.includes('.')) {
-                    const keys = property.propertyPath.split('.');
-                    const newFilter = { ...filter };
-                    if (newFilter[keys[0]]?.[keys[1]]) {
-                        newFilter[property.propertyPath] = newFilter[keys[0]][keys[1]];
-                    }
-                    return (React.createElement(BasePropertyComponent, { key: property.propertyPath, where: "filter", onChange: handleChange, property: property, filter: newFilter, resource: resource }));
-                }
-                return (React.createElement(BasePropertyComponent, { key: property.propertyPath, where: "filter", onChange: handleChange, property: property, filter: filter, resource: resource }));
-            }))),
+            React.createElement(Box, { my: "x3" }, properties.map((property) => (React.createElement(BasePropertyComponent, { key: property.propertyPath, where: "filter", onChange: handleChange, property: property, filter: flat.flatten(filter), resource: resource }))))),
         React.createElement(DrawerFooter, { "data-css": cssFooter },
             React.createElement(Button, { type: "button", variant: "light", onClick: handleReset, "data-css": cssButtonReset }, translateButton('resetFilter', resource.id)),
             React.createElement(Button, { type: "submit", variant: "contained", "data-css": cssButtonApply }, translateButton('applyChanges', resource.id)))));

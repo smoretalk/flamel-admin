@@ -25,7 +25,7 @@ export const after: After<RecordActionResponse> = async (
       const params: { [k: string]: object } = flat.unflatten(request.payload);
       await Promise.all(
         manyProperties.map(async (propertyDecorator) => {
-          // Image에서 CollectionInfo.CollectionKoTags를 수정하는 경웨
+          // Image에서 CollectionInfo.CollectionKoTags를 수정하는 경우에
           const toResourceId = propertyDecorator.name();
           let ids: any = params || [];
           let fromModel = resource.model.name; // Image
@@ -33,7 +33,7 @@ export const after: After<RecordActionResponse> = async (
           if (toResourceId.includes('.')) { // 릴레이션이면
             const relations = toResourceId.split('.');
             for (let i = 0; i < relations.length; i++) {
-              ids = ids[relations[i]] || [];
+              ids = ids[relations[i]] || []; // 아이디는 CollectionKoTags의 아이디로
             }
             fromModel = relations[0]; // 여기서 CollectionInfo로 수정
           } else {
