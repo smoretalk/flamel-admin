@@ -10,7 +10,6 @@ interface Props {
 }
 
 const StyledLink = styled(Link)`
-  border: 1px solid gray;
   padding-left: ${({ theme }): string => theme.space?.xs};
   padding-right: ${({ theme }): string => theme.space?.xs};
 `;
