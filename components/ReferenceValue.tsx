@@ -10,10 +10,7 @@ interface Props {
 }
 
 const StyledLink = styled(Link)`
-  padding-left: ${({ theme }): string => {
-    console.log('theme', theme);
-    return theme.space?.xs
-  }};
+  padding-left: ${({ theme }): string => theme.space?.xs};
   padding-right: ${({ theme }): string => theme.space?.xs};
 `;
 
@@ -51,7 +48,7 @@ const ReferenceValue: React.FC<Props> = (props) => {
   });
   return (
     <StyledLink to={href}>
-      <Button size="xs" rounded>
+      <Button size="xs" rounded variant="outlined">
         {record.title}
       </Button>
     </StyledLink>
