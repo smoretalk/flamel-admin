@@ -4,7 +4,10 @@ import { Link } from 'react-router-dom';
 import { Button } from '@adminjs/design-system';
 import { ViewHelpers } from 'adminjs';
 const StyledLink = styled(Link) `
-  padding-left: ${({ theme }) => theme.space?.xs};
+  padding-left: ${({ theme }) => {
+    console.log('theme', theme);
+    return theme.space?.xs;
+}};
   padding-right: ${({ theme }) => theme.space?.xs};
 `;
 const ReferenceValue = (props) => {
@@ -17,7 +20,7 @@ const ReferenceValue = (props) => {
         actionName: 'show',
     });
     return (React.createElement(StyledLink, { to: href },
-        React.createElement(Button, { size: "sm", rounded: true }, record.title)));
+        React.createElement(Button, { size: "xs", rounded: true }, record.title)));
 };
 export default ReferenceValue;
 //# sourceMappingURL=ReferenceValue.js.map

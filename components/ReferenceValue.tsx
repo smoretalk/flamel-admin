@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '@adminjs/design-system/styled-components';
+import {styled, useTheme} from '@adminjs/design-system/styled-components';
 import { Link } from 'react-router-dom';
 import { Button } from '@adminjs/design-system';
 import { ViewHelpers, PropertyJSON } from 'adminjs';
@@ -10,7 +10,10 @@ interface Props {
 }
 
 const StyledLink = styled(Link)`
-  padding-left: ${({ theme }): string => theme.space?.xs};
+  padding-left: ${({ theme }): string => {
+    console.log('theme', theme);
+    return theme.space?.xs
+  }};
   padding-right: ${({ theme }): string => theme.space?.xs};
 `;
 
@@ -48,7 +51,7 @@ const ReferenceValue: React.FC<Props> = (props) => {
   });
   return (
     <StyledLink to={href}>
-      <Button size="sm" rounded>
+      <Button size="xs" rounded>
         {record.title}
       </Button>
     </StyledLink>
