@@ -9,8 +9,8 @@ import {
   EditPropertyPropsInArray,
   RecordJSON,
   SelectRecord, useTranslation,
+  flat,
 } from 'adminjs';
-import {unflatten, flatten} from 'flat';
 import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
 import axios from "axios";
 
@@ -73,15 +73,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   };
   const error = record?.errors[property.path];
 
-  let selectedValues: Array<{ id: number, enTagId: number, koTagId: number, title: string }> = [];
-  if (property.path.includes('.')) {
-    // 중첩된 경로면
-    const middle = property.path.split('.')[0];
-    const last = property.path.split('.')[1];
-    selectedValues = (unflatten(record.params) as Record<string, Record<string, typeof selectedValues>>)[middle]?.[last] || [];
-  } else {
-    selectedValues = (unflatten(record.params) as Record<string, typeof selectedValues>)[property.path] || [];
-  }
+  const selectedValues: Array<{ id: number, enTagId: number, koTagId: number, title: string }> = flat.get(flat.unflatten(record.params) as Record<string, Record<string, typeof selectedValues>>)[property.path] || [];
 
   const selectedId = record?.params[property.path] as string | undefined;
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FormGroup, FormMessage, Label, } from '@adminjs/design-system';
-import { ApiClient, useTranslation, } from 'adminjs';
-import { unflatten } from 'flat';
+import { ApiClient, useTranslation, flat, } from 'adminjs';
 import SelectAsyncCreatable from "./SelectAsyncCreatable.js";
 import axios from "axios";
 const EditManyToManyInput = (props) => {
@@ -38,15 +37,7 @@ const EditManyToManyInput = (props) => {
         }));
     };
     const error = record?.errors[property.path];
-    let selectedValues = [];
-    if (property.path.includes('.')) {
-        const middle = property.path.split('.')[0];
-        const last = property.path.split('.')[1];
-        selectedValues = unflatten(record.params)[middle]?.[last] || [];
-    }
-    else {
-        selectedValues = unflatten(record.params)[property.path] || [];
-    }
+    const selectedValues = flat.get(flat.unflatten(record.params))[property.path] || [];
     const selectedId = record?.params[property.path];
     const [loadedRecord, setLoadedRecord] = useState();
     const [loadingRecord, setLoadingRecord] = useState(0);

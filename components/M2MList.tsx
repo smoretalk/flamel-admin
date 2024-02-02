@@ -1,10 +1,5 @@
-import { Section } from '@adminjs/design-system';
-import { ValueGroup, ButtonGroup } from '@adminjs/design-system';
 import {
-  ApiClient,
-  EditPropertyPropsInArray,
   RecordJSON,
-  SelectRecord,
   PropertyJSON,
   flat,
 } from 'adminjs';

@@ -1,11 +1,8 @@
 import React from 'react';
 import { styled } from '@adminjs/design-system/styled-components';
 import { Link } from 'react-router-dom';
-import { ButtonCSS, Button } from '@adminjs/design-system';
-import { RecordJSON, ViewHelpers, PropertyJSON } from 'adminjs';
-
-// import ViewHelpers from '../../../../backend/utils/view-helpers/view-helpers';
-// import { RecordJSON, PropertyJSON } from '../../../interfaces';
+import { Button } from '@adminjs/design-system';
+import { ViewHelpers, PropertyJSON } from 'adminjs';
 
 interface Props {
   property: PropertyJSON;
@@ -13,6 +10,7 @@ interface Props {
 }
 
 const StyledLink = styled(Link)`
+  border: 1px solid gray;
   padding-left: ${({ theme }): string => theme.space?.xs};
   padding-right: ${({ theme }): string => theme.space?.xs};
 `;

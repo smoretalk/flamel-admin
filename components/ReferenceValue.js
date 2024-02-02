@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@adminjs/design-system';
 import { ViewHelpers } from 'adminjs';
 const StyledLink = styled(Link) `
+  border: 1px solid gray;
   padding-left: ${({ theme }) => theme.space?.xs};
   padding-right: ${({ theme }) => theme.space?.xs};
 `;
