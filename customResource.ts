@@ -4,6 +4,7 @@ import type { DMMF } from '@prisma/client/runtime/library.js';
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
 import { convertFilter } from './convertFilter.js';
+import {unflatten} from "flat";
 
 export const lowerCase = (name: string) => name.substring(0, 1).toLowerCase() + name.substring(1);
 
@@ -62,14 +63,15 @@ export class CustomResource extends BaseResource {
     const { direction, sortBy } = sort;
     const where = convertFilter(this.model.fields, filter);
     console.log('where', where);
+    const orderBy = unflatten({
+      [sortBy]: direction,
+    })
     const results: FlattenParams[] = await this.manager.findMany({
       where,
       skip: offset,
       take: limit,
       include: this.include,
-      orderBy: {
-        [sortBy]: direction,
-      },
+      orderBy,
     });
     return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
   }
