@@ -1,6 +1,8 @@
 import { flat, } from 'adminjs';
 import React from 'react';
 import ReferenceValue from './ReferenceValue.js';
+import { ThemeProvider } from "styled-components";
+import { theme } from "@adminjs/design-system";
 export default class ManyToManyList extends React.PureComponent {
     render() {
         const { property, record, ItemComponent } = this.props;
@@ -14,7 +16,7 @@ export default class ManyToManyList extends React.PureComponent {
             isDraggable: false,
         });
         const items = flat.get(record.params, property.path) || [];
-        return (React.createElement(React.Fragment, null, (items || []).map((item, i) => {
+        return (React.createElement(ThemeProvider, { theme: theme }, (items || []).map((item, i) => {
             return (React.createElement(ReferenceValue, { key: i, ...this.props, record: item, property: property }));
         })));
     }

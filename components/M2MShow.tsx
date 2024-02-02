@@ -1,4 +1,4 @@
-import {ValueGroup} from '@adminjs/design-system';
+import {theme, ValueGroup} from '@adminjs/design-system';
 import {
   RecordJSON,
   PropertyJSON,
@@ -6,6 +6,7 @@ import {
 } from 'adminjs';
 import React from 'react';
 import ReferenceValue from './ReferenceValue.js';
+import {ThemeProvider} from "styled-components";
 
 type Props = {
   property: PropertyJSON;
@@ -36,7 +37,7 @@ export default function ManyToManyShow(props: Props) {
   const items: object[] = flat.get(record.params, property.path) || [];
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <ValueGroup label={translateProperty(property.label)}>
         {(items || []).map((item, i) => {
           // const itemProperty = convertToSubProperty(property, i);
@@ -63,6 +64,6 @@ export default function ManyToManyShow(props: Props) {
         </Section>
 					*/}
       </ValueGroup>
-    </>
+    </ThemeProvider>
   );
 }

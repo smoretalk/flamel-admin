@@ -5,6 +5,8 @@ import {
 } from 'adminjs';
 import React, { ReactNode } from 'react';
 import ReferenceValue from './ReferenceValue.js';
+import {ThemeProvider} from "styled-components";
+import {theme} from "@adminjs/design-system";
 
 type Props = {
   property: PropertyJSON;
@@ -34,7 +36,7 @@ export default class ManyToManyList extends React.PureComponent<Props> {
     const items: object[] = flat.get(record.params, property.path) || [];
 
     return (
-      <>
+      <ThemeProvider theme={theme}>
         {(items || []).map((item, i) => {
           // const itemProperty = convertToSubProperty(property, i);
           return (
@@ -46,7 +48,7 @@ export default class ManyToManyList extends React.PureComponent<Props> {
             />
           );
         })}
-      </>
+      </ThemeProvider>
     );
   }
 }
