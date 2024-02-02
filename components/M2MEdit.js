@@ -37,7 +37,7 @@ const EditManyToManyInput = (props) => {
         }));
     };
     const error = record?.errors[property.path];
-    const selectedValues = flat.get(flat.unflatten(record.params))[property.path] || [];
+    const selectedValues = flat.get(record.params, property.path) || [];
     const selectedId = record?.params[property.path];
     const [loadedRecord, setLoadedRecord] = useState();
     const [loadingRecord, setLoadingRecord] = useState(0);

@@ -73,8 +73,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   };
   const error = record?.errors[property.path];
 
-  const selectedValues: Array<{ id: number, enTagId: number, koTagId: number, title: string }> = flat.get(flat.unflatten(record.params) as Record<string, Record<string, typeof selectedValues>>)[property.path] || [];
-
+  const selectedValues: Array<{ id: number, enTagId: number, koTagId: number, title: string }> = flat.get(record.params as Record<string, Record<string, typeof selectedValues>>, property.path) || [];
   const selectedId = record?.params[property.path] as string | undefined;
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();
   const [loadingRecord, setLoadingRecord] = useState(0);
