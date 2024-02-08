@@ -17,7 +17,7 @@ export const after = async (response, request, context) => {
                 if (toResourceId.includes('.')) {
                     const relations = toResourceId.split('.');
                     for (let i = 0; i < relations.length; i++) {
-                        ids = ids[relations[i]] || [];
+                        ids = ids[relations[i]];
                     }
                     fromModel = relations[0];
                 }
