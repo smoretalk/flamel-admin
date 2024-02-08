@@ -37,9 +37,10 @@ export const after: After<RecordActionResponse> = async (
             }
             fromModel = relations[0]; // 여기서 CollectionInfo로 수정
           } else {
-            ids = params[toResourceId] || [];
+            ids = params[toResourceId];
           }
-          if (!Array.isArray(ids) || ids.length === 0) { // 다대다 관계가 아니므로
+          if (!Array.isArray(ids)) { // 다대다 관계가 아니므로
+            console.log(toResourceId, 'is not m2m, so return');
             return;
           }
           const idField = (resource.client._runtimeDataModel.models[fromModel].fields as DMMF.Field[]).find((v) => v.isId);

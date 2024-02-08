@@ -22,9 +22,10 @@ export const after = async (response, request, context) => {
                     fromModel = relations[0];
                 }
                 else {
-                    ids = params[toResourceId] || [];
+                    ids = params[toResourceId];
                 }
-                if (!Array.isArray(ids) || ids.length === 0) {
+                if (!Array.isArray(ids)) {
+                    console.log(toResourceId, 'is not m2m, so return');
                     return;
                 }
                 const idField = resource.client._runtimeDataModel.models[fromModel].fields.find((v) => v.isId);
