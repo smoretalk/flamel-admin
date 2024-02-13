@@ -14,7 +14,7 @@ const DATA_TYPES = {
 };
 
 export class Property extends BaseProperty {
-  column;
+  column: DMMF.Field;
   enums;
   columnPosition;
   depModel: string;

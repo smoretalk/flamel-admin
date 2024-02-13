@@ -12,7 +12,7 @@ export const safeParseNumber = (value: string | number) => {
   return value;
 };
 
-export const convertParam = (property: Property, fields: { name: string, type: string }[], value: unknown, nested = false) => {
+export const convertParam = (property: Property, fields: readonly { name: string, type: string }[], value: unknown, nested = false) => {
   const type = property.type();
   if (type === 'mixed')
     return value;

@@ -1,9 +1,13 @@
 import {BaseRecord, BaseResource, Filter, flat, FlattenParams, ParamsType} from 'adminjs';
 import { type Enums, getEnums } from "@adminjs/prisma";
-import type { DMMF } from '@prisma/client/runtime/library.js';
+import type { DMMF, ReadonlyDeep } from '@prisma/client/runtime/library.js';
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
 import { convertFilter } from './convertFilter.js';
+
+type ReadonlyDeep_2<O> = {
+  +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
+};
 
 export const lowerCase = (name: string) => name.substring(0, 1).toLowerCase() + name.substring(1);
 
@@ -15,7 +19,7 @@ export class CustomResource extends BaseResource {
   manager;
   propertiesObject: { [key: string]: Property };
   include;
-  depModels;
+  depModels: ReadonlyDeep_2<{}>;
   depModelsObject;
   constructor(args: Args) {
     super(args);

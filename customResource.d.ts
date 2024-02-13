@@ -2,6 +2,9 @@ import { BaseRecord, BaseResource, Filter, FlattenParams, ParamsType } from 'adm
 import { type Enums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
 import { Property } from "./customProperty.js";
+type ReadonlyDeep_2<O> = {
+    +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
+};
 export declare const lowerCase: (name: string) => string;
 type Args = {
     model: DMMF.Model;
@@ -26,10 +29,7 @@ export declare class CustomResource extends BaseResource {
         [key: string]: Property;
     };
     include: object;
-    depModels: {
-        alias: string;
-        model: DMMF.Model;
-    }[];
+    depModels: ReadonlyDeep_2<{}>;
     depModelsObject: {
         [k: string]: Property;
     }[];
