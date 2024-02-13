@@ -7,10 +7,14 @@ const ExportCsv = ({ resource }) => {
     const [isFetching, setFetching] = useState();
     const filter = {};
     const query = new URLSearchParams(location.search || localStorage.getItem('query'));
+    let page;
     for (const entry of query.entries()) {
         const [key, value] = entry;
         if (key.match('filters.')) {
             filter[key.replace('filters.', '')] = value;
+        }
+        if (key.match('page')) {
+            page = parseInt(value, 10);
         }
     }
     const exportData = async () => {
@@ -25,6 +29,7 @@ const ExportCsv = ({ resource }) => {
                 method: 'POST',
                 params: {
                     filter,
+                    page,
                 },
             });
             const blob = new Blob([exportedData], { type: 'text/csv' });

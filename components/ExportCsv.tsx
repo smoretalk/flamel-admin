@@ -13,10 +13,14 @@ const ExportCsv: FC<ActionProps> = ({ resource }) => {
   const query = new URLSearchParams(
     location.search || localStorage.getItem('query'),
   );
+  let page: number;
   for (const entry of query.entries()) {
     const [key, value] = entry;
     if (key.match('filters.')) {
       filter[key.replace('filters.', '')] = value;
+    }
+    if (key.match('page')) {
+      page = parseInt(value, 10);
     }
   }
 
@@ -34,6 +38,7 @@ const ExportCsv: FC<ActionProps> = ({ resource }) => {
           method: 'POST',
           params: {
             filter,
+            page,
           },
         });
 
