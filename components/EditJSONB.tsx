@@ -7,11 +7,9 @@ import { unflatten } from 'flat';
 const EditJSONB = (props: any) => {
   const { property, record, onChange } = props;
   const matchingParams = _.chain(record.params)
-    .omitBy(_.isNil)
     .pickBy((value, key) => key.startsWith(property.name))
     .value();
 
-  console.log('EditJSONB', property.name, matchingParams);
   const object: any = unflatten(matchingParams);
   const paramObject = object?.[property.name];
 
@@ -21,19 +19,16 @@ const EditJSONB = (props: any) => {
 
   const onEdit = (event: any) => {
     const updated_src = event?.updated_src;
-    console.log('onEdit', updated_src);
     saveData(updated_src);
   };
 
   const onAdd = (event: any) => {
     const updated_src = event?.updated_src;
-    console.log('onAdd', updated_src);
     saveData(updated_src);
   };
 
   const onDelete = (event: any) => {
     const updated_src = event?.updated_src;
-    console.log('onDelete', updated_src);
     saveData(updated_src);
   };
 
@@ -44,7 +39,7 @@ const EditJSONB = (props: any) => {
       <ReactJson
         name={property.name}
         collapsed={false}
-        src={JSON.parse(JSON.stringify(paramObject || {}))}
+        src={paramObject || {}}
         onEdit={onEdit}
         onAdd={onAdd}
         onDelete={onDelete}
