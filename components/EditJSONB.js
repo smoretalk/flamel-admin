@@ -28,7 +28,7 @@ const EditJSONB = (props) => {
     };
     return (React.createElement(Box, { mb: "xl" },
         React.createElement(Label, null, property.label),
-        React.createElement(ReactJson, { name: property.name, collapsed: false, src: JSON.parse(JSON.stringify(paramObject)), onEdit: onEdit, onAdd: onAdd, onDelete: onDelete })));
+        React.createElement(ReactJson, { name: property.name, collapsed: false, src: JSON.parse(JSON.stringify(paramObject || {})), onEdit: onEdit, onAdd: onAdd, onDelete: onDelete })));
 };
 export default EditJSONB;
 //# sourceMappingURL=EditJSONB.js.map

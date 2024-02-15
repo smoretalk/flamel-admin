@@ -40,7 +40,7 @@ const EditJSONB = (props: any) => {
       <ReactJson
         name={property.name}
         collapsed={false}
-        src={JSON.parse(JSON.stringify(paramObject))}
+        src={JSON.parse(JSON.stringify(paramObject || {}))}
         onEdit={onEdit}
         onAdd={onAdd}
         onDelete={onDelete}
