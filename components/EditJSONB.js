@@ -9,6 +9,7 @@ const EditJSONB = (props) => {
         .omitBy(_.isNil)
         .pickBy((value, key) => key.startsWith(property.name))
         .value();
+    console.log('EditJSONB', property.name, matchingParams);
     const object = unflatten(matchingParams);
     const paramObject = object?.[property.name];
     const saveData = (data) => {
@@ -16,14 +17,17 @@ const EditJSONB = (props) => {
     };
     const onEdit = (event) => {
         const updated_src = event?.updated_src;
+        console.log('onEdit', updated_src);
         saveData(updated_src);
     };
     const onAdd = (event) => {
         const updated_src = event?.updated_src;
+        console.log('onAdd', updated_src);
         saveData(updated_src);
     };
     const onDelete = (event) => {
         const updated_src = event?.updated_src;
+        console.log('onDelete', updated_src);
         saveData(updated_src);
     };
     return (React.createElement(Box, { mb: "xl" },

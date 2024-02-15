@@ -11,6 +11,7 @@ const EditJSONB = (props: any) => {
     .pickBy((value, key) => key.startsWith(property.name))
     .value();
 
+  console.log('EditJSONB', property.name, matchingParams);
   const object: any = unflatten(matchingParams);
   const paramObject = object?.[property.name];
 
@@ -20,16 +21,19 @@ const EditJSONB = (props: any) => {
 
   const onEdit = (event: any) => {
     const updated_src = event?.updated_src;
+    console.log('onEdit', updated_src);
     saveData(updated_src);
   };
 
   const onAdd = (event: any) => {
     const updated_src = event?.updated_src;
+    console.log('onAdd', updated_src);
     saveData(updated_src);
   };
 
   const onDelete = (event: any) => {
     const updated_src = event?.updated_src;
+    console.log('onDelete', updated_src);
     saveData(updated_src);
   };
 
