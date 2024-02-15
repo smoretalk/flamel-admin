@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Box, Label } from '@adminjs/design-system';
 // @ts-ignore
-import ReactJson from 'react-json-view';
+import ReactJson from '@microlink/react-json-view';
 import * as _ from 'lodash';
 import { unflatten } from 'flat';
 

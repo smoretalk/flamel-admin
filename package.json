@@ -29,7 +29,7 @@
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-dropzone": "^14.2.3",
-    "react-json-view": "^1.21.3",
+    "@microlink/react-json-view": "^1.23.0",
     "typescript": "^5.2.2"
   },
   "devDependencies": {
