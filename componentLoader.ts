@@ -59,6 +59,7 @@ export const Components = {
     path.resolve(__dirname, 'components', 'M2MList'),
   ),
   ImageList: componentLoader.add('ImageList', path.resolve(__dirname, 'components', 'List')),
+  PreserveQueryList: componentLoader.add('ImageList', path.resolve(__dirname, 'components', 'PreserveQueryList')),
   EditJSONB: componentLoader.add('EditJSONB', path.resolve(__dirname, 'components', 'EditJSONB')),
   ShowJSONB: componentLoader.add('ShowJSONB', path.resolve(__dirname, 'components', 'ShowJSONB')),
 }
