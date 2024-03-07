@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 const DisplayImageBig = (props) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.params.link.replace(/\/api\/users\//, '/api/admin/').replace(/\/api\/collections\//, `/api/admin/${props.record.params.ownerId || 0}/images/`));
+    const [src, setSrc] = useState(props.record.params[props.property.path].replace(/\/api\/users\//, '/api/admin/').replace(/\/api\/collections\//, `/api/admin/${props.record.params.ownerId || 0}/images/`));
     return (React.createElement("section", { style: { marginBottom: props.where === 'show' ? 24 : 0 } },
         props.where === 'show' && (React.createElement("label", { style: {
                 display: 'block',
