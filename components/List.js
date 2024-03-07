@@ -26,7 +26,7 @@ const List = ({ resource, setTag }) => {
                 if (isCollection && isCollection !== 'false') {
                     setNewResource({
                         ...resource,
-                        listProperties: resourceFinder(['idQuerySaver', 'displayImage', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.promptKo', 'CollectionInfo.promptEn', 'CollectionInfo.Theme', 'CollectionInfo.enabled']),
+                        listProperties: resourceFinder(['idQuerySaver', 'link', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.promptKo', 'CollectionInfo.promptEn', 'CollectionInfo.Theme', 'CollectionInfo.enabled']),
                     });
                 }
                 else {
@@ -34,7 +34,7 @@ const List = ({ resource, setTag }) => {
                         ...resource,
                         listProperties: resourceFinder([
                             'idQuerySaver',
-                            'displayImage',
+                            'link',
                             'referenceImage',
                             'createdAt',
                             'Owner',
