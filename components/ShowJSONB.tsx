@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import _ from 'lodash'
 import { unflatten } from 'flat'
 import { Badge, Section, FormGroup, Label } from '@adminjs/design-system'
-import {ShowPropertyProps} from "adminjs";
+import {ShowPropertyProps, flat, FlattenValue} from "adminjs";
 
 const mapBoolean = (value: unknown) => {
   if (typeof value === 'undefined') {
@@ -49,10 +49,10 @@ export default class ShowJSONB extends React.PureComponent<ShowPropertyProps> {
     const matchingParams = _.chain(record.params)
       .omitBy(_.isNil)
       .pickBy((value, key) => key.startsWith(property.name))
-      .value() as { [key: string]: ReactNode };
+      .value() as { [key: string]: object };
 
-    const unflattened = unflatten(matchingParams) as { [key: string]: ReactNode };
-    const paramObject = unflattened[property.name];
+    const unflattened = unflatten(matchingParams) as { [key: string]: FlattenValue };
+    const paramObject = flat.get(unflattened, property.name);
 
     return (
       <FormGroup>
