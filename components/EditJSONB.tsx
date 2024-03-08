@@ -3,6 +3,7 @@ import { Box, Label } from '@adminjs/design-system';
 import ReactJson from '@microlink/react-json-view';
 import * as _ from 'lodash';
 import { unflatten } from 'flat';
+import {flat} from "adminjs";
 
 const EditJSONB = (props: any) => {
   const { property, record, onChange } = props;
@@ -10,8 +11,7 @@ const EditJSONB = (props: any) => {
     .pickBy((value, key) => key.startsWith(property.name))
     .value();
 
-  const object: any = unflatten(matchingParams);
-  const paramObject = object?.[property.name];
+  const paramObject = flat.get(matchingParams, property.name)
 
   const saveData = (data: any): void => {
     onChange(property.name, data);

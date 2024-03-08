@@ -49,10 +49,9 @@ export default class ShowJSONB extends React.PureComponent<ShowPropertyProps> {
     const matchingParams = _.chain(record.params)
       .omitBy(_.isNil)
       .pickBy((value, key) => key.startsWith(property.name))
-      .value() as { [key: string]: object };
+      .value() as { [key: string]: FlattenValue };
 
-    const unflattened = unflatten(matchingParams) as { [key: string]: FlattenValue };
-    const paramObject = flat.get(unflattened, property.name);
+    const paramObject = flat.get(matchingParams, property.name);
 
     return (
       <FormGroup>

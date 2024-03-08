@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import { unflatten } from 'flat';
 import { Badge, Section, FormGroup, Label } from '@adminjs/design-system';
 import { flat } from "adminjs";
 const mapBoolean = (value) => {
@@ -33,8 +32,7 @@ export default class ShowJSONB extends React.PureComponent {
             .omitBy(_.isNil)
             .pickBy((value, key) => key.startsWith(property.name))
             .value();
-        const unflattened = unflatten(matchingParams);
-        const paramObject = flat.get(unflattened, property.name);
+        const paramObject = flat.get(matchingParams, property.name);
         return (React.createElement(FormGroup, null,
             React.createElement(Label, null, property.label),
             React.createElement(JSONBEntry, { paramObject: paramObject })));
