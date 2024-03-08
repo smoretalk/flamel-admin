@@ -3,8 +3,7 @@ import React, {useEffect, useState} from 'react'
 import {useLocation, useNavigate} from 'react-router'
 
 export const REFRESH_KEY = 'refresh'
-import {ActionProps, useRecords, useSelectedRecords, RecordsTable, BasePropertyJSON} from 'adminjs';
-import * as querystring from "querystring";
+import {ActionProps, useRecords, useSelectedRecords, RecordsTable, useQueryParams} from 'adminjs';
 
 export const getActionElementCss = (resourceId: string, actionName: string, suffix: string) => `${resourceId}-${actionName}-${suffix}`
 
@@ -27,6 +26,7 @@ const PreserveQueryList: React.FC<ActionProps> = ({resource, setTag}) => {
   } = useSelectedRecords(records)
   const location = useLocation()
   const navigate = useNavigate()
+  const { storeParams } = useQueryParams()
 
   useEffect(() => {
     if (setTag) {
@@ -55,8 +55,13 @@ const PreserveQueryList: React.FC<ActionProps> = ({resource, setTag}) => {
     const search = new URLSearchParams(location.search)
     if (search.get(REFRESH_KEY)) {
       setSelectedRecords([])
+    } else {
+      const recordIds = search.get('recordIds')?.split?.(',') ?? []
+      setSelectedRecords(
+        records.filter((r) => recordIds.includes(r.id.toString())),
+      )
     }
-  }, [location.search])
+  }, [location.search, records])
 
   const handleActionPerformed = (): any => {
     console.log('action performed');
@@ -64,9 +69,7 @@ const PreserveQueryList: React.FC<ActionProps> = ({resource, setTag}) => {
   }
 
   const handlePaginationChange = (pageNumber: number): void => {
-    const search = new URLSearchParams(location.search)
-    search.set('page', pageNumber.toString())
-    navigate({search: search.toString()})
+    storeParams({ page: pageNumber.toString() })
   }
 
   const contentTag = getActionElementCss(resource.id, 'list', 'table-wrapper')

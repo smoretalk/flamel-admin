@@ -3,8 +3,7 @@ import React, {useEffect, useState} from 'react'
 import {useLocation, useNavigate} from 'react-router'
 
 export const REFRESH_KEY = 'refresh'
-import {ActionProps, useRecords, useSelectedRecords, RecordsTable, BasePropertyJSON} from 'adminjs';
-import * as querystring from "querystring";
+import {ActionProps, useRecords, useSelectedRecords, RecordsTable, BasePropertyJSON, useQueryParams} from 'adminjs';
 
 export const getActionElementCss = (resourceId: string, actionName: string, suffix: string) => `${resourceId}-${actionName}-${suffix}`
 
@@ -28,6 +27,7 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
   const location = useLocation()
   const navigate = useNavigate()
   const [newResource, setNewResource] = useState(resource);
+  const { storeParams } = useQueryParams()
 
   function resourceFinder(list: string[]) {
     const resourceList: BasePropertyJSON[] = [];
@@ -105,8 +105,13 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
     const search = new URLSearchParams(location.search)
     if (search.get(REFRESH_KEY)) {
       setSelectedRecords([])
+    } else {
+      const recordIds = search.get('recordIds')?.split?.(',') ?? []
+      setSelectedRecords(
+        records.filter((r) => recordIds.includes(r.id.toString())),
+      )
     }
-  }, [location.search])
+  }, [location.search, records])
 
   const handleActionPerformed = (): any => {
     console.log('action performed');
@@ -114,9 +119,7 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
   }
 
   const handlePaginationChange = (pageNumber: number): void => {
-    const search = new URLSearchParams(location.search)
-    search.set('page', pageNumber.toString())
-    navigate({search: search.toString()})
+    storeParams({ page: pageNumber.toString() })
   }
 
   const contentTag = getActionElementCss(resource.id, 'list', 'table-wrapper')

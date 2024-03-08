@@ -2,7 +2,7 @@ import { Box, Pagination, Text } from '@adminjs/design-system';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 export const REFRESH_KEY = 'refresh';
-import { useRecords, useSelectedRecords, RecordsTable } from 'adminjs';
+import { useRecords, useSelectedRecords, RecordsTable, useQueryParams } from 'adminjs';
 export const getActionElementCss = (resourceId, actionName, suffix) => `${resourceId}-${actionName}-${suffix}`;
 const List = ({ resource, setTag }) => {
     const { records, loading, direction, sortBy, page, total, fetchData, perPage, } = useRecords(resource.id);
@@ -10,6 +10,7 @@ const List = ({ resource, setTag }) => {
     const location = useLocation();
     const navigate = useNavigate();
     const [newResource, setNewResource] = useState(resource);
+    const { storeParams } = useQueryParams();
     function resourceFinder(list) {
         const resourceList = [];
         list.forEach((item) => {
@@ -78,15 +79,17 @@ const List = ({ resource, setTag }) => {
         if (search.get(REFRESH_KEY)) {
             setSelectedRecords([]);
         }
-    }, [location.search]);
+        else {
+            const recordIds = search.get('recordIds')?.split?.(',') ?? [];
+            setSelectedRecords(records.filter((r) => recordIds.includes(r.id.toString())));
+        }
+    }, [location.search, records]);
     const handleActionPerformed = () => {
         console.log('action performed');
         return fetchData();
     };
     const handlePaginationChange = (pageNumber) => {
-        const search = new URLSearchParams(location.search);
-        search.set('page', pageNumber.toString());
-        navigate({ search: search.toString() });
+        storeParams({ page: pageNumber.toString() });
     };
     const contentTag = getActionElementCss(resource.id, 'list', 'table-wrapper');
     return (React.createElement(Box, { variant: "container", "data-css": contentTag },
