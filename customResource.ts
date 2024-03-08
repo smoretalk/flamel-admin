@@ -61,11 +61,9 @@ export class CustomResource extends BaseResource {
     return this.manager.count({ where: convertFilter(this.model.fields, filter) });
   }
   override async find(filter: Filter, params: { limit?: number, offset?: number, sort?: { direction?: string, sortBy?: string } } = {}): Promise<BaseRecord[]> {
-    console.log('find called', this.include);
     const { limit = 10, offset = 0, sort = {} } = params;
     const { direction, sortBy } = sort;
     const where = convertFilter(this.model.fields, filter);
-    console.log('where', where);
     const orderBy = flat.unflatten({
       [sortBy]: direction,
     })
@@ -79,7 +77,6 @@ export class CustomResource extends BaseResource {
     return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
   }
   override async findOne(id: string): Promise<BaseRecord> {
-    console.log('findOne called');
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
       return null;
@@ -94,7 +91,6 @@ export class CustomResource extends BaseResource {
     return new BaseRecord(this.prepareReturnValues(result), this);
   }
   override async findMany(ids: string[]): Promise<BaseRecord[]> {
-    console.log('findMany called');
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
       return [];
@@ -114,19 +110,16 @@ export class CustomResource extends BaseResource {
     return this.prepareReturnValues(result);
   }
   override async update(pk: unknown, params = {}) {
-    console.log('update');
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
       return {};
     const preparedParams = this.prepareParams(params);
-    console.log('preparedParams', preparedParams, idProperty.path(), convertParam(idProperty, this.model.fields, pk));
     const result = await this.manager.update({
       where: {
         [idProperty.path()]: convertParam(idProperty, this.model.fields, pk),
       },
       data: preparedParams,
     });
-    console.log('udpate result', result);
     return this.prepareReturnValues(result);
   }
   override async delete(id: string) {
@@ -159,7 +152,6 @@ export class CustomResource extends BaseResource {
     const { model } = modelObj;
     const { fields = [], name } = model;
     return fields.reduce((memo: { [k: string]: Property }, field) => {
-      console.log('prepareDepModelProperties', field);
       if (field.isReadOnly && !field.isId) {
         return memo;
       }
@@ -172,7 +164,6 @@ export class CustomResource extends BaseResource {
     }, {});
   }
   prepareParams(params: FlattenParams) {
-    console.log('prepareParams', params);
     const preparedParams: { [k: string]: unknown } = {};
     for (const property of this.properties()) {
       const param: object[] = flat.get(params, property.path());
@@ -207,7 +198,6 @@ export class CustomResource extends BaseResource {
 
   prepareReturnValues(params: FlattenParams) {
     const preparedValues: { [k: string]: unknown } = {};
-    console.log('params', params);
     for (const property of this.properties()) {
       const param = flat.get(params, property.path());
 
@@ -243,7 +233,6 @@ export class CustomResource extends BaseResource {
         continue;
       preparedValues[key] = params[foreignColumnName];
     }
-    console.log('preparedValues', preparedValues);
     return preparedValues;
   }
 
@@ -281,7 +270,6 @@ export class CustomResource extends BaseResource {
 
   // 다대다용도
   async saveRecords(key: string, idValue: string, resourceId: string, targetKey: string, ids: { id: string | number }[]) {
-    console.log('record', key, idValue, 'resourceId', resourceId, targetKey, 'ids', ids);
     if (resourceId.includes('.')) { // 중첩된 다대다관계이면
       // 중첩된 리소스로 타고 들어가서 다대다 수행
       const split = resourceId.split('.');
@@ -296,16 +284,13 @@ export class CustomResource extends BaseResource {
         }
       });
       if (result?.[middle]) {
-        console.log('insert nested m2m', middle, last);
         const middleId = result[middle][key]; // TODO: 다른 아이디도 가능하게 만들기
-        console.log(lowerCase(middle), middleId, last);
         await (this.client[lowerCase(middle)] as any).update({
           where: { [key]: middleId},
           data: {
             [last]: {
               set: ids.map((v) => {
                 const value = v.id || v[targetKey as 'id'];
-                console.log('value', value, 'targetKey', targetKey, 'v', v);
                 return ({
                   [targetKey]: typeof value === 'string' ? parseInt(value) : value,
                 })
@@ -315,7 +300,6 @@ export class CustomResource extends BaseResource {
         })
       }
     } else {
-      console.log('insert m2m', key, idValue, resourceId);
       await this.manager.update({
         where: { [key]: idValue },
         data: {

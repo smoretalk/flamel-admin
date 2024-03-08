@@ -4,10 +4,8 @@ export const after = async (response, request, context) => {
     if (request && request.method) {
         const resource = context.resource;
         const manyProperties = resource.getManyProperties();
-        console.log('m2m manyProperties', manyProperties.map((v) => v.name()));
         const { record, _admin } = context;
         if (request.method === 'post' && record.isValid()) {
-            console.log('request.payload', request.payload);
             const params = flat.unflatten(request.payload);
             await Promise.all(manyProperties.map(async (propertyDecorator) => {
                 const toResourceId = propertyDecorator.name();
@@ -25,12 +23,10 @@ export const after = async (response, request, context) => {
                     ids = params[toResourceId];
                 }
                 if (!Array.isArray(ids)) {
-                    console.log(toResourceId, 'is not m2m, so return');
                     return;
                 }
                 const idField = resource.client._runtimeDataModel.models[fromModel].fields.find((v) => v.isId);
                 const targetIdField = resource.client._runtimeDataModel.models[targetModel].fields.find((v) => v.isId);
-                console.log('idField', idField);
                 await resource.saveRecords(idField.name, record.params[idField.name], toResourceId, targetIdField.name, ids);
             }));
         }

@@ -16,12 +16,9 @@ export const after: After<RecordActionResponse> = async (
     const resource = context.resource as CustomResource;
     const manyProperties: PropertyDecorator[] = resource.getManyProperties();
 
-    console.log('m2m manyProperties', manyProperties.map((v) => v.name()));
-
     const { record, _admin } = context;
 
     if (request.method === 'post' && record.isValid()) {
-      console.log('request.payload', request.payload);
       const params: { [k: string]: object } = flat.unflatten(request.payload);
       await Promise.all(
         manyProperties.map(async (propertyDecorator) => {
@@ -40,12 +37,10 @@ export const after: After<RecordActionResponse> = async (
             ids = params[toResourceId];
           }
           if (!Array.isArray(ids)) { // 다대다 관계가 아니므로
-            console.log(toResourceId, 'is not m2m, so return');
             return;
           }
           const idField = (resource.client._runtimeDataModel.models[fromModel].fields as DMMF.Field[]).find((v) => v.isId);
           const targetIdField = (resource.client._runtimeDataModel.models[targetModel].fields as DMMF.Field[]).find((v) => v.isId);
-          console.log('idField', idField);
           await resource.saveRecords(idField.name, record.params[idField.name], toResourceId, targetIdField.name, ids);
           // await context.resource.getRoles(record);
         }),

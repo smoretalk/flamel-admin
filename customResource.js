@@ -53,11 +53,9 @@ export class CustomResource extends BaseResource {
         return this.manager.count({ where: convertFilter(this.model.fields, filter) });
     }
     async find(filter, params = {}) {
-        console.log('find called', this.include);
         const { limit = 10, offset = 0, sort = {} } = params;
         const { direction, sortBy } = sort;
         const where = convertFilter(this.model.fields, filter);
-        console.log('where', where);
         const orderBy = flat.unflatten({
             [sortBy]: direction,
         });
@@ -71,7 +69,6 @@ export class CustomResource extends BaseResource {
         return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
     }
     async findOne(id) {
-        console.log('findOne called');
         const idProperty = this.properties().find((property) => property.isId());
         if (!idProperty)
             return null;
@@ -86,7 +83,6 @@ export class CustomResource extends BaseResource {
         return new BaseRecord(this.prepareReturnValues(result), this);
     }
     async findMany(ids) {
-        console.log('findMany called');
         const idProperty = this.properties().find((property) => property.isId());
         if (!idProperty)
             return [];
@@ -106,19 +102,16 @@ export class CustomResource extends BaseResource {
         return this.prepareReturnValues(result);
     }
     async update(pk, params = {}) {
-        console.log('update');
         const idProperty = this.properties().find((property) => property.isId());
         if (!idProperty)
             return {};
         const preparedParams = this.prepareParams(params);
-        console.log('preparedParams', preparedParams, idProperty.path(), convertParam(idProperty, this.model.fields, pk));
         const result = await this.manager.update({
             where: {
                 [idProperty.path()]: convertParam(idProperty, this.model.fields, pk),
             },
             data: preparedParams,
         });
-        console.log('udpate result', result);
         return this.prepareReturnValues(result);
     }
     async delete(id) {
@@ -150,7 +143,6 @@ export class CustomResource extends BaseResource {
         const { model } = modelObj;
         const { fields = [], name } = model;
         return fields.reduce((memo, field) => {
-            console.log('prepareDepModelProperties', field);
             if (field.isReadOnly && !field.isId) {
                 return memo;
             }
@@ -163,7 +155,6 @@ export class CustomResource extends BaseResource {
         }, {});
     }
     prepareParams(params) {
-        console.log('prepareParams', params);
         const preparedParams = {};
         for (const property of this.properties()) {
             const param = flat.get(params, property.path());
@@ -193,7 +184,6 @@ export class CustomResource extends BaseResource {
     }
     prepareReturnValues(params) {
         const preparedValues = {};
-        console.log('params', params);
         for (const property of this.properties()) {
             const param = flat.get(params, property.path());
             const key = property.path();
@@ -223,7 +213,6 @@ export class CustomResource extends BaseResource {
                 continue;
             preparedValues[key] = params[foreignColumnName];
         }
-        console.log('preparedValues', preparedValues);
         return preparedValues;
     }
     titleField() {
@@ -254,7 +243,6 @@ export class CustomResource extends BaseResource {
         });
     }
     async saveRecords(key, idValue, resourceId, targetKey, ids) {
-        console.log('record', key, idValue, 'resourceId', resourceId, targetKey, 'ids', ids);
         if (resourceId.includes('.')) {
             const split = resourceId.split('.');
             const middle = split[0];
@@ -268,16 +256,13 @@ export class CustomResource extends BaseResource {
                 }
             });
             if (result?.[middle]) {
-                console.log('insert nested m2m', middle, last);
                 const middleId = result[middle][key];
-                console.log(lowerCase(middle), middleId, last);
                 await this.client[lowerCase(middle)].update({
                     where: { [key]: middleId },
                     data: {
                         [last]: {
                             set: ids.map((v) => {
                                 const value = v.id || v[targetKey];
-                                console.log('value', value, 'targetKey', targetKey, 'v', v);
                                 return ({
                                     [targetKey]: typeof value === 'string' ? parseInt(value) : value,
                                 });
@@ -288,7 +273,6 @@ export class CustomResource extends BaseResource {
             }
         }
         else {
-            console.log('insert m2m', key, idValue, resourceId);
             await this.manager.update({
                 where: { [key]: idValue },
                 data: {
