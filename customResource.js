@@ -1,8 +1,9 @@
-import { BaseRecord, BaseResource, flat } from 'adminjs';
+import { BaseResource, flat } from 'adminjs';
 import { getEnums } from "@adminjs/prisma";
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
 import { convertFilter } from './convertFilter.js';
+import CustomRecord from "./customRecord.js";
 export const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
 export class CustomResource extends BaseResource {
     model;
@@ -47,7 +48,7 @@ export class CustomResource extends BaseResource {
         return this.propertiesObject[path] ?? null;
     }
     build(params) {
-        return new BaseRecord(flat.unflatten(params), this);
+        return new CustomRecord(flat.unflatten(params), this);
     }
     async count(filter) {
         return this.manager.count({ where: convertFilter(this.model.fields, filter) });
@@ -66,7 +67,7 @@ export class CustomResource extends BaseResource {
             include: this.include,
             orderBy,
         });
-        return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
+        return results.map((result) => new CustomRecord(this.prepareReturnValues(result), this));
     }
     async findOne(id) {
         const idProperty = this.properties().find((property) => property.isId());
@@ -80,7 +81,7 @@ export class CustomResource extends BaseResource {
         });
         if (!result)
             return null;
-        return new BaseRecord(this.prepareReturnValues(result), this);
+        return new CustomRecord(this.prepareReturnValues(result), this);
     }
     async findMany(ids) {
         const idProperty = this.properties().find((property) => property.isId());
@@ -94,7 +95,7 @@ export class CustomResource extends BaseResource {
             },
             include: this.include,
         });
-        return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
+        return results.map((result) => new CustomRecord(this.prepareReturnValues(result), this));
     }
     async create(params) {
         const preparedParams = this.prepareParams(params);
@@ -219,7 +220,7 @@ export class CustomResource extends BaseResource {
         return this.decorate().titleProperty().name();
     }
     wrapObjects(objects) {
-        return objects.map((sequelizeObject) => new BaseRecord(sequelizeObject.toJSON(), this));
+        return objects.map((sequelizeObject) => new CustomRecord(sequelizeObject.toJSON(), this));
     }
     async saveRecord(where, resourceId, ids) {
         const update = ids;

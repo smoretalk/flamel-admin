@@ -1,9 +1,10 @@
-import {BaseRecord, BaseResource, Filter, flat, FlattenParams, ParamsType} from 'adminjs';
+import {BaseResource, Filter, flat, FlattenParams, ParamsType} from 'adminjs';
 import { type Enums, getEnums } from "@adminjs/prisma";
-import type { DMMF, ReadonlyDeep } from '@prisma/client/runtime/library.js';
+import type { DMMF } from '@prisma/client/runtime/library.js';
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
 import { convertFilter } from './convertFilter.js';
+import CustomRecord from "./customRecord.js";
 
 type ReadonlyDeep_2<O> = {
   +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
@@ -54,13 +55,13 @@ export class CustomResource extends BaseResource {
   override property(path: string) {
     return this.propertiesObject[path] ?? null;
   }
-  override build(params: object): BaseRecord {
-    return new BaseRecord(flat.unflatten(params), this);
+  override build(params: object): CustomRecord {
+    return new CustomRecord(flat.unflatten(params), this);
   }
   override async count(filter: Filter) {
     return this.manager.count({ where: convertFilter(this.model.fields, filter) });
   }
-  override async find(filter: Filter, params: { limit?: number, offset?: number, sort?: { direction?: string, sortBy?: string } } = {}): Promise<BaseRecord[]> {
+  override async find(filter: Filter, params: { limit?: number, offset?: number, sort?: { direction?: string, sortBy?: string } } = {}): Promise<CustomRecord[]> {
     const { limit = 10, offset = 0, sort = {} } = params;
     const { direction, sortBy } = sort;
     const where = convertFilter(this.model.fields, filter);
@@ -74,9 +75,9 @@ export class CustomResource extends BaseResource {
       include: this.include,
       orderBy,
     });
-    return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
+    return results.map((result) => new CustomRecord(this.prepareReturnValues(result), this));
   }
-  override async findOne(id: string): Promise<BaseRecord> {
+  override async findOne(id: string): Promise<CustomRecord> {
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
       return null;
@@ -88,9 +89,9 @@ export class CustomResource extends BaseResource {
     });
     if (!result)
       return null;
-    return new BaseRecord(this.prepareReturnValues(result), this);
+    return new CustomRecord(this.prepareReturnValues(result), this);
   }
-  override async findMany(ids: string[]): Promise<BaseRecord[]> {
+  override async findMany(ids: string[]): Promise<CustomRecord[]> {
     const idProperty = this.properties().find((property) => property.isId());
     if (!idProperty)
       return [];
@@ -102,7 +103,7 @@ export class CustomResource extends BaseResource {
       },
       include: this.include,
     });
-    return results.map((result) => new BaseRecord(this.prepareReturnValues(result), this));
+    return results.map((result) => new CustomRecord(this.prepareReturnValues(result), this));
   }
   override async create(params: FlattenParams) {
     const preparedParams = this.prepareParams(params);
@@ -242,7 +243,7 @@ export class CustomResource extends BaseResource {
 
   wrapObjects(objects: { toJSON(): ParamsType }[]) {
     return objects.map(
-      (sequelizeObject) => new BaseRecord(sequelizeObject.toJSON(), this),
+      (sequelizeObject) => new CustomRecord(sequelizeObject.toJSON(), this),
     );
   }
   // 일대다용도

@@ -1,7 +1,8 @@
-import { BaseRecord, BaseResource, Filter, FlattenParams, ParamsType } from 'adminjs';
+import { BaseResource, Filter, FlattenParams, ParamsType } from 'adminjs';
 import { type Enums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
 import { Property } from "./customProperty.js";
+import CustomRecord from "./customRecord.js";
 type ReadonlyDeep_2<O> = {
     +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
 };
@@ -39,7 +40,7 @@ export declare class CustomResource extends BaseResource {
     id(): string;
     properties(): Property[];
     property(path: string): Property;
-    build(params: object): BaseRecord;
+    build(params: object): CustomRecord;
     count(filter: Filter): Promise<any>;
     find(filter: Filter, params?: {
         limit?: number;
@@ -48,9 +49,9 @@ export declare class CustomResource extends BaseResource {
             direction?: string;
             sortBy?: string;
         };
-    }): Promise<BaseRecord[]>;
-    findOne(id: string): Promise<BaseRecord>;
-    findMany(ids: string[]): Promise<BaseRecord[]>;
+    }): Promise<CustomRecord[]>;
+    findOne(id: string): Promise<CustomRecord>;
+    findMany(ids: string[]): Promise<CustomRecord[]>;
     create(params: FlattenParams): Promise<{
         [k: string]: unknown;
     }>;
@@ -78,7 +79,7 @@ export declare class CustomResource extends BaseResource {
     titleField(): string;
     wrapObjects(objects: {
         toJSON(): ParamsType;
-    }[]): BaseRecord[];
+    }[]): CustomRecord[];
     saveRecord(where: object, resourceId: string, ids: {
         imageId: number;
     }): Promise<void>;
