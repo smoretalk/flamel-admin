@@ -1,4 +1,5 @@
-import {BaseRecord} from "adminjs";
+import {BaseRecord, ParamsType} from "adminjs";
+import {CustomResource} from "./customResource.js";
 
 /**
  * Representation of an particular ORM/ODM Record in given Resource in AdminJS
@@ -6,6 +7,12 @@ import {BaseRecord} from "adminjs";
  * @category Base
  */
 class CustomRecord extends BaseRecord {
+  declare resource: CustomResource;
+  constructor(params: ParamsType, resource: CustomResource) {
+    super(params, resource);
+    this.resource = resource
+  }
+
   /**
    * Returns uniq id of the Record.
    * @return {string | number} id of the Record
@@ -15,7 +22,10 @@ class CustomRecord extends BaseRecord {
     if (!idProperties.length) {
       throw new Error(`Resource: "${this.resource.id()}" does not have an id property`)
     }
-    return this.params[idProperties[0].name()]
+    // idProperty가 여러 개일 수 있는 문제 해결
+    const idField = this.resource.model.fields.find((v) => v.isId);
+    const idProperty = idProperties.find((v) => v.name() === idField.name);
+    return this.params[idProperty.name()]
   }
 }
 
