@@ -5,7 +5,7 @@ const DisplayImage = (props) => {
     const onError = () => {
         if (!errored) {
             setErrored(true);
-            setSrc((prev) => prev?.replace("/thumb", "binary"));
+            setSrc((prev) => prev?.replace("/thumb", "/binary"));
         }
     };
     return (React.createElement("section", { style: { marginBottom: props.where === 'show' ? 24 : 0 } },

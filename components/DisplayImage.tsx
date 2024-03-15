@@ -10,7 +10,7 @@ const DisplayImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   const onError = () => {
     if (!errored) {
       setErrored(true);
-      setSrc((prev) => prev?.replace("/thumb", "binary"));
+      setSrc((prev) => prev?.replace("/thumb", "/binary"));
     }
   };
 
