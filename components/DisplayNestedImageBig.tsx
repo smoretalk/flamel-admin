@@ -5,7 +5,7 @@ const DisplayNestedImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'lis
   props,
 ) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/'))
+    const [src, setSrc] = useState(`/api/admin/images/${props.record.populated.Image.params.imageId}/binary`)
 
   return (
     <section style={{ marginBottom: props.where === 'show' ? 24 : 0 }}>

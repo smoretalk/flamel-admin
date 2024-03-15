@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 const DisplayNestedImage = (props) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/') +
-        '/thumb');
+    const [src, setSrc] = useState(`/api/admin/images/${props.record.populated.Image.params.imageId}/binary`);
     const onError = () => {
         if (!errored) {
             setErrored(true);
-            setSrc((prev) => prev?.replace("/thumb", ""));
+            setSrc((prev) => prev?.replace("/thumb", "/binary"));
         }
     };
     return (React.createElement("section", { style: { marginBottom: props.where === 'show' ? 24 : 0 } },

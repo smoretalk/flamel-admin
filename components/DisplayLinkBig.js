@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 const DisplayImageBig = (props) => {
-    const [src, setSrc] = useState(props.record.params.link);
+    const [src, setSrc] = useState(`/api/admin/images/${props.record.params.imageId}/binary`);
     return (React.createElement("section", { style: { marginBottom: props.where === 'show' ? 24 : 0 } },
         props.where === 'show' && (React.createElement("label", { style: {
                 display: 'block',

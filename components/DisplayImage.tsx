@@ -5,13 +5,12 @@ const DisplayImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
   const [errored, setErrored] = useState(false);
-  const [src, setSrc] = useState(props.record.params[props.property.path].replace(/\/api\/users\//, '/api/admin/').replace(/\/api\/collections\//, `/api/admin/${props.record.params.ownerId || 0}/images/`) +
-    '/thumb')
+  const [src, setSrc] = useState(`/api/admin/images/${props.record.params[props.property.path]}/thumb`)
 
   const onError = () => {
     if (!errored) {
       setErrored(true);
-      setSrc((prev) => prev?.replace("/thumb", ""));
+      setSrc((prev) => prev?.replace("/thumb", "binary"));
     }
   };
 

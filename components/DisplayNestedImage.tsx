@@ -5,13 +5,12 @@ const DisplayNestedImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' 
   props,
 ) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(props.record.populated.Image.params.link.replace(/\/api\/users\//, '/api/admin/') +
-        '/thumb')
+    const [src, setSrc] = useState(`/api/admin/images/${props.record.populated.Image.params.imageId}/binary`)
 
     const onError = () => {
         if (!errored) {
             setErrored(true);
-            setSrc((prev) => prev?.replace("/thumb", ""));
+            setSrc((prev) => prev?.replace("/thumb", "/binary"));
         }
     };
 

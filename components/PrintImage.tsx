@@ -90,7 +90,7 @@ const PrintImage: FC<ActionProps> = ({ record }) => {
       </div>
       <div id="print-root-visible">
         <img src="https://flamel.app/api/collections/ces-image.png/theme" width="100%" alt=""/>
-        <img id="print-image" src={record.params.link.replaceAll('users', 'admin')} alt="이미지"/>
+        <img id="print-image" src={`/api/admin/images/${record.params.imageId}/binary`} alt="이미지"/>
         <canvas id="qr"></canvas>
       </div>
     </div>

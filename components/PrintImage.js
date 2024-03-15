@@ -68,7 +68,7 @@ const PrintImage = ({ record }) => {
             React.createElement("button", { onClick: onClose }, "\uB2EB\uAE30")),
         React.createElement("div", { id: "print-root-visible" },
             React.createElement("img", { src: "https://flamel.app/api/collections/ces-image.png/theme", width: "100%", alt: "" }),
-            React.createElement("img", { id: "print-image", src: record.params.link.replaceAll('users', 'admin'), alt: "\uC774\uBBF8\uC9C0" }),
+            React.createElement("img", { id: "print-image", src: `/api/admin/images/${record.params.imageId}/binary`, alt: "\uC774\uBBF8\uC9C0" }),
             React.createElement("canvas", { id: "qr" }))));
 };
 export default PrintImage;
