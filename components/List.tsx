@@ -27,7 +27,7 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
   const location = useLocation()
   const navigate = useNavigate()
   const [newResource, setNewResource] = useState(resource);
-  const { storeParams } = useQueryParams()
+  const {storeParams} = useQueryParams()
 
   function resourceFinder(list: string[]) {
     const resourceList: BasePropertyJSON[] = [];
@@ -47,7 +47,7 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
         if (isCollection && isCollection !== 'false') {
           setNewResource({
             ...resource,
-            listProperties: resourceFinder(['idQuerySaver', 'link', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.promptKo', 'CollectionInfo.promptEn', 'CollectionInfo.Theme', 'CollectionInfo.enabled']),
+            listProperties: resourceFinder(['idQuerySaver', 'link', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.prompt', 'CollectionInfo.Theme', 'CollectionInfo.enabled', 'CollectionInfo.is2x']),
           })
         } else {
           setNewResource({
@@ -119,7 +119,7 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
   }
 
   const handlePaginationChange = (pageNumber: number): void => {
-    storeParams({ page: pageNumber.toString() })
+    storeParams({page: pageNumber.toString()})
   }
 
   const contentTag = getActionElementCss(resource.id, 'list', 'table-wrapper')

@@ -27,7 +27,7 @@ const List = ({ resource, setTag }) => {
                 if (isCollection && isCollection !== 'false') {
                     setNewResource({
                         ...resource,
-                        listProperties: resourceFinder(['idQuerySaver', 'link', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.promptKo', 'CollectionInfo.promptEn', 'CollectionInfo.Theme', 'CollectionInfo.enabled']),
+                        listProperties: resourceFinder(['idQuerySaver', 'link', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.prompt', 'CollectionInfo.Theme', 'CollectionInfo.enabled', 'CollectionInfo.is2x']),
                     });
                 }
                 else {
