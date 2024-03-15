@@ -40,19 +40,21 @@ export const Dashboard = (props) => {
     const { translateMessage, translateButton } = useTranslation();
     const [imageFiles, setImageFiles] = useState([]);
     const [themeFiles, setThemeFiles] = useState([]);
-    const uploadImageFiles = async (files) => {
+    const uploadImageFiles = (scaleSize) => async (files) => {
         setImageFiles(files);
         try {
             const formData = new FormData();
+            formData.append('scaleSize', scaleSize);
             files.forEach((file) => {
                 formData.append('file', file);
             });
-            const res = await axios.post('/api/s3/collectionImages', formData);
+            await axios.post('/api/s3/collectionImages', formData);
         }
         catch (err) {
             if (axios.isAxiosError(err)) {
                 alert(err.response.data);
             }
+            console.error(err);
         }
         setImageFiles([]);
     };
@@ -72,6 +74,7 @@ export const Dashboard = (props) => {
             if (axios.isAxiosError(err)) {
                 console.error(err.response.data);
             }
+            console.error(err);
         }
         setThemeFiles([]);
     };
@@ -82,9 +85,16 @@ export const Dashboard = (props) => {
                 React.createElement(Card, { as: "a" },
                     React.createElement(Text, { textAlign: "center" },
                         React.createElement(Icon, { icon: "Image" }),
-                        React.createElement(H5, { mt: "lg" }, translateMessage('uploadCollectionImages')),
-                        React.createElement(Text, null, translateMessage('uploadCollectionImages_detail')),
-                        React.createElement(DropZone, { files: imageFiles, multiple: true, onChange: uploadImageFiles })))),
+                        React.createElement(H5, { mt: "lg" }, translateMessage('uploadCollectionImages1x')),
+                        React.createElement(Text, null, translateMessage('uploadCollectionImages1x_detail')),
+                        React.createElement(DropZone, { files: imageFiles, multiple: true, onChange: uploadImageFiles('1x') })))),
+            React.createElement(Box, { width: [1, 1 / 2, 1 / 2, 1 / 3], p: "lg" },
+                React.createElement(Card, { as: "a" },
+                    React.createElement(Text, { textAlign: "center" },
+                        React.createElement(Icon, { icon: "Image" }),
+                        React.createElement(H5, { mt: "lg" }, translateMessage('uploadCollectionImages2x')),
+                        React.createElement(Text, null, translateMessage('uploadCollectionImages2x_detail')),
+                        React.createElement(DropZone, { files: imageFiles, multiple: true, onChange: uploadImageFiles('2x') })))),
             React.createElement(Box, { width: [1, 1 / 2, 1 / 2, 1 / 3], p: "lg" },
                 React.createElement(Card, { as: "a" },
                     React.createElement(Text, { textAlign: "center" },

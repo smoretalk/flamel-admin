@@ -102,18 +102,20 @@ export const Dashboard: React.FC = (props) => {
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [themeFiles, setThemeFiles] = useState<File[]>([])
 
-  const uploadImageFiles = async (files: File[]) => {
+  const uploadImageFiles = (scaleSize: '1x' | '2x') => async (files: File[]) => {
     setImageFiles(files);
     try {
       const formData = new FormData();
+      formData.append('scaleSize', scaleSize);
       files.forEach((file) => {
         formData.append('file', file);
       })
-      const res = await axios.post('/api/s3/collectionImages', formData)
+      await axios.post('/api/s3/collectionImages', formData)
     } catch (err) {
       if (axios.isAxiosError(err)) {
         alert(err.response.data);
       }
+      console.error(err);
     }
     setImageFiles([]);
   }
@@ -133,6 +135,7 @@ export const Dashboard: React.FC = (props) => {
       if (axios.isAxiosError(err)) {
         console.error(err.response.data);
       }
+      console.error(err);
     }
     setThemeFiles([]);
   }
@@ -155,12 +158,26 @@ export const Dashboard: React.FC = (props) => {
           <Card as="a">
             <Text textAlign="center">
               <Icon icon="Image" />
-              <H5 mt="lg">{translateMessage('uploadCollectionImages')}</H5>
-              <Text>{translateMessage('uploadCollectionImages_detail')}</Text>
+              <H5 mt="lg">{translateMessage('uploadCollectionImages1x')}</H5>
+              <Text>{translateMessage('uploadCollectionImages1x_detail')}</Text>
               <DropZone
                 files={imageFiles}
                 multiple
-                onChange={uploadImageFiles}
+                onChange={uploadImageFiles('1x')}
+              />
+            </Text>
+          </Card>
+        </Box>
+        <Box width={[1, 1 / 2, 1 / 2, 1 / 3]} p="lg">
+          <Card as="a">
+            <Text textAlign="center">
+              <Icon icon="Image" />
+              <H5 mt="lg">{translateMessage('uploadCollectionImages2x')}</H5>
+              <Text>{translateMessage('uploadCollectionImages2x_detail')}</Text>
+              <DropZone
+                files={imageFiles}
+                multiple
+                onChange={uploadImageFiles('2x')}
               />
             </Text>
           </Card>
