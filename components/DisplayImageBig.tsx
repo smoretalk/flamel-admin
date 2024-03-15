@@ -5,7 +5,7 @@ const DisplayImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> 
   props,
 ) => {
   const [errored, setErrored] = useState(false);
-  const [src, setSrc] = useState(`/api/admin/images/${props.record.params[props.property.path]}/binary`)
+  const [src, setSrc] = useState(`/api/admin/images/${props.record.params.imageId}/binary`)
 
   return (
     <section style={{marginBottom: props.where === 'show' ? 24 : 0}}>

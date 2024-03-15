@@ -4,7 +4,7 @@ import type {ShowPropertyProps} from 'adminjs';
 const DisplayLink: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
-  const [src, setSrc] = useState(`/api/admin/images/${props.record.params.imageId}/thumb`)
+  const [src, setSrc] = useState(props.record.params.link)
 
   return (
     <section style={{marginBottom: props.where === 'show' ? 24 : 0}}>

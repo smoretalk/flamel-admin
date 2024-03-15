@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 const DisplayImage = (props) => {
     const [errored, setErrored] = useState(false);
-    const [src, setSrc] = useState(`/api/admin/images/${props.record.params[props.property.path]}/thumb`);
+    const [src, setSrc] = useState(`/api/admin/images/${props.record.params.imageId}/thumb`);
     const onError = () => {
         if (!errored) {
             setErrored(true);

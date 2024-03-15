@@ -5,7 +5,7 @@ const DisplayImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
   const [errored, setErrored] = useState(false);
-  const [src, setSrc] = useState(`/api/admin/images/${props.record.params[props.property.path]}/thumb`)
+  const [src, setSrc] = useState(`/api/admin/images/${props.record.params.imageId}/thumb`)
 
   const onError = () => {
     if (!errored) {
