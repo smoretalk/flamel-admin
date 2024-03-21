@@ -13,7 +13,7 @@ dependencies:
     version: 5.0.3(@prisma/client@5.10.2)(adminjs@7.7.2)
   '@microlink/react-json-view':
     specifier: github:zerocho/react-json-view
-    version: github.com/zerocho/react-json-view/a67e5408043c68593e541fa85460e50b73ed08ae(react-dom@18.2.0)(react@18.2.0)
+    version: github.com/zerocho/react-json-view/76fd3fb0c40d608f6cdf2df110736ce0d0a616ae(react-dom@18.2.0)(react@18.2.0)
   adminjs:
     specifier: ^7.7.2
     version: 7.7.2
@@ -6192,9 +6192,9 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/zerocho/react-json-view/a67e5408043c68593e541fa85460e50b73ed08ae(react-dom@18.2.0)(react@18.2.0):
-    resolution: {tarball: https://codeload.github.com/zerocho/react-json-view/tar.gz/a67e5408043c68593e541fa85460e50b73ed08ae}
-    id: github.com/zerocho/react-json-view/a67e5408043c68593e541fa85460e50b73ed08ae
+  github.com/zerocho/react-json-view/76fd3fb0c40d608f6cdf2df110736ce0d0a616ae(react-dom@18.2.0)(react@18.2.0):
+    resolution: {tarball: https://codeload.github.com/zerocho/react-json-view/tar.gz/76fd3fb0c40d608f6cdf2df110736ce0d0a616ae}
+    id: github.com/zerocho/react-json-view/76fd3fb0c40d608f6cdf2df110736ce0d0a616ae
     name: '@microlink/react-json-view'
     version: 1.23.2
     peerDependencies:
