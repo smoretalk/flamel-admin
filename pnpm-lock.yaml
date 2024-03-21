@@ -13,7 +13,7 @@ dependencies:
     version: 5.0.3(@prisma/client@5.10.2)(adminjs@7.7.2)
   '@microlink/react-json-view':
     specifier: github:zerocho/react-json-view
-    version: github.com/zerocho/react-json-view/76fd3fb0c40d608f6cdf2df110736ce0d0a616ae(react-dom@18.2.0)(react@18.2.0)
+    version: github.com/zerocho/react-json-view/6228ca771c5088ab8ab541f0fe2c65cb0106ac1f(react-dom@18.2.0)(react@18.2.0)
   adminjs:
     specifier: ^7.7.2
     version: 7.7.2
@@ -5455,10 +5455,6 @@ packages:
       '@babel/runtime': 7.24.0
     dev: false
 
-  /redux@5.0.1:
-    resolution: {integrity: sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==}
-    dev: false
-
   /regenerate-unicode-properties@10.1.1:
     resolution: {integrity: sha512-X007RyZLsCJVVrjgEFVpLUTZwyOZk3oiL75ZcuYjlIWd6rNJtOjkBwQc5AsRrpbKVkxN6sklw/k/9m2jJYOf8Q==}
     engines: {node: '>=4'}
@@ -6192,11 +6188,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/zerocho/react-json-view/76fd3fb0c40d608f6cdf2df110736ce0d0a616ae(react-dom@18.2.0)(react@18.2.0):
-    resolution: {tarball: https://codeload.github.com/zerocho/react-json-view/tar.gz/76fd3fb0c40d608f6cdf2df110736ce0d0a616ae}
-    id: github.com/zerocho/react-json-view/76fd3fb0c40d608f6cdf2df110736ce0d0a616ae
+  github.com/zerocho/react-json-view/6228ca771c5088ab8ab541f0fe2c65cb0106ac1f(react-dom@18.2.0)(react@18.2.0):
+    resolution: {tarball: https://codeload.github.com/zerocho/react-json-view/tar.gz/6228ca771c5088ab8ab541f0fe2c65cb0106ac1f}
+    id: github.com/zerocho/react-json-view/6228ca771c5088ab8ab541f0fe2c65cb0106ac1f
     name: '@microlink/react-json-view'
-    version: 1.23.2
+    version: 1.23.3
     peerDependencies:
       react: '>= 15'
       react-dom: '>= 15'
@@ -6206,7 +6202,6 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
       react-lifecycles-compat: 3.0.4
       react-textarea-autosize: 8.3.4(react@18.2.0)
-      redux: 5.0.1
     transitivePeerDependencies:
       - '@types/react'
     dev: false
