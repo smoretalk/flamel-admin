@@ -1,4 +1,4 @@
-import {BaseRecord, ParamsType} from "adminjs";
+import {BaseRecord, flat, ParamsType} from "adminjs";
 import {CustomResource} from "./customResource.js";
 
 /**
@@ -10,6 +10,7 @@ class CustomRecord extends BaseRecord {
   declare resource: CustomResource;
   constructor(params: ParamsType, resource: CustomResource) {
     super(params, resource);
+    this.params = params ? flat.flatten(params, { safe: true }) : {};
     this.resource = resource
   }
 
