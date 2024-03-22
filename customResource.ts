@@ -78,9 +78,16 @@ export class CustomResource extends BaseResource {
     return results.map((result) => new CustomRecord(this.prepareReturnValues(result), this));
   }
   override async findOne(id: string): Promise<CustomRecord> {
-    const idProperty = this.properties().find((property) => property.isId());
-    if (!idProperty)
+    const idProperties = this.properties().filter((p) => p.isId())
+    if (!idProperties.length) {
       return null;
+    }
+    // idProperty가 여러 개일 수 있는 문제 해결
+    const idField = this.model.fields.find((v) => v.isId);
+    const idProperty = idProperties.find((v) => v.name() === idField.name);
+    if (!idProperty) {
+      return null;
+    }
     const result = await this.manager.findUnique({
       where: {
         [idProperty.path()]: convertParam(idProperty, this.model.fields, id),
@@ -92,9 +99,16 @@ export class CustomResource extends BaseResource {
     return new CustomRecord(this.prepareReturnValues(result), this);
   }
   override async findMany(ids: string[]): Promise<CustomRecord[]> {
-    const idProperty = this.properties().find((property) => property.isId());
-    if (!idProperty)
+    const idProperties = this.properties().filter((p) => p.isId())
+    if (!idProperties.length) {
       return [];
+    }
+    // idProperty가 여러 개일 수 있는 문제 해결
+    const idField = this.model.fields.find((v) => v.isId);
+    const idProperty = idProperties.find((v) => v.name() === idField.name);
+    if (!idProperty) {
+      return [];
+    }
     const results: FlattenParams[] = await this.manager.findMany({
       where: {
         [idProperty.path()]: {
@@ -111,9 +125,16 @@ export class CustomResource extends BaseResource {
     return this.prepareReturnValues(result);
   }
   override async update(pk: unknown, params = {}) {
-    const idProperty = this.properties().find((property) => property.isId());
-    if (!idProperty)
+    const idProperties = this.properties().filter((p) => p.isId())
+    if (!idProperties.length) {
       return {};
+    }
+    // idProperty가 여러 개일 수 있는 문제 해결
+    const idField = this.model.fields.find((v) => v.isId);
+    const idProperty = idProperties.find((v) => v.name() === idField.name);
+    if (!idProperty) {
+      return {};
+    }
     const preparedParams = this.prepareParams(params);
     const result = await this.manager.update({
       where: {
@@ -124,9 +145,16 @@ export class CustomResource extends BaseResource {
     return this.prepareReturnValues(result);
   }
   override async delete(id: string) {
-    const idProperty = this.properties().find((property) => property.isId());
-    if (!idProperty)
+    const idProperties = this.properties().filter((p) => p.isId())
+    if (!idProperties.length) {
       return;
+    }
+    // idProperty가 여러 개일 수 있는 문제 해결
+    const idField = this.model.fields.find((v) => v.isId);
+    const idProperty = idProperties.find((v) => v.name() === idField.name);
+    if (!idProperty) {
+      return;
+    }
     await this.manager.delete({
       where: {
         [idProperty.path()]: convertParam(idProperty, this.model.fields, id),
