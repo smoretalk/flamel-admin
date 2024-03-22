@@ -70,9 +70,15 @@ export class CustomResource extends BaseResource {
         return results.map((result) => new CustomRecord(this.prepareReturnValues(result), this));
     }
     async findOne(id) {
-        const idProperty = this.properties().find((property) => property.isId());
-        if (!idProperty)
+        const idProperties = this.properties().filter((p) => p.isId());
+        if (!idProperties.length) {
             return null;
+        }
+        const idField = this.model.fields.find((v) => v.isId);
+        const idProperty = idProperties.find((v) => v.name() === idField.name);
+        if (!idProperty) {
+            return null;
+        }
         const result = await this.manager.findUnique({
             where: {
                 [idProperty.path()]: convertParam(idProperty, this.model.fields, id),
@@ -84,9 +90,15 @@ export class CustomResource extends BaseResource {
         return new CustomRecord(this.prepareReturnValues(result), this);
     }
     async findMany(ids) {
-        const idProperty = this.properties().find((property) => property.isId());
-        if (!idProperty)
+        const idProperties = this.properties().filter((p) => p.isId());
+        if (!idProperties.length) {
             return [];
+        }
+        const idField = this.model.fields.find((v) => v.isId);
+        const idProperty = idProperties.find((v) => v.name() === idField.name);
+        if (!idProperty) {
+            return [];
+        }
         const results = await this.manager.findMany({
             where: {
                 [idProperty.path()]: {
@@ -103,9 +115,15 @@ export class CustomResource extends BaseResource {
         return this.prepareReturnValues(result);
     }
     async update(pk, params = {}) {
-        const idProperty = this.properties().find((property) => property.isId());
-        if (!idProperty)
+        const idProperties = this.properties().filter((p) => p.isId());
+        if (!idProperties.length) {
             return {};
+        }
+        const idField = this.model.fields.find((v) => v.isId);
+        const idProperty = idProperties.find((v) => v.name() === idField.name);
+        if (!idProperty) {
+            return {};
+        }
         const preparedParams = this.prepareParams(params);
         const result = await this.manager.update({
             where: {
@@ -116,9 +134,15 @@ export class CustomResource extends BaseResource {
         return this.prepareReturnValues(result);
     }
     async delete(id) {
-        const idProperty = this.properties().find((property) => property.isId());
-        if (!idProperty)
+        const idProperties = this.properties().filter((p) => p.isId());
+        if (!idProperties.length) {
             return;
+        }
+        const idField = this.model.fields.find((v) => v.isId);
+        const idProperty = idProperties.find((v) => v.name() === idField.name);
+        if (!idProperty) {
+            return;
+        }
         await this.manager.delete({
             where: {
                 [idProperty.path()]: convertParam(idProperty, this.model.fields, id),
