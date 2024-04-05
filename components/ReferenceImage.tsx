@@ -8,7 +8,10 @@ const ReferenceImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> =
   const [src, setSrc] = useState(() => {
     const referenceLink = props.record.params['GenerationInfo.referenceLink'];
     if (referenceLink) {
-      return `/api/admin/owners/${referenceLink.split('/')[0]}/images/${referenceLink.split('/')[1]}/thumb`
+      if (referenceLink.includes('/')) {
+        return `/api/admin/owners/${referenceLink.split('/')[0]}/images/${referenceLink.split('/')[1]}/thumb`
+      }
+      return `/api/admin/images/${referenceLink}/thumb`;
     }
     return '';
   })

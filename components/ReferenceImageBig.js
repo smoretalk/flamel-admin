@@ -4,7 +4,10 @@ const ReferenceImageBig = (props) => {
     const [src, setSrc] = useState(() => {
         const referenceLink = props.record.params['GenerationInfo.referenceLink'];
         if (referenceLink) {
-            return `/api/admin/owners/${referenceLink.split('/')[0]}/images/${referenceLink.split('/')[1]}`;
+            if (referenceLink.includes('/')) {
+                return `/api/admin/owners/${referenceLink.split('/')[0]}/images/${referenceLink.split('/')[1]}`;
+            }
+            return `/api/admin/images/${referenceLink}/binary`;
         }
         return '';
     });
