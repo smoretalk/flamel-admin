@@ -6,8 +6,8 @@ const ImageIdLink = (props) => {
     const srcId = Number(src);
     return (React.createElement("section", { style: { marginBottom: props.where === 'show' ? 24 : 0 } },
         props.where === 'show' && (React.createElement(Label, { variant: "light" }, props.property.props.linkLabel)),
-        !Number.isNaN(srcId)
-            ? React.createElement(Link, { variant: "text", href: `/admin/resources/Image/records/${srcId}/show` }, srcId)
+        !Number.isNaN(srcId) && srcId !== 0
+            ? React.createElement(Link, { variant: "success", href: `/admin/resources/Image/records/${srcId}/show` }, srcId)
             : React.createElement("span", null, src)));
 };
 export default ImageIdLink;
