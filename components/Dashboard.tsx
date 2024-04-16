@@ -101,6 +101,7 @@ export const Dashboard: React.FC = (props) => {
   const { translateMessage, translateButton } = useTranslation();
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [themeFiles, setThemeFiles] = useState<File[]>([])
+  const [styleFiles, setStyleFiles] = useState<File[]>([])
 
   const uploadImageFiles = (scaleSize: '1x' | '2x') => async (files: File[]) => {
     setImageFiles(files);
@@ -138,6 +139,26 @@ export const Dashboard: React.FC = (props) => {
       console.error(err);
     }
     setThemeFiles([]);
+  }
+
+  const uploadStyleFiles = async (files: File[]) => {
+    setStyleFiles(files);
+    try {
+      const formData = new FormData();
+      files.forEach((file) => {
+        formData.append('file', file);
+      })
+      const res = await axios.post<string[]>('/api/s3/collectionStyles', formData)
+      if (res.data.length) {
+        alert('중복: ' + res.data.join(', '))
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.error(err.response.data);
+      }
+      console.error(err);
+    }
+    setStyleFiles([]);
   }
 
   return (
@@ -192,6 +213,20 @@ export const Dashboard: React.FC = (props) => {
                   files={themeFiles}
                   multiple
                   onChange={uploadThemeFiles}
+              />
+            </Text>
+          </Card>
+        </Box>
+        <Box width={[1, 1 / 2, 1 / 2, 1 / 3]} p="lg">
+          <Card as="a">
+            <Text textAlign="center">
+              <Icon icon="Image" />
+              <H5 mt="lg">{translateMessage('uploadCollectionStyle')}</H5>
+              <Text>{translateMessage('uploadCollectionStyle_detail')}</Text>
+              <DropZone
+                files={styleFiles}
+                multiple
+                onChange={uploadStyleFiles}
               />
             </Text>
           </Card>

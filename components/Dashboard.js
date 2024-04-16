@@ -40,6 +40,7 @@ export const Dashboard = (props) => {
     const { translateMessage, translateButton } = useTranslation();
     const [imageFiles, setImageFiles] = useState([]);
     const [themeFiles, setThemeFiles] = useState([]);
+    const [styleFiles, setStyleFiles] = useState([]);
     const uploadImageFiles = (scaleSize) => async (files) => {
         setImageFiles(files);
         try {
@@ -78,6 +79,26 @@ export const Dashboard = (props) => {
         }
         setThemeFiles([]);
     };
+    const uploadStyleFiles = async (files) => {
+        setStyleFiles(files);
+        try {
+            const formData = new FormData();
+            files.forEach((file) => {
+                formData.append('file', file);
+            });
+            const res = await axios.post('/api/s3/collectionStyles', formData);
+            if (res.data.length) {
+                alert('중복: ' + res.data.join(', '));
+            }
+        }
+        catch (err) {
+            if (axios.isAxiosError(err)) {
+                console.error(err.response.data);
+            }
+            console.error(err);
+        }
+        setStyleFiles([]);
+    };
     return (React.createElement(Box, null,
         React.createElement(DashboardHeader, null),
         React.createElement(Box, { mt: ['xl', 'xl', '-100px'], mb: "xl", mx: [0, 0, 0, 'auto'], px: ['default', 'lg', 'xxl', '0'], position: "relative", flex: true, flexDirection: "row", flexWrap: "wrap", width: [1, 1, 1, 1024] },
@@ -102,6 +123,13 @@ export const Dashboard = (props) => {
                         React.createElement(H5, { mt: "lg" }, translateMessage('uploadCollectionTheme')),
                         React.createElement(Text, null, translateMessage('uploadCollectionTheme_detail')),
                         React.createElement(DropZone, { files: themeFiles, multiple: true, onChange: uploadThemeFiles })))),
+            React.createElement(Box, { width: [1, 1 / 2, 1 / 2, 1 / 3], p: "lg" },
+                React.createElement(Card, { as: "a" },
+                    React.createElement(Text, { textAlign: "center" },
+                        React.createElement(Icon, { icon: "Image" }),
+                        React.createElement(H5, { mt: "lg" }, translateMessage('uploadCollectionStyle')),
+                        React.createElement(Text, null, translateMessage('uploadCollectionStyle_detail')),
+                        React.createElement(DropZone, { files: styleFiles, multiple: true, onChange: uploadStyleFiles })))),
             React.createElement(Box, { width: [1, 1, 1 / 2], p: "lg" },
                 React.createElement(Card, { as: "a", flex: true, href: "https://smoretalk-io.slack.com/ssb/redirect", target: "_blank" },
                     React.createElement(Box, { flexShrink: 0 },
