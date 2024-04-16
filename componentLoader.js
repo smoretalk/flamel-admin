@@ -25,5 +25,6 @@ export const Components = {
     PreserveQueryList: componentLoader.add('PreserveQueryList', path.resolve(__dirname, 'components', 'PreserveQueryList')),
     EditJSONB: componentLoader.add('EditJSONB', path.resolve(__dirname, 'components', 'EditJSONB')),
     ShowJSONB: componentLoader.add('ShowJSONB', path.resolve(__dirname, 'components', 'ShowJSONB')),
+    ImageIdLink: componentLoader.add('ImageIdLink', path.resolve(__dirname, 'components', 'ImageIdLink')),
 };
 //# sourceMappingURL=componentLoader.js.map

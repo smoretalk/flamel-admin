@@ -20,4 +20,5 @@ export declare const Components: {
     PreserveQueryList: string;
     EditJSONB: string;
     ShowJSONB: string;
+    ImageIdLink: string;
 };
