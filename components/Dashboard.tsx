@@ -175,7 +175,7 @@ export const Dashboard: React.FC = (props) => {
         flexWrap="wrap"
         width={[1, 1, 1, 1024]}
       >
-        <Box width={[1, 1 / 2, 1 / 2, 1 / 3]} p="lg">
+        <Box width={[1, 1 / 2, 1 / 2, 1 / 4]} p="lg">
           <Card as="a">
             <Text textAlign="center">
               <Icon icon="Image" />
@@ -184,12 +184,15 @@ export const Dashboard: React.FC = (props) => {
               <DropZone
                 files={imageFiles}
                 multiple
+                translations={{
+                  placeholder: '클릭하거나 파일을 드롭하세요',
+                }}
                 onChange={uploadImageFiles('1x')}
               />
             </Text>
           </Card>
         </Box>
-        <Box width={[1, 1 / 2, 1 / 2, 1 / 3]} p="lg">
+        <Box width={[1, 1 / 2, 1 / 2, 1 / 4]} p="lg">
           <Card as="a">
             <Text textAlign="center">
               <Icon icon="Image" />
@@ -198,12 +201,15 @@ export const Dashboard: React.FC = (props) => {
               <DropZone
                 files={imageFiles}
                 multiple
+                translations={{
+                  placeholder: '클릭하거나 파일을 드롭하세요',
+                }}
                 onChange={uploadImageFiles('2x')}
               />
             </Text>
           </Card>
         </Box>
-        <Box width={[1, 1 / 2, 1 / 2, 1 / 3]} p="lg">
+        <Box width={[1, 1 / 2, 1 / 2, 1 / 4]} p="lg">
           <Card as="a">
             <Text textAlign="center">
               <Icon icon="Image" />
@@ -212,12 +218,15 @@ export const Dashboard: React.FC = (props) => {
               <DropZone
                   files={themeFiles}
                   multiple
+                  translations={{
+                    placeholder: '클릭하거나 파일을 드롭하세요',
+                  }}
                   onChange={uploadThemeFiles}
               />
             </Text>
           </Card>
         </Box>
-        <Box width={[1, 1 / 2, 1 / 2, 1 / 3]} p="lg">
+        <Box width={[1, 1 / 2, 1 / 2, 1 / 4]} p="lg">
           <Card as="a">
             <Text textAlign="center">
               <Icon icon="Image" />
@@ -226,6 +235,9 @@ export const Dashboard: React.FC = (props) => {
               <DropZone
                 files={styleFiles}
                 multiple
+                translations={{
+                  placeholder: '클릭하거나 파일을 드롭하세요',
+                }}
                 onChange={uploadStyleFiles}
               />
             </Text>
