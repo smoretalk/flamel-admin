@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Label } from '@adminjs/design-system';
 const LLMPromptIdLink = (props) => {
-    const [src, setSrc] = useState(props.record.params[props.property.props.linkProp]);
+    const [src, setSrc] = useState(props.record.populated['GenerationInfo.imageId'].params.LLMPrompt);
     const srcId = Number(src);
     return (React.createElement("section", { style: { marginBottom: props.where === 'show' ? 24 : 0 } },
         props.where === 'show' && (React.createElement(Label, { variant: "light" }, props.property.props.linkLabel)),
