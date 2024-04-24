@@ -5,6 +5,7 @@ import { Link, Label } from '@adminjs/design-system'
 const LLMPromptIdLink: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
+  console.log(props.record);
   const [src, setSrc] = useState(props.record.params[props.property.props.linkProp])
 
   const srcId = Number(src);
