@@ -63,5 +63,5 @@ export const Components = {
   EditJSONB: componentLoader.add('EditJSONB', path.resolve(__dirname, 'components', 'EditJSONB')),
   ShowJSONB: componentLoader.add('ShowJSONB', path.resolve(__dirname, 'components', 'ShowJSONB')),
   ImageIdLink: componentLoader.add('ImageIdLink', path.resolve(__dirname, 'components', 'ImageIdLink')),
-  LLMPromptIdLink: componentLoader.add('ImageIdLink', path.resolve(__dirname, 'components', 'LLMPromptIdLink')),
+  LLMPromptIdLink: componentLoader.add('LLMPromptIdLink', path.resolve(__dirname, 'components', 'LLMPromptIdLink')),
 }
