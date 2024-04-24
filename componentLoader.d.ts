@@ -21,4 +21,5 @@ export declare const Components: {
     EditJSONB: string;
     ShowJSONB: string;
     ImageIdLink: string;
+    LLMPromptIdLink: string;
 };
