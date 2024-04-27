@@ -1,10 +1,16 @@
 import { BaseResource, flat } from 'adminjs';
-import { getEnums } from "@adminjs/prisma";
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
 import { convertFilter } from './convertFilter.js';
 import CustomRecord from "./customRecord.js";
 export const lowerCase = (name) => name.substring(0, 1).toLowerCase() + name.substring(1);
+export const getEnums = (clientModule) => {
+    const dmmf = clientModule?.Prisma.dmmf?.datamodel;
+    return dmmf?.enums.reduce((memo, current) => {
+        memo[current.name] = current;
+        return memo;
+    }, {});
+};
 export class CustomResource extends BaseResource {
     model;
     client;
@@ -60,6 +66,7 @@ export class CustomResource extends BaseResource {
         const orderBy = flat.unflatten({
             [sortBy]: direction,
         });
+        console.log('find where', where);
         const results = await this.manager.findMany({
             where,
             skip: offset,

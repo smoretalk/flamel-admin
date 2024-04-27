@@ -7,6 +7,13 @@ type ReadonlyDeep_2<O> = {
     +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
 };
 export declare const lowerCase: (name: string) => string;
+export declare const getEnums: (clientModule?: {
+    Prisma: {
+        dmmf: DMMF.Document;
+    };
+}) => {
+    [key: string]: DMMF.DatamodelEnum;
+};
 type Args = {
     model: DMMF.Model;
     client: any;

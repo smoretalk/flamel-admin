@@ -6,6 +6,7 @@ const __dirname = path.dirname(__filename);
 
 export const componentLoader = new ComponentLoader()
 componentLoader.override('FilterDrawer', path.resolve(__dirname, 'components', 'FilterDrawer'));
+componentLoader.override('DefaultFilterProperty', path.resolve(__dirname, 'components', 'DefaultFilterProperty'));
 export const Components = {
   Dashboard: componentLoader.add('Dashboard', path.resolve(__dirname, 'components', 'Dashboard')),
   DisplayLink: componentLoader.add(
