@@ -2,7 +2,7 @@ import {
   RecordActionResponse,
   ResourceOptions, After, PropertyDecorator,
 } from 'adminjs';
-import flat from 'flat';
+import { unflatten } from 'flat';
 import { CustomResource } from './customResource.js';
 import { Components } from './componentLoader.js';
 import type { DMMF } from '@prisma/client/runtime/library.js';
@@ -19,7 +19,7 @@ export const after: After<RecordActionResponse> = async (
     const { record, _admin } = context;
 
     if (request.method === 'post' && record.isValid()) {
-      const params: { [k: string]: object } = flat.unflatten(request.payload);
+      const params: { [k: string]: object } = unflatten(request.payload);
       await Promise.all(
         manyProperties.map(async (propertyDecorator) => {
           // Image에서 CollectionInfo.CollectionKoTags를 수정하는 경우에
