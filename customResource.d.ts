@@ -3,6 +3,7 @@ import { type Enums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
 import { Property } from "./customProperty.js";
 import CustomRecord from "./customRecord.js";
+import { Prisma } from '@prisma/client';
 type ReadonlyDeep_2<O> = {
     +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
 };
@@ -12,7 +13,15 @@ export declare const getEnums: (clientModule?: {
         dmmf: DMMF.Document;
     };
 }) => {
-    [key: string]: DMMF.DatamodelEnum;
+    [key: string]: {
+        readonly name: string;
+        readonly values: readonly {
+            readonly name: string;
+            readonly dbName: string;
+        }[];
+        readonly dbName?: string;
+        readonly documentation?: string;
+    };
 };
 type Args = {
     model: DMMF.Model;

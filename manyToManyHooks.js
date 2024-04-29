@@ -1,4 +1,4 @@
-import flat from 'flat';
+import { flat } from 'adminjs';
 import { Components } from './componentLoader.js';
 export const after = async (response, request, context) => {
     if (request && request.method) {
