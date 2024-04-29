@@ -5,6 +5,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 export const componentLoader = new ComponentLoader();
 componentLoader.override('FilterDrawer', path.resolve(__dirname, 'components', 'FilterDrawer'));
+componentLoader.override('DefaultFilterProperty', path.resolve(__dirname, 'components', 'DefaultFilterProperty'));
 export const Components = {
     Dashboard: componentLoader.add('Dashboard', path.resolve(__dirname, 'components', 'Dashboard')),
     DisplayLink: componentLoader.add('DisplayLink', path.resolve(__dirname, 'components', 'DisplayLink')),
@@ -26,5 +27,6 @@ export const Components = {
     EditJSONB: componentLoader.add('EditJSONB', path.resolve(__dirname, 'components', 'EditJSONB')),
     ShowJSONB: componentLoader.add('ShowJSONB', path.resolve(__dirname, 'components', 'ShowJSONB')),
     ImageIdLink: componentLoader.add('ImageIdLink', path.resolve(__dirname, 'components', 'ImageIdLink')),
+    LLMPromptIdLink: componentLoader.add('LLMPromptIdLink', path.resolve(__dirname, 'components', 'LLMPromptIdLink')),
 };
 //# sourceMappingURL=componentLoader.js.map

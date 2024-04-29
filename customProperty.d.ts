@@ -15,7 +15,7 @@ export declare class Property extends BaseProperty {
     isRequired(): boolean;
     isSortable(): boolean;
     reference(): string;
-    referencedColumnName(): string;
+    referencedColumnName(): any;
     foreignColumnName(): string;
     availableValues(): string[];
     position(): number;

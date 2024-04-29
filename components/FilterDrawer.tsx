@@ -38,7 +38,6 @@ const FilterDrawer: React.FC<FilterProps> = (props) => {
   const {isVisible, toggleFilter} = useFilterDrawer()
   const {storeParams, clearParams, filters} = useQueryParams()
 
-  console.log('filterResource', properties);
   useEffect(() => {
     if (initialLoad.current) {
       initialLoad.current = false

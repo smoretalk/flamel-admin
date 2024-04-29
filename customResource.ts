@@ -1,16 +1,25 @@
 import {BaseResource, Filter, flat, FlattenParams, ParamsType} from 'adminjs';
-import { type Enums, getEnums } from "@adminjs/prisma";
+import { type Enums } from "@adminjs/prisma";
 import type { DMMF } from '@prisma/client/runtime/library.js';
 import { Property } from "./customProperty.js";
 import { convertParam } from "./convertParam.js";
 import { convertFilter } from './convertFilter.js';
 import CustomRecord from "./customRecord.js";
+import { Prisma } from '@prisma/client';
 
 type ReadonlyDeep_2<O> = {
   +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
 };
 
 export const lowerCase = (name: string) => name.substring(0, 1).toLowerCase() + name.substring(1);
+export const getEnums = (clientModule?: { Prisma: { dmmf: DMMF.Document } }) => {
+  const dmmf = clientModule?.Prisma.dmmf?.datamodel;
+  return dmmf?.enums.reduce((memo, current) => {
+    // eslint-disable-next-line no-param-reassign
+    memo[current.name] = current;
+    return memo;
+  }, {} as { [key: string]: DMMF.DatamodelEnum });
+};
 
 type Args = { model: DMMF.Model, client: any, clientModule?: { Prisma: { dmmf: DMMF.Document } }, include?: object, depModels?: { alias: string, model: DMMF.Model}[] };
 export class CustomResource extends BaseResource {
@@ -68,6 +77,7 @@ export class CustomResource extends BaseResource {
     const orderBy = flat.unflatten({
       [sortBy]: direction,
     })
+    console.log('find where', where);
     const results: FlattenParams[] = await this.manager.findMany({
       where,
       skip: offset,

@@ -37,6 +37,9 @@ export const convertFilter = (modelFields, filterObject) => {
         else if (filter.property.type() === 'reference' && filter.property.foreignColumnName()) {
             where[filter.property.foreignColumnName()] = convertParam(filter.property, modelFields, filter.value);
         }
+        else if (filter.value === '!null') {
+            where[name] = { not: null };
+        }
         else {
             where[name] = { contains: filter.value.toString() };
         }

@@ -38,6 +38,8 @@ export const convertFilter = (modelFields: DMMF.Model['fields'], filterObject: F
         modelFields,
         filter.value,
       );
+    } else if (filter.value === '!null') {
+      where[name] = { not: null }
     } else {
       where[name] = { contains: filter.value.toString() };
     }
