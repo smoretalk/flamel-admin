@@ -40,6 +40,9 @@ export const convertFilter = (modelFields, filterObject) => {
         else if (filter.value === '!null') {
             where[name] = { not: null };
         }
+        else if (filter.value.toString().startsWith('-')) {
+            where[name] = { not: filter.value.toString().slice(1) };
+        }
         else {
             where[name] = { contains: filter.value.toString() };
         }
