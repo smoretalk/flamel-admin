@@ -22,4 +22,5 @@ export declare const Components: {
     ShowJSONB: string;
     ImageIdLink: string;
     LLMPromptIdLink: string;
+    LimitTextLength: string;
 };
