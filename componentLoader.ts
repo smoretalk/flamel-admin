@@ -29,6 +29,10 @@ export const Components = {
     'DisplayImageBig',
     path.resolve(__dirname, 'components', 'DisplayImageBig'),
   ),
+  DisplayStyleImage: componentLoader.add(
+    'DisplayStyleImage',
+    path.resolve(__dirname, 'components', 'DisplayStyleImage'),
+  ),
   ReferenceImage: componentLoader.add(
     'ReferenceImage',
     path.resolve(__dirname, 'components', 'ReferenceImage'),

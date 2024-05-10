@@ -7,6 +7,7 @@ export declare const Components: {
     PrintImage: string;
     DisplayImage: string;
     DisplayImageBig: string;
+    DisplayStyleImage: string;
     ReferenceImage: string;
     ReferenceImageBig: string;
     DisplayLinkBig: string;

@@ -13,6 +13,7 @@ export const Components = {
     PrintImage: componentLoader.add('PrintImage', path.resolve(__dirname, 'components', 'PrintImage')),
     DisplayImage: componentLoader.add('DisplayImage', path.resolve(__dirname, 'components', 'DisplayImage')),
     DisplayImageBig: componentLoader.add('DisplayImageBig', path.resolve(__dirname, 'components', 'DisplayImageBig')),
+    DisplayStyleImage: componentLoader.add('DisplayStyleImage', path.resolve(__dirname, 'components', 'DisplayStyleImage')),
     ReferenceImage: componentLoader.add('ReferenceImage', path.resolve(__dirname, 'components', 'ReferenceImage')),
     ReferenceImageBig: componentLoader.add('ReferenceImageBig', path.resolve(__dirname, 'components', 'ReferenceImageBig')),
     DisplayLinkBig: componentLoader.add('DisplayLinkBig', path.resolve(__dirname, 'components', 'DisplayLinkBig')),
