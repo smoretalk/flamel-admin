@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 const DisplayStyleImage = (props) => {
+    console.log(props);
     const [errored, setErrored] = useState(false);
     const [src, setSrc] = useState(() => {
         const referenceLink = props.record.params[props.property.props.target];

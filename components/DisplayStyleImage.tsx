@@ -4,6 +4,7 @@ import type {ShowPropertyProps} from 'adminjs';
 const DisplayStyleImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
+  console.log(props);
   const [errored, setErrored] = useState(false);
   const [src, setSrc] = useState(() => {
     const referenceLink: string = props.record.params[props.property.props.target];
