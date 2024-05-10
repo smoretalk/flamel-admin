@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 const DisplayStyleImage = (props) => {
-    console.log(props);
     const [errored, setErrored] = useState(false);
     const [src, setSrc] = useState(() => {
         const referenceLink = props.record.params[props.property.props.target];
@@ -16,6 +15,7 @@ const DisplayStyleImage = (props) => {
                 const id = parseInt(referenceLink.replace('/api/images/', ''));
                 return `/api/admin/images/${id}/thumb`;
             }
+            return referenceLink;
         }
         return '';
     });
@@ -35,8 +35,8 @@ const DisplayStyleImage = (props) => {
                 marginBottom: 4,
                 fontWeight: 300,
             }, htmlFor: "image", className: "adminjs_Label" }, "\uBBF8\uB9AC\uBCF4\uAE30")),
-        React.createElement("div", null,
-            React.createElement("img", { width: 100, id: "image", alt: props.record.params.styleId, onError: onError, src: src }))));
+        src && (React.createElement("div", null,
+            React.createElement("img", { width: 100, id: "image", alt: props.record.params.styleId, onError: onError, src: src })))));
 };
 export default DisplayStyleImage;
 //# sourceMappingURL=DisplayStyleImage.js.map

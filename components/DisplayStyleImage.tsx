@@ -4,7 +4,6 @@ import type {ShowPropertyProps} from 'adminjs';
 const DisplayStyleImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
-  console.log(props);
   const [errored, setErrored] = useState(false);
   const [src, setSrc] = useState(() => {
     const referenceLink: string = props.record.params[props.property.props.target];
@@ -18,6 +17,7 @@ const DisplayStyleImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }
         const id = parseInt(referenceLink.replace('/api/images/', ''));
         return `/api/admin/images/${id}/thumb`;
       }
+      return referenceLink;
     }
     return '';
   })
@@ -48,17 +48,19 @@ const DisplayStyleImage: React.FC<ShowPropertyProps & { where: 'show' | 'list' }
           미리보기
         </label>
       )}
-      <div>
-        <img
-          width={100}
-          id="image"
-          alt={props.record.params.styleId}
-          onError={onError}
-          src={
-            src
-          }
-        />
-      </div>
+      {src && (
+        <div>
+          <img
+            width={100}
+            id="image"
+            alt={props.record.params.styleId}
+            onError={onError}
+            src={
+              src
+            }
+          />
+        </div>
+      )}
     </section>
   );
 };
