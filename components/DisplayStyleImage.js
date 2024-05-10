@@ -10,7 +10,7 @@ const DisplayStyleImage = (props) => {
             }
             else if (referenceLink.startsWith('/api/images/reference/')) {
                 const name = referenceLink.replace('/api/images/reference/', '');
-                return `/api/admin/owners/${props.record.params.userId}/images/${name}/thumb`;
+                return `/api/admin/owners/${props.record.params.User}/images/${name}/thumb`;
             }
             else if (referenceLink.startsWith('/api/images/')) {
                 const id = parseInt(referenceLink.replace('/api/images/', ''));
