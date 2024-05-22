@@ -19,7 +19,30 @@ export const convertFilter = (modelFields: DMMF.Model['fields'], filterObject: F
   const { filters = {} } = filterObject;
   return Object.entries(filters).reduce((where: Record<string, any>, [name, filter]) => {
     if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property.type())) {
-      where[name] = safeParseJSON(filter.value as string);
+      if (filter.property.type() === 'number') {
+        const regex = (filter.value as string).match(/([<>]=?)\s*(\d+)/);
+        if (regex?.[1] === '<') {
+          where[name] = {
+            lt: parseInt(regex[2]),
+          }
+        } else if (regex?.[1] === '>') {
+          where[name] = {
+            gt: parseInt(regex[2]),
+          }
+        } else if (regex?.[1] === '<=') {
+          where[name] = {
+            lte: parseInt(regex[2]),
+          }
+        } else if (regex?.[1] === '>=') {
+          where[name] = {
+            gte: parseInt(regex[2]),
+          }
+        } else {
+          where[name] = safeParseJSON(filter.value as string);
+        }
+      } else {
+        where[name] = safeParseJSON(filter.value as string);
+      }
     } else if (['date', 'datetime'].includes(filter.property.type())) {
       if (typeof filter.value !== 'string' && filter.value.from && filter.value.to) {
         where[name] = { gte: new Date(filter.value.from), lte: new Date(filter.value.to) };
@@ -40,6 +63,8 @@ export const convertFilter = (modelFields: DMMF.Model['fields'], filterObject: F
       );
     } else if (filter.value === '!null') {
       where[name] = { not: null }
+    } else if (filter.value.toString().startsWith('-')) {
+      where[name] = { not: filter.value.toString().slice(1) }
     } else {
       where[name] = { contains: filter.value.toString() };
     }

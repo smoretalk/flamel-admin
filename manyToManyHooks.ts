@@ -1,8 +1,8 @@
 import {
   RecordActionResponse,
   ResourceOptions, After, PropertyDecorator,
+  flat
 } from 'adminjs';
-import flat from 'flat';
 import { CustomResource } from './customResource.js';
 import { Components } from './componentLoader.js';
 import type { DMMF } from '@prisma/client/runtime/library.js';

@@ -12,7 +12,6 @@
     }
   },
   "scripts": {
-    "postinstall": "patch-package",
     "test": "NODE_OPTIONS=--experimental-vm-modules npx jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",

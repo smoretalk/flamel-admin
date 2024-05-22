@@ -5,7 +5,8 @@ import { Link, Label } from '@adminjs/design-system'
 const LLMPromptIdLink: React.FC<ShowPropertyProps & { where: 'show' | 'list' }> = (
   props,
 ) => {
-  const [src, setSrc] = useState(props.record.populated['GenerationInfo.imageId'].params.LLMPrompt);
+  console.log(props.record);
+  const [src, setSrc] = useState(props.record.populated['GenerationInfo.imageId']?.params.LLMPrompt);
 
   const srcId = Number(src);
   return (
