@@ -65,4 +65,5 @@ export const Components = {
   ShowJSONB: componentLoader.add('ShowJSONB', path.resolve(__dirname, 'components', 'ShowJSONB')),
   ImageIdLink: componentLoader.add('ImageIdLink', path.resolve(__dirname, 'components', 'ImageIdLink')),
   LLMPromptIdLink: componentLoader.add('LLMPromptIdLink', path.resolve(__dirname, 'components', 'LLMPromptIdLink')),
+  ImageEmbed: componentLoader.add('ImageEmbed', path.resolve(__dirname, 'components', 'ImageEmbed')),
 }

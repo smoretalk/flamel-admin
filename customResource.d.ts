@@ -12,7 +12,15 @@ export declare const getEnums: (clientModule?: {
         dmmf: DMMF.Document;
     };
 }) => {
-    [key: string]: DMMF.DatamodelEnum;
+    [key: string]: {
+        readonly name: string;
+        readonly values: readonly {
+            readonly name: string;
+            readonly dbName: string;
+        }[];
+        readonly dbName?: string;
+        readonly documentation?: string;
+    };
 };
 type Args = {
     model: DMMF.Model;
