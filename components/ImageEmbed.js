@@ -14,11 +14,11 @@ export const ImageEmbed = () => {
             const response = await axios.post('/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=0');
             const total = response.data.meta.total;
             const response2 = await axios.post(`/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=${total}`);
-            console.log(response2.data.records);
+            console.log(response2.data.records, imageEmbedder);
             for (const r of response2.data.records) {
                 const htmlImageElement = document.querySelector('#image');
-                await sleep(2000);
                 htmlImageElement.src = `/api/admin/images/${r.id}/binary`;
+                await sleep(2000);
                 const imageEmbedderResult = imageEmbedder.embed(htmlImageElement);
                 console.log(r.id, imageEmbedderResult);
                 await axios.patch(`/api/collections/${r.id}/imageEmbed`, {
