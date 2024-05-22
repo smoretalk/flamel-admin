@@ -15,7 +15,35 @@ export const convertFilter = (modelFields, filterObject) => {
     const { filters = {} } = filterObject;
     return Object.entries(filters).reduce((where, [name, filter]) => {
         if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property.type())) {
-            where[name] = safeParseJSON(filter.value);
+            if (filter.property.type() === 'number') {
+                const regex = filter.value.match(/([<>]=?)\s*(\d+)/);
+                if (regex?.[1] === '<') {
+                    where[name] = {
+                        lt: parseInt(regex[2]),
+                    };
+                }
+                else if (regex?.[1] === '>') {
+                    where[name] = {
+                        gt: parseInt(regex[2]),
+                    };
+                }
+                else if (regex?.[1] === '<=') {
+                    where[name] = {
+                        lte: parseInt(regex[2]),
+                    };
+                }
+                else if (regex?.[1] === '>=') {
+                    where[name] = {
+                        gte: parseInt(regex[2]),
+                    };
+                }
+                else {
+                    where[name] = safeParseJSON(filter.value);
+                }
+            }
+            else {
+                where[name] = safeParseJSON(filter.value);
+            }
         }
         else if (['date', 'datetime'].includes(filter.property.type())) {
             if (typeof filter.value !== 'string' && filter.value.from && filter.value.to) {
