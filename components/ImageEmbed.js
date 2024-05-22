@@ -23,7 +23,7 @@ export const ImageEmbed = () => {
             for (const r of response2.data.records) {
                 const htmlImageElement = document.querySelector('#image');
                 await sleep(2000);
-                htmlImageElement.src = `/api/admin/owners/${r.params.Owner}/images/${r.id}`;
+                htmlImageElement.src = `/api/admin/images/${r.id}/binary`;
                 const imageEmbedderResult = embedder.embed(htmlImageElement);
                 console.log(r.id, imageEmbedderResult);
             }
