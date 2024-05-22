@@ -6,10 +6,6 @@ import axios from "axios";
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const ImageEmbed: React.FC = () => {
-  const { translateMessage } = useTranslation();
-  const [embedder, setEmbedder] = useState<ImageEmbedder>(null);
-  const [src, setSrc] = useState<string>('');
-
   useEffect(() => {
     async function main() {
       const vision = await FilesetResolver.forVisionTasks(
@@ -21,7 +17,6 @@ export const ImageEmbed: React.FC = () => {
           modelAssetPath: `https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/1/mobilenet_v3_small.tflite`
         },
       });
-      setEmbedder(imageEmbedder);
       const response = await axios.post('/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=0')
       const total = response.data.meta.total;
       const response2 = await axios.post<{ records: { id:number; params: { Owner: number }}[] }>(`/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=${total}`);
@@ -30,8 +25,11 @@ export const ImageEmbed: React.FC = () => {
         const htmlImageElement = document.querySelector('#image') as HTMLImageElement;
         await sleep(2000);
         htmlImageElement.src = `/api/admin/images/${r.id}/binary`;
-        const imageEmbedderResult = embedder.embed(htmlImageElement);
+        const imageEmbedderResult = imageEmbedder.embed(htmlImageElement);
         console.log(r.id, imageEmbedderResult);
+        await axios.patch(`/api/collections/${r.id}/imageEmbed`, {
+          vector: JSON.stringify(imageEmbedderResult.embeddings[0].floatEmbedding),
+        });
       }
     }
     main();
@@ -39,7 +37,7 @@ export const ImageEmbed: React.FC = () => {
 
   return (
     <div>
-      <img id='image' src={src} alt='' width='512' height='512' />
+      <img id='image' alt='' width='512' height='512' />
     </div>
   );
 };
