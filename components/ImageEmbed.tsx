@@ -129,9 +129,9 @@ export const ImageEmbed: React.FC = () => {
       <button onClick={onClick}>이미지 유사도 조회</button>
       <button onClick={onTextClick}>텍스트 유사도 조회</button>
       <div>
-        {result.map((v) => (
+        {result.slice(0, 20).map((v) => (
           <div>
-            <img src={`/api/admin/images/${v.imageId}/binary`} alt=""  width={128} height={128}/>
+            <img src={`/api/admin/images/${v.imageId}/thumb`} alt=""  width={128} height={128}/>
             <div>{v.imageId} {v.similar}</div>
           </div>
         ))}
