@@ -10,6 +10,7 @@ export const ImageEmbed: React.FC = () => {
   const [embedder, setEmbedder] = useState<ImageEmbedder>(null);
   const [textEmbedder, setTextEmbedder] = useState<TextEmbedder>(null);
   const [value, setValue] = useState('');
+  const [result, setResult] = useState<{ imageId: number; similar?: number; text?: string}[]>([]);
 
   useEffect(() => {
     async function main() {
@@ -67,7 +68,7 @@ export const ImageEmbed: React.FC = () => {
         continue;
       }
       const textEmbedderResult = textEmbedder.embed(r.params['CollectionInfo.stylePrompt'] || r.params['GenerationInfo.fullPrompt']);
-      console.log(r.id, textEmbedderResult);
+      console.log(r.id, textEmbedderResult, r.params['CollectionInfo.stylePrompt'] || r.params['GenerationInfo.fullPrompt']);
       await axios.patch(`/api/collections/${r.id}/textEmbed`, {
         vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
       });
@@ -92,6 +93,7 @@ export const ImageEmbed: React.FC = () => {
       }
     }).toSorted((a, b) => b.similar - a.similar);
     console.log(result);
+    setResult(result);
   }
 
   const onTextClick = async () => {
@@ -114,11 +116,12 @@ export const ImageEmbed: React.FC = () => {
       }
     }).toSorted((a, b) => b.similar - a.similar);
     console.log(result);
+    setResult(result);
   }
 
   return (
     <div>
-      <img id='image' alt='' width='512' height='512' />
+      <img id='image' alt='' width={256} height={256} />
       <button onClick={onStart}>이미지 임베딩 시작</button>
       <button onClick={onTextStart}>텍스트 임베딩 시작</button>
       <br/>
@@ -126,7 +129,12 @@ export const ImageEmbed: React.FC = () => {
       <button onClick={onClick}>이미지 유사도 조회</button>
       <button onClick={onTextClick}>텍스트 유사도 조회</button>
       <div>
-
+        {result.map((v) => (
+          <div>
+            <img src={`/api/admin/images/${v.imageId}/binary`} alt=""  width={128} height={128}/>
+            <div>{v.imageId} {v.similar}</div>
+          </div>
+        ))}
       </div>
     </div>
   );
