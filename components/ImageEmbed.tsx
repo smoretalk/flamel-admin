@@ -64,6 +64,9 @@ export const ImageEmbed: React.FC = () => {
     console.log(response2.data.records, textEmbedder);
     for (const r of response2.data.records) {
       const textEmbedderResult = textEmbedder.embed(r.params['CollectionInfo.stylePrompt'] || r.params['GenerationInfo.fullPrompt']);
+      if (!textEmbedderResult) {
+        continue;
+      }
       console.log(r.id, textEmbedderResult);
       await axios.patch(`/api/collections/${r.id}/textEmbed`, {
         vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
@@ -94,7 +97,13 @@ export const ImageEmbed: React.FC = () => {
   const onTextClick = async () => {
     const response = await axios.get<{ imageId: number; imageEmbedding: string; textEmbedding: string; }[]>(`/api/collections/imageEmbed?take=1000`);
     const target = response.data.find((v) => v.imageId.toString() === value);
+    if (!target.textEmbedding) {
+      return;
+    }
     const result = response.data.map((v) => {
+      if (!v.textEmbedding) {
+        return { imageId: v.imageId };
+      }
       const similar = TextEmbedder.cosineSimilarity(
         { floatEmbedding: JSON.parse(target.textEmbedding) as number[], headName: 'feature', headIndex: 0 },
         { floatEmbedding: JSON.parse(v.textEmbedding) as number[], headName: 'feature', headIndex: 0 },
