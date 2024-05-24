@@ -57,14 +57,14 @@ export const ImageEmbed: React.FC = () => {
   };
 
   const onTextStart = async () => {
-    const response2 = await axios.get<{ imageId: number; CollectionInfo: { stylePrompt: string | null }; GenerationInfo: { fullPrompt: string | null } }[]>(`/api/collections/noTextEmbedding`);
+    const response2 = await axios.get<{ imageId: number; stylePrompt: string | null; fullPrompt: string | null }[]>(`/api/collections/noTextEmbedding`);
     console.log(response2.data, textEmbedder);
     for (const r of response2.data) {
-      if (!r.CollectionInfo?.stylePrompt && !r.GenerationInfo?.fullPrompt) {
+      if (!r.stylePrompt && !r.fullPrompt) {
         continue;
       }
-      const textEmbedderResult = textEmbedder.embed(r.CollectionInfo?.stylePrompt || r.GenerationInfo?.fullPrompt);
-      console.log(r.imageId, textEmbedderResult, r.CollectionInfo?.stylePrompt || r.GenerationInfo?.fullPrompt);
+      const textEmbedderResult = textEmbedder.embed(r.stylePrompt || r.fullPrompt);
+      console.log(r.imageId, textEmbedderResult, r.stylePrompt || r.fullPrompt);
       await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
         vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
       });
