@@ -49,10 +49,10 @@ export const ImageEmbed = () => {
         const response2 = await axios.post(`/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=${total}`);
         console.log(response2.data.records, textEmbedder);
         for (const r of response2.data.records) {
-            const textEmbedderResult = textEmbedder.embed(r.params['CollectionInfo.stylePrompt'] || r.params['GenerationInfo.fullPrompt']);
-            if (!textEmbedderResult) {
+            if (!r.params['CollectionInfo.stylePrompt'] && !r.params['GenerationInfo.fullPrompt']) {
                 continue;
             }
+            const textEmbedderResult = textEmbedder.embed(r.params['CollectionInfo.stylePrompt'] || r.params['GenerationInfo.fullPrompt']);
             console.log(r.id, textEmbedderResult);
             await axios.patch(`/api/collections/${r.id}/textEmbed`, {
                 vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
