@@ -29,33 +29,29 @@ export const ImageEmbed = () => {
         main();
     }, []);
     const onStart = async () => {
-        const response = await axios.post('/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=0');
-        const total = response.data.meta.total;
-        const response2 = await axios.post(`/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=${total}`);
-        console.log(response2.data.records, embedder);
-        for (const r of response2.data.records) {
+        const response2 = await axios.get(`/api/collections/noImageEmbedding`);
+        console.log(response2.data, embedder);
+        for (const r of response2.data) {
             const htmlImageElement = document.querySelector('#image');
-            htmlImageElement.src = `/api/admin/images/${r.id}/binary`;
+            htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
             await sleep(2000);
             const imageEmbedderResult = embedder.embed(htmlImageElement);
-            console.log(r.id, imageEmbedderResult);
-            await axios.patch(`/api/collections/${r.id}/imageEmbed`, {
+            console.log(r.imageId, imageEmbedderResult);
+            await axios.patch(`/api/collections/${r.imageId}/imageEmbed`, {
                 vector: JSON.stringify(imageEmbedderResult.embeddings[0].floatEmbedding),
             });
         }
     };
     const onTextStart = async () => {
-        const response = await axios.post('/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=0');
-        const total = response.data.meta.total;
-        const response2 = await axios.post(`/admin/api/resources/Image/actions/list?filters.CollectionInfo.enabled=true&perPage=${total}`);
-        console.log(response2.data.records, textEmbedder);
-        for (const r of response2.data.records) {
-            if (!r.params['CollectionInfo.stylePrompt'] && !r.params['GenerationInfo.fullPrompt']) {
+        const response2 = await axios.get(`/api/collections/noTextEmbedding`);
+        console.log(response2.data, textEmbedder);
+        for (const r of response2.data) {
+            if (!r.CollectionInfo?.stylePrompt && !r.GenerationInfo?.fullPrompt) {
                 continue;
             }
-            const textEmbedderResult = textEmbedder.embed(r.params['CollectionInfo.stylePrompt'] || r.params['GenerationInfo.fullPrompt']);
-            console.log(r.id, textEmbedderResult, r.params['CollectionInfo.stylePrompt'] || r.params['GenerationInfo.fullPrompt']);
-            await axios.patch(`/api/collections/${r.id}/textEmbed`, {
+            const textEmbedderResult = textEmbedder.embed(r.CollectionInfo?.stylePrompt || r.GenerationInfo?.fullPrompt);
+            console.log(r.imageId, textEmbedderResult, r.CollectionInfo?.stylePrompt || r.GenerationInfo?.fullPrompt);
+            await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
                 vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
             });
         }
@@ -64,7 +60,7 @@ export const ImageEmbed = () => {
         setValue(e.target.value);
     };
     const onClick = async () => {
-        const response = await axios.get(`/api/collections/imageEmbed?take=1000`);
+        const response = await axios.get(`/api/collections/imageEmbedding`);
         const target = response.data.find((v) => v.imageId.toString() === value);
         const result = response.data.map((v) => {
             const similar = ImageEmbedder.cosineSimilarity({ floatEmbedding: JSON.parse(target.imageEmbedding), headName: 'feature', headIndex: 0 }, { floatEmbedding: JSON.parse(v.imageEmbedding), headName: 'feature', headIndex: 0 });
@@ -77,7 +73,7 @@ export const ImageEmbed = () => {
         setResult(result);
     };
     const onTextClick = async () => {
-        const response = await axios.get(`/api/collections/imageEmbed?take=1000`);
+        const response = await axios.get(`/api/collections/textEmbedding`);
         const target = response.data.find((v) => v.imageId.toString() === value);
         if (!target.textEmbedding) {
             return;
