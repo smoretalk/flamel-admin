@@ -25,4 +25,5 @@ export declare const Components: {
     LLMPromptIdLink: string;
     LimitTextLength: string;
     ImageEmbed: string;
+    CopyAndAssign: string;
 };
