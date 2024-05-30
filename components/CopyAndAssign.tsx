@@ -10,7 +10,7 @@ type SelectRecordEnhanced = SelectRecord & {
 }
 
 export default function CopyAndAssign(props: EditPropertyProps) {
-  const { property, record } = props
+  const { onChange, property, record } = props
   const { reference: resourceId } = property;
   const [id, setId] = useState<number>();
 
@@ -20,6 +20,7 @@ export default function CopyAndAssign(props: EditPropertyProps) {
 
   const handleChange = (selected: SelectRecordEnhanced): void => {
     console.log(property.path, selected.value, selected.record);
+    onChange(property.path, selected.value, selected.record);
     setId(selected.value as number);
   }
 
@@ -45,13 +46,15 @@ export default function CopyAndAssign(props: EditPropertyProps) {
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>()
   const [loadingRecord, setLoadingRecord] = useState(0);
 
-  const onCopy = () => {
+  const onCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     if (!id) {
       return alert('유저를 선택하세요.');
     }
     axios.post(`/api/categories/${record.id}/copy/${id}`)
-      .then(() => {
+      .then((response) => {
         console.log('복사되었습니다.');
+        location.href = `/admin/resources/Style/records/${response.data}/show`;
       })
       .catch(console.error);
   }

@@ -4,7 +4,7 @@ import { Button, FormGroup, FormMessage, SelectAsync } from "@adminjs/design-sys
 import { PropertyLabel } from "adminjs";
 import axios from "axios";
 export default function CopyAndAssign(props) {
-    const { property, record } = props;
+    const { onChange, property, record } = props;
     const { reference: resourceId } = property;
     const [id, setId] = useState();
     if (!resourceId) {
@@ -12,6 +12,7 @@ export default function CopyAndAssign(props) {
     }
     const handleChange = (selected) => {
         console.log(property.path, selected.value, selected.record);
+        onChange(property.path, selected.value, selected.record);
         setId(selected.value);
     };
     const loadOptions = async (inputValue) => {
@@ -30,13 +31,15 @@ export default function CopyAndAssign(props) {
     const selectedId = useMemo(() => flat.get(record?.params, property.path), [record]);
     const [loadedRecord, setLoadedRecord] = useState();
     const [loadingRecord, setLoadingRecord] = useState(0);
-    const onCopy = () => {
+    const onCopy = (e) => {
+        e.preventDefault();
         if (!id) {
             return alert('유저를 선택하세요.');
         }
         axios.post(`/api/categories/${record.id}/copy/${id}`)
-            .then(() => {
+            .then((response) => {
             console.log('복사되었습니다.');
+            location.href = `/admin/resources/Style/records/${response.data}/show`;
         })
             .catch(console.error);
     };
