@@ -27,7 +27,7 @@ const DefaultPropertyValue: FC<ShowPropertyProps> = ({
     )
   }
 
-  return rawValue.slice(0, props.maxLength)
+  return rawValue.slice(0, props.maxLen)
 }
 
 const LimitTextLength: React.FC<ShowPropertyProps> = (props) => (<DefaultPropertyValue {...props} />)
