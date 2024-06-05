@@ -31,5 +31,6 @@ export const Components = {
     LLMPromptIdLink: componentLoader.add('LLMPromptIdLink', path.resolve(__dirname, 'components', 'LLMPromptIdLink')),
     LimitTextLength: componentLoader.add('LimitTextLength', path.resolve(__dirname, 'components', 'LimitTextLength')),
     ImageEmbed: componentLoader.add('ImageEmbed', path.resolve(__dirname, 'components', 'ImageEmbed')),
+    CopyAndAssign: componentLoader.add('CopyAndAssign', path.resolve(__dirname, 'components', 'CopyAndAssign')),
 };
 //# sourceMappingURL=componentLoader.js.map
