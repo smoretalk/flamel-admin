@@ -5,6 +5,7 @@ import startCase from 'lodash/startCase.js';
 const DefaultPropertyValue = ({ property: { propertyPath, availableValues, path, props }, record, resource: { id: resourceId }, }) => {
     const rawValue = record?.params[path];
     const { translateProperty } = useTranslation();
+    console.log(rawValue);
     if (typeof rawValue === 'undefined')
         return null;
     const option = availableValues?.find((opt) => opt.value == rawValue);
@@ -14,7 +15,8 @@ const DefaultPropertyValue = ({ property: { propertyPath, availableValues, path,
             defaultValue: startCase(label),
         })));
     }
-    return rawValue.slice(0, props.maxLength);
+    console.log(rawValue.length, props.maxLen);
+    return rawValue.slice(0, props.maxLen);
 };
 const LimitTextLength = (props) => (React.createElement(DefaultPropertyValue, { ...props }));
 export default LimitTextLength;

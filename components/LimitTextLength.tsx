@@ -11,6 +11,7 @@ const DefaultPropertyValue: FC<ShowPropertyProps> = ({
   const rawValue = record?.params[path]
   const { translateProperty } = useTranslation()
 
+  console.log(rawValue);
   if (typeof rawValue === 'undefined') return null
 
   // eslint-disable-next-line eqeqeq
@@ -27,6 +28,7 @@ const DefaultPropertyValue: FC<ShowPropertyProps> = ({
     )
   }
 
+  console.log(rawValue.length, props.maxLen);
   return rawValue.slice(0, props.maxLen)
 }
 
