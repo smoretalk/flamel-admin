@@ -10,7 +10,7 @@ type SelectRecordEnhanced = SelectRecord & {
 
 const ReferenceEditWithFilter: FC<CombinedProps> = (props) => {
   const { onChange, property, record } = props
-  const { reference: resourceId } = property
+  const { reference: resourceId, props: customProps } = property
 
   if (!resourceId) {
     throw new Error(`Cannot reference resource in property '${property.path}'`)
@@ -31,10 +31,7 @@ const ReferenceEditWithFilter: FC<CombinedProps> = (props) => {
       resourceId,
       actionName: 'search',
       query: inputValue,
-      params: {
-        ['filters.sub']: 'null',
-        ['filters.super']: 'STL',
-      },
+      params: customProps,
     })
     return response.data.records.map((optionRecord: RecordJSON) => ({
       value: optionRecord.id,

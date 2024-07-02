@@ -3,7 +3,7 @@ import { FormGroup, FormMessage, SelectAsync } from '@adminjs/design-system';
 import { ApiClient, flat, PropertyLabel } from 'adminjs';
 const ReferenceEditWithFilter = (props) => {
     const { onChange, property, record } = props;
-    const { reference: resourceId } = property;
+    const { reference: resourceId, props: customProps } = property;
     if (!resourceId) {
         throw new Error(`Cannot reference resource in property '${property.path}'`);
     }
@@ -21,10 +21,7 @@ const ReferenceEditWithFilter = (props) => {
             resourceId,
             actionName: 'search',
             query: inputValue,
-            params: {
-                ['filters.sub']: 'null',
-                ['filters.super']: 'STL',
-            },
+            params: customProps,
         });
         return response.data.records.map((optionRecord) => ({
             value: optionRecord.id,
