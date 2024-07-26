@@ -3,8 +3,7 @@ import isNil from 'lodash/isNil.js';
 import pickBy from 'lodash/pickBy.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useTranslation, BasePropertyComponent, useQueryParams, useFilterDrawer, } from 'adminjs';
-import flat from "flat";
+import { useTranslation, BasePropertyComponent, useQueryParams, useFilterDrawer, flat } from 'adminjs';
 export const getDataCss = (...args) => args.join('-');
 export const getResourceElementCss = (resourceId, suffix) => getDataCss(resourceId, suffix);
 const FilterDrawer = (props) => {

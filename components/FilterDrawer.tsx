@@ -12,8 +12,8 @@ import {
   useQueryParams,
   useFilterDrawer,
   BasePropertyJSON,
+  flat
 } from 'adminjs'
-import flat from "flat";
 
 export const getDataCss = (...args: string[]) => args.join('-');
 export const getResourceElementCss = (resourceId: string, suffix: string) => getDataCss(resourceId, suffix);

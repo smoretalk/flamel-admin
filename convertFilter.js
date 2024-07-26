@@ -14,7 +14,7 @@ export const convertFilter = (modelFields, filterObject) => {
     const uuidRegex = /^[0-9A-F]{8}-[0-9A-F]{4}-[5|4|3|2|1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
     const { filters = {} } = filterObject;
     return Object.entries(filters).reduce((where, [name, filter]) => {
-        if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property.type())) {
+        if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property?.type())) {
             if (filter.property.type() === 'number') {
                 const regex = filter.value.match(/([<>]=?)\s*(\d+)/);
                 if (regex?.[1] === '<') {
@@ -45,7 +45,7 @@ export const convertFilter = (modelFields, filterObject) => {
                 where[name] = safeParseJSON(filter.value);
             }
         }
-        else if (['date', 'datetime'].includes(filter.property.type())) {
+        else if (['date', 'datetime'].includes(filter.property?.type())) {
             if (typeof filter.value !== 'string' && filter.value.from && filter.value.to) {
                 where[name] = { gte: new Date(filter.value.from), lte: new Date(filter.value.to) };
             }
@@ -56,13 +56,13 @@ export const convertFilter = (modelFields, filterObject) => {
                 where[name] = { lte: new Date(filter.value.to) };
             }
         }
-        else if (filter.property.isEnum()) {
+        else if (filter.property?.isEnum()) {
             where[name] = { equals: filter.value };
         }
-        else if (filter.property.type() === 'string' && uuidRegex.test(filter.value.toString())) {
+        else if (filter.property?.type() === 'string' && uuidRegex.test(filter.value.toString())) {
             where[name] = { equals: filter.value };
         }
-        else if (filter.property.type() === 'reference' && filter.property.foreignColumnName()) {
+        else if (filter.property?.type() === 'reference' && filter.property?.foreignColumnName()) {
             where[filter.property.foreignColumnName()] = convertParam(filter.property, modelFields, filter.value);
         }
         else if (filter.value === 'null') {
