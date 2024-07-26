@@ -66,7 +66,7 @@ export default function CouponIssueSection({}) {
                 React.createElement(Input, { onChange: onChangeCredit, type: "number", placeholder: "\uD06C\uB808\uB527 \uC218" })),
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uB9CC\uB8CC\uAE30\uD55C"),
-                React.createElement(DatePicker, { onChange: onChangeDate, propertyType: "date", value: date.toString() })),
+                React.createElement(DatePicker, { onChange: onChangeDate, propertyType: "date", value: date?.toString() })),
             React.createElement(Box, null,
                 React.createElement(Button, { variant: "contained" }, "\uC0DD\uC131")))));
 }

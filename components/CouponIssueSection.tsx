@@ -76,7 +76,7 @@ export default function CouponIssueSection({}) {
         ]} value={type} onChange={onChangeType} /></Box>
         <Box><Label>쿠폰코드</Label><Input onChange={onChangeCode} type="text" placeholder="쿠폰 코드" required /></Box>
         <Box><Label>크레딧</Label><Input onChange={onChangeCredit} type="number" placeholder="크레딧 수" /></Box>
-        <Box><Label>만료기한</Label><DatePicker onChange={onChangeDate} propertyType="date" value={date.toString()} /></Box>
+        <Box><Label>만료기한</Label><DatePicker onChange={onChangeDate} propertyType="date" value={date?.toString()} /></Box>
         <Box><Button variant="contained">생성</Button></Box>
       </Card>
     </Box>
