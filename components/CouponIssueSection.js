@@ -5,7 +5,7 @@ import { useTranslation } from "adminjs";
 import axios from "axios";
 export default function CouponIssueSection({}) {
     const { translateMessage } = useTranslation();
-    const [type, setType] = useState('defaultCredit');
+    const [type, setType] = useState({ value: 'defaultCredit', label: '디폴트 크레딧' });
     const [date, setDate] = useState(null);
     const [code, setCode] = useState('');
     const [credit, setCredit] = useState(0);
@@ -21,11 +21,11 @@ export default function CouponIssueSection({}) {
     function onChangeType(type) {
         setType(type);
     }
-    function onChangeCode(code) {
-        setCode(code);
+    function onChangeCode(e) {
+        setCode(e.target.value);
     }
-    function onChangeCredit(credit) {
-        setCredit(credit);
+    function onChangeCredit(e) {
+        setCredit(parseInt(e.target.value, 10));
     }
     async function onSubmit(e) {
         e.preventDefault();
@@ -35,7 +35,7 @@ export default function CouponIssueSection({}) {
                 code,
                 credit,
                 expiresAt: date,
-                type,
+                type: type.value,
             });
             setCode('');
         }
@@ -61,10 +61,10 @@ export default function CouponIssueSection({}) {
                     ], value: type, onChange: onChangeType })),
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uCFE0\uD3F0\uCF54\uB4DC"),
-                React.createElement(Input, { onChange: onChangeCode, type: "text", placeholder: "\uCFE0\uD3F0 \uCF54\uB4DC", required: true })),
+                React.createElement(Input, { onChange: onChangeCode, type: "text", placeholder: "\uCFE0\uD3F0 \uCF54\uB4DC", required: true, value: code })),
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uD06C\uB808\uB527"),
-                React.createElement(Input, { onChange: onChangeCredit, type: "number", placeholder: "\uD06C\uB808\uB527 \uC218" })),
+                React.createElement(Input, { onChange: onChangeCredit, type: "number", placeholder: "\uD06C\uB808\uB527 \uC218", value: credit })),
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uB9CC\uB8CC\uAE30\uD55C"),
                 React.createElement(DatePicker, { onChange: onChangeDate, propertyType: "date", value: date?.toString() })),

@@ -11,14 +11,14 @@ import {
   Select,
   Text
 } from "@adminjs/design-system";
-import React, {FormEvent, useState} from "react";
+import React, {ChangeEvent, FormEvent, useState} from "react";
 import Card from "./Card.js";
 import {useTranslation} from "adminjs";
 import axios from "axios";
 
 export default function CouponIssueSection({}) {
   const { translateMessage } = useTranslation();
-  const [type, setType] = useState<string>('defaultCredit');
+  const [type, setType] = useState<{ value: string; label: string }>({ value: 'defaultCredit', label: '디폴트 크레딧'});
   const [date, setDate] = useState<Date | null>(null);
   const [code, setCode] = useState<string>('');
   const [credit, setCredit] = useState<number>(0);
@@ -32,16 +32,16 @@ export default function CouponIssueSection({}) {
     }
   }
 
-  function onChangeType(type: string) {
+  function onChangeType(type: { label: string; value: string }) {
     setType(type);
   }
 
-  function onChangeCode(code: string) {
-    setCode(code);
+  function onChangeCode(e: ChangeEvent<HTMLInputElement>) {
+    setCode(e.target.value);
   }
 
-  function onChangeCredit(credit: number) {
-    setCredit(credit);
+  function onChangeCredit(e: ChangeEvent<HTMLInputElement>) {
+    setCredit(parseInt(e.target.value, 10));
   }
 
   async function onSubmit(e: FormEvent) {
@@ -52,7 +52,7 @@ export default function CouponIssueSection({}) {
         code,
         credit,
         expiresAt: date,
-        type,
+        type: type.value,
       });
       setCode('');
     } catch (err) {
@@ -75,8 +75,8 @@ export default function CouponIssueSection({}) {
           { value: 'onetime', label: '일일권' },
           { value: 'basic', label: 'basic 요금제' },
         ]} value={type} onChange={onChangeType} /></Box>
-        <Box><Label>쿠폰코드</Label><Input onChange={onChangeCode} type="text" placeholder="쿠폰 코드" required /></Box>
-        <Box><Label>크레딧</Label><Input onChange={onChangeCredit} type="number" placeholder="크레딧 수" /></Box>
+        <Box><Label>쿠폰코드</Label><Input onChange={onChangeCode} type="text" placeholder="쿠폰 코드" required value={code}/></Box>
+        <Box><Label>크레딧</Label><Input onChange={onChangeCredit} type="number" placeholder="크레딧 수" value={credit} /></Box>
         <Box><Label>만료기한</Label><DatePicker onChange={onChangeDate} propertyType="date" value={date?.toString()} /></Box>
         <Box><Button variant="contained" onClick={onSubmit}>생성</Button></Box>
       </Card>
