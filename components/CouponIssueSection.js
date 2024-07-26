@@ -29,6 +29,7 @@ export default function CouponIssueSection({}) {
     }
     async function onSubmit(e) {
         e.preventDefault();
+        console.log('submitting', code, credit, date, type);
         try {
             await axios.post('/api/coupons', {
                 code,
@@ -39,10 +40,10 @@ export default function CouponIssueSection({}) {
             setCode('');
         }
         catch (err) {
+            console.error(err);
             if (axios.isAxiosError(err)) {
                 alert(err.response.data);
             }
-            console.error(err);
         }
     }
     return (React.createElement(Box, { width: [1, 1, 1 / 2], p: "lg" },
@@ -68,6 +69,6 @@ export default function CouponIssueSection({}) {
                 React.createElement(Label, null, "\uB9CC\uB8CC\uAE30\uD55C"),
                 React.createElement(DatePicker, { onChange: onChangeDate, propertyType: "date", value: date?.toString() })),
             React.createElement(Box, null,
-                React.createElement(Button, { variant: "contained" }, "\uC0DD\uC131")))));
+                React.createElement(Button, { variant: "contained", onClick: onSubmit }, "\uC0DD\uC131")))));
 }
 //# sourceMappingURL=CouponIssueSection.js.map

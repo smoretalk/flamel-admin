@@ -46,6 +46,7 @@ export default function CouponIssueSection({}) {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
+    console.log('submitting', code, credit, date, type);
     try {
       await axios.post('/api/coupons', {
         code,
@@ -55,10 +56,10 @@ export default function CouponIssueSection({}) {
       });
       setCode('');
     } catch (err) {
+      console.error(err);
       if (axios.isAxiosError(err)) {
         alert(err.response.data);
       }
-      console.error(err);
     }
   }
 
@@ -77,7 +78,7 @@ export default function CouponIssueSection({}) {
         <Box><Label>쿠폰코드</Label><Input onChange={onChangeCode} type="text" placeholder="쿠폰 코드" required /></Box>
         <Box><Label>크레딧</Label><Input onChange={onChangeCredit} type="number" placeholder="크레딧 수" /></Box>
         <Box><Label>만료기한</Label><DatePicker onChange={onChangeDate} propertyType="date" value={date?.toString()} /></Box>
-        <Box><Button variant="contained">생성</Button></Box>
+        <Box><Button variant="contained" onClick={onSubmit}>생성</Button></Box>
       </Card>
     </Box>
   )
