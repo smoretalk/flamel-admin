@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Box, Button, DropZone, H2, H5, Icon, Illustration, Text } from "@adminjs/design-system";
-import { styled } from '@adminjs/design-system/styled-components';
 import { useTranslation } from 'adminjs';
 import axios from "axios";
+import CouponIssueSection from "./CouponIssueSection.js";
+import Card from "./Card.js";
 const pageHeaderHeight = 284;
 const pageHeaderPaddingY = 74;
 const pageHeaderPaddingX = 250;
@@ -17,23 +18,6 @@ export const DashboardHeader = () => {
             React.createElement(Text, { textAlign: "center", color: "white" },
                 React.createElement(H2, null, translateMessage('welcomeOnBoard_title')),
                 React.createElement(Text, { opacity: 0.8 }, translateMessage('welcomeOnBoard_subtitle'))))));
-};
-const Card = styled(Box) `
-  display: ${({ flex }) => (flex ? 'flex' : 'block')};
-  color: ${({ theme }) => theme.colors.grey100};
-  height: 100%;
-  text-decoration: none;
-  border: 1px solid transparent;
-  border-radius: ${({ theme }) => theme.space.md};
-  transition: all 0.1s ease-in;
-  &:hover {
-    border: 1px solid ${({ theme }) => theme.colors.primary100};
-    box-shadow: ${({ theme }) => theme.shadows.cardHover};
-  }
-`;
-Card.defaultProps = {
-    variant: 'container',
-    boxShadow: 'card',
 };
 export const Dashboard = (props) => {
     console.log('dashboard props', props);
@@ -138,6 +122,7 @@ export const Dashboard = (props) => {
                         React.createElement(DropZone, { files: styleFiles, multiple: true, translations: {
                                 placeholder: '클릭하거나 파일을 드롭하세요',
                             }, onChange: uploadStyleFiles })))),
+            React.createElement(CouponIssueSection, null),
             React.createElement(Box, { width: [1, 1, 1 / 2], p: "lg" },
                 React.createElement(Card, { as: "a", flex: true, href: "https://smoretalk-io.slack.com/ssb/redirect", target: "_blank" },
                     React.createElement(Box, { flexShrink: 0 },
