@@ -21,6 +21,7 @@ export default function CouponIssueSection({}) {
   const [type, setType] = useState<{ value: string; label: string }>({ value: 'defaultCredit', label: '디폴트 크레딧'});
   const [date, setDate] = useState<Date | null>(null);
   const [ownerId, setOwnerId] = useState<number | null>(null);
+  const [maxCount, setMaxCount] = useState<number | null>(null);
   const [code, setCode] = useState<string>('');
   const [credit, setCredit] = useState<number>(0);
 
@@ -45,6 +46,10 @@ export default function CouponIssueSection({}) {
     setCredit(parseInt(e.target.value, 10));
   }
 
+  function onChangeMaxCount(e: ChangeEvent<HTMLInputElement>) {
+    setMaxCount(parseInt(e.target.value, 10));
+  }
+
   function onChangeOwnerId(e: ChangeEvent<HTMLInputElement>) {
     let value = parseInt(e.target.value, 10);
     if (value) {
@@ -56,7 +61,7 @@ export default function CouponIssueSection({}) {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log('submitting', code, credit, date, type, ownerId);
+    console.log('submitting', code, credit, date, type, maxCount, ownerId);
     try {
       await axios.post('/api/coupons', {
         code,
@@ -64,6 +69,7 @@ export default function CouponIssueSection({}) {
         expiresAt: date,
         type: type.value,
         ownerId,
+        maxCount: maxCount || null,
       });
       setCode('');
     } catch (err) {
@@ -88,6 +94,7 @@ export default function CouponIssueSection({}) {
         ]} value={type} onChange={onChangeType} /></Box>
         <Box><Label>쿠폰코드</Label><Input onChange={onChangeCode} type="text" placeholder="쿠폰 코드" required value={code}/></Box>
         <Box><Label>크레딧</Label><Input onChange={onChangeCredit} type="number" placeholder="크레딧 수" value={credit} /></Box>
+        <Box><Label>발행량</Label><Input onChange={onChangeMaxCount} type="number" placeholder="발행량(비워두면 1)" value={maxCount} /></Box>
         <Box><Label>사용자</Label><Input onChange={onChangeOwnerId} type="number" placeholder="지급 대상(빈칸이면 누구나 가능)" value={ownerId} /></Box>
         <Box><Label>만료기한</Label><DatePicker onChange={onChangeDate} propertyType="date" value={date?.toString()} /></Box>
         <Box><Button variant="contained" onClick={onSubmit}>생성</Button></Box>
