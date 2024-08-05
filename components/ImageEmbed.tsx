@@ -10,6 +10,7 @@ export const ImageEmbed: React.FC = () => {
   const [embedder, setEmbedder] = useState<ImageEmbedder>(null);
   const [textEmbedder, setTextEmbedder] = useState<TextEmbedder>(null);
   const [value, setValue] = useState('');
+  const [disabled, setDisabled] = useState(true);
   const [result, setResult] = useState<{ imageId: number; similar?: number; text?: string}[]>([]);
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export const ImageEmbed: React.FC = () => {
       setEmbedder(imageEmbedder);
       setTextEmbedder(textEmbedder);
       alert('모델 준비 완료');
+      setDisabled(false);
     }
     main();
   }, []);
@@ -64,7 +66,7 @@ export const ImageEmbed: React.FC = () => {
       const obj = map.get(r.imageId);
       if (obj) {
         obj.en.add(r.enTitle);
-        obj.en.add(r.koTitle);
+        obj.ko.add(r.koTitle);
       } else {
         map.set(r.imageId, {
           en: new Set([r.enTitle]),
@@ -129,12 +131,12 @@ export const ImageEmbed: React.FC = () => {
   return (
     <div>
       <img id='image' alt='' width={256} height={256} />
-      <button onClick={onStart}>이미지 임베딩 시작</button>
-      <button onClick={onTextStart}>텍스트 임베딩 시작</button>
+      <button onClick={onStart} disabled={disabled}>이미지 임베딩 시작</button>
+      <button onClick={onTextStart} disabled={disabled}>텍스트 임베딩 시작</button>
       <br/>
       <input value={value} onChange={onChange} />
-      <button onClick={onClick}>이미지 유사도 조회</button>
-      <button onClick={onTextClick}>텍스트 유사도 조회</button>
+      <button onClick={onClick} disabled={disabled}>이미지 유사도 조회</button>
+      <button onClick={onTextClick} disabled={disabled}>텍스트 유사도 조회</button>
       <div>
         {result.slice(0, 20).map((v) => (
           <div>

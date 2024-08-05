@@ -7,6 +7,7 @@ export const ImageEmbed = () => {
     const [embedder, setEmbedder] = useState(null);
     const [textEmbedder, setTextEmbedder] = useState(null);
     const [value, setValue] = useState('');
+    const [disabled, setDisabled] = useState(true);
     const [result, setResult] = useState([]);
     useEffect(() => {
         async function main() {
@@ -25,6 +26,7 @@ export const ImageEmbed = () => {
             setEmbedder(imageEmbedder);
             setTextEmbedder(textEmbedder);
             alert('모델 준비 완료');
+            setDisabled(false);
         }
         main();
     }, []);
@@ -50,7 +52,7 @@ export const ImageEmbed = () => {
             const obj = map.get(r.imageId);
             if (obj) {
                 obj.en.add(r.enTitle);
-                obj.en.add(r.koTitle);
+                obj.ko.add(r.koTitle);
             }
             else {
                 map.set(r.imageId, {
@@ -105,12 +107,12 @@ export const ImageEmbed = () => {
     };
     return (React.createElement("div", null,
         React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),
-        React.createElement("button", { onClick: onStart }, "\uC774\uBBF8\uC9C0 \uC784\uBCA0\uB529 \uC2DC\uC791"),
-        React.createElement("button", { onClick: onTextStart }, "\uD14D\uC2A4\uD2B8 \uC784\uBCA0\uB529 \uC2DC\uC791"),
+        React.createElement("button", { onClick: onStart, disabled: disabled }, "\uC774\uBBF8\uC9C0 \uC784\uBCA0\uB529 \uC2DC\uC791"),
+        React.createElement("button", { onClick: onTextStart, disabled: disabled }, "\uD14D\uC2A4\uD2B8 \uC784\uBCA0\uB529 \uC2DC\uC791"),
         React.createElement("br", null),
         React.createElement("input", { value: value, onChange: onChange }),
-        React.createElement("button", { onClick: onClick }, "\uC774\uBBF8\uC9C0 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
-        React.createElement("button", { onClick: onTextClick }, "\uD14D\uC2A4\uD2B8 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
+        React.createElement("button", { onClick: onClick, disabled: disabled }, "\uC774\uBBF8\uC9C0 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
+        React.createElement("button", { onClick: onTextClick, disabled: disabled }, "\uD14D\uC2A4\uD2B8 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
         React.createElement("div", null, result.slice(0, 20).map((v) => (React.createElement("div", null,
             React.createElement("img", { src: `/api/admin/images/${v.imageId}/thumb`, alt: "", width: 128, height: 128 }),
             React.createElement("div", null,
