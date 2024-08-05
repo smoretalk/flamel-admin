@@ -8,6 +8,7 @@ export default function CouponIssueSection({}) {
     const [type, setType] = useState({ value: 'defaultCredit', label: '디폴트 크레딧' });
     const [date, setDate] = useState(null);
     const [ownerId, setOwnerId] = useState(null);
+    const [maxCount, setMaxCount] = useState(null);
     const [code, setCode] = useState('');
     const [credit, setCredit] = useState(0);
     function onChangeDate(date) {
@@ -28,6 +29,9 @@ export default function CouponIssueSection({}) {
     function onChangeCredit(e) {
         setCredit(parseInt(e.target.value, 10));
     }
+    function onChangeMaxCount(e) {
+        setMaxCount(parseInt(e.target.value, 10));
+    }
     function onChangeOwnerId(e) {
         let value = parseInt(e.target.value, 10);
         if (value) {
@@ -39,7 +43,7 @@ export default function CouponIssueSection({}) {
     }
     async function onSubmit(e) {
         e.preventDefault();
-        console.log('submitting', code, credit, date, type, ownerId);
+        console.log('submitting', code, credit, date, type, maxCount, ownerId);
         try {
             await axios.post('/api/coupons', {
                 code,
@@ -47,6 +51,7 @@ export default function CouponIssueSection({}) {
                 expiresAt: date,
                 type: type.value,
                 ownerId,
+                maxCount: maxCount || null,
             });
             setCode('');
         }
@@ -76,6 +81,9 @@ export default function CouponIssueSection({}) {
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uD06C\uB808\uB527"),
                 React.createElement(Input, { onChange: onChangeCredit, type: "number", placeholder: "\uD06C\uB808\uB527 \uC218", value: credit })),
+            React.createElement(Box, null,
+                React.createElement(Label, null, "\uBC1C\uD589\uB7C9"),
+                React.createElement(Input, { onChange: onChangeMaxCount, type: "number", placeholder: "\uBC1C\uD589\uB7C9(\uBE44\uC6CC\uB450\uBA74 1)", value: maxCount })),
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uC0AC\uC6A9\uC790"),
                 React.createElement(Input, { onChange: onChangeOwnerId, type: "number", placeholder: "\uC9C0\uAE09 \uB300\uC0C1(\uBE48\uCE78\uC774\uBA74 \uB204\uAD6C\uB098 \uAC00\uB2A5)", value: ownerId })),
