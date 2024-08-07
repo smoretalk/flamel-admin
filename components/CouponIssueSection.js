@@ -58,7 +58,7 @@ export default function CouponIssueSection({}) {
         catch (err) {
             console.error(err);
             if (axios.isAxiosError(err)) {
-                alert(err.response.data);
+                alert(err.response.data?.data);
             }
         }
     }
