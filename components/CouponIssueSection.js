@@ -48,6 +48,7 @@ export default function CouponIssueSection({}) {
                 maxCount: maxCount || null,
             });
             setCode('');
+            alert("쿠폰이 발급되었습니다!");
         }
         catch (err) {
             console.error(err);
