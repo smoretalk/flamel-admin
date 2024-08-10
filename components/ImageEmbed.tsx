@@ -84,19 +84,26 @@ export const ImageEmbed: React.FC = () => {
     }
   };
 
+  function rgb2hsv(r: number,g: number,b: number) {
+    let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
+    let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c));
+    return [60*(h<0?h+6:h), v&&c/v, v] as const;
+  }
+
   const onColorStart = async () => {
     const response2 = await axios.get<{ imageId: number; }[]>(`/api/collections/noColors`);
     console.log(response2.data);
     const colorThief = new window.ColorThief();
     const image = document.querySelector('#image') as HTMLImageElement;
-    for (const r of response2.data) {
+    for (const r of response2.data.slice(0, 4)) {
       await new Promise((resolve, reject) => {
         console.log(r);
         const loadEvent = async function() {
           const result = colorThief.getPalette(image);
           console.log(result);
           for (const rr of result) {
-            await axios.post(`/api/collections/${r.imageId}/color/${rr.join(',')}`)
+            const hsv = rgb2hsv(...rr);
+            await axios.post(`/api/collections/${r.imageId}/color/${hsv.join(',')}`)
           }
           image.removeEventListener('load', loadEvent)
           resolve(result);
