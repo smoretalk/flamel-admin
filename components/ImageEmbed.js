@@ -79,9 +79,12 @@ export const ImageEmbed = () => {
         for (const r of response2.data) {
             await new Promise((resolve, reject) => {
                 console.log(r);
-                const loadEvent = function () {
+                const loadEvent = async function () {
                     const result = colorThief.getPalette(image);
                     console.log(result);
+                    for (const rr of result) {
+                        await axios.post(`/api/collections/${r.imageId}/color/${rr.join(',')}`);
+                    }
                     image.removeEventListener('load', loadEvent);
                     resolve(result);
                 };
