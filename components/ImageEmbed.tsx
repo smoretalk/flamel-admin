@@ -84,10 +84,37 @@ export const ImageEmbed: React.FC = () => {
     }
   };
 
-  function rgb2hsv(r: number,g: number,b: number) {
-    let v=Math.max(r,g,b), c=v-Math.min(r,g,b);
-    let h= c && ((v==r) ? (g-b)/c : ((v==g) ? 2+(b-r)/c : 4+(r-g)/c));
-    return [60*(h<0?h+6:h), v&&c/v, v] as const;
+  function rgb2hsv (r: number, g: number, b: number) {
+    let rabs, gabs, babs, rr, gg, bb, h, s, v, diff, diffc, percentRoundFn;
+    rabs = r / 255;
+    gabs = g / 255;
+    babs = b / 255;
+    v = Math.max(rabs, gabs, babs),
+      diff = v - Math.min(rabs, gabs, babs);
+    diffc = (c: number) => (v - c) / 6 / diff + 1 / 2;
+    percentRoundFn = (num: number) => Math.round(num * 100) / 100;
+    if (diff == 0) {
+      h = s = 0;
+    } else {
+      s = diff / v;
+      rr = diffc(rabs);
+      gg = diffc(gabs);
+      bb = diffc(babs);
+
+      if (rabs === v) {
+        h = bb - gg;
+      } else if (gabs === v) {
+        h = (1 / 3) + rr - bb;
+      } else if (babs === v) {
+        h = (2 / 3) + gg - rr;
+      }
+      if (h < 0) {
+        h += 1;
+      }else if (h > 1) {
+        h -= 1;
+      }
+    }
+    return [Math.round(h * 360), percentRoundFn(s * 100), percentRoundFn(v * 100)] as const;
   }
 
   const onColorStart = async () => {
