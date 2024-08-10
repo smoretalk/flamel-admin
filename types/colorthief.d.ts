@@ -1,6 +1,6 @@
 class ColorThief {
   constructor();
-  getColors(image: HTMLImageElement): [number, number, number][];
+  getPalette(image: HTMLImageElement): [number, number, number][];
   getColor(image: HTMLImageElement): [number, number, number];
 }
 interface Window {

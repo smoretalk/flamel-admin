@@ -80,7 +80,7 @@ export const ImageEmbed = () => {
             await new Promise((resolve, reject) => {
                 console.log(r);
                 const loadEvent = function () {
-                    const result = colorThief.getColors(image);
+                    const result = colorThief.getPalette(image);
                     console.log(result);
                     image.removeEventListener('load', loadEvent);
                     resolve(result);
@@ -148,8 +148,7 @@ export const ImageEmbed = () => {
             React.createElement("div", null,
                 v.imageId,
                 " ",
-                v.similar))))),
-        React.createElement("script", { src: "https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js" })));
+                v.similar)))))));
 };
 export default ImageEmbed;
 //# sourceMappingURL=ImageEmbed.js.map
