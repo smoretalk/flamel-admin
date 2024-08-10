@@ -81,13 +81,13 @@ export const ImageEmbed = () => {
         console.log(response2.data);
         const colorThief = new window.ColorThief();
         const image = document.querySelector('#image');
-        for (const r of response2.data.slice(0, 4)) {
+        for (const r of response2.data) {
             await new Promise((resolve, reject) => {
                 console.log(r);
                 const loadEvent = async function () {
                     const result = colorThief.getPalette(image);
                     console.log(result);
-                    for (const rr of result) {
+                    for (const rr of result.slice(0, 4)) {
                         const hsv = rgb2hsv(...rr);
                         await axios.post(`/api/collections/${r.imageId}/color/${hsv.join(',')}`);
                     }
