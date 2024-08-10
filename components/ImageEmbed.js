@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { FilesetResolver, ImageEmbedder } from '@mediapipe/tasks-vision';
 import { FilesetResolver as TextFilesetResolver, TextEmbedder } from '@mediapipe/tasks-text';
 import axios from "axios";
+import ColorThief from 'colorthief';
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 export const ImageEmbed = () => {
     const [embedder, setEmbedder] = useState(null);
     const [textEmbedder, setTextEmbedder] = useState(null);
     const [value, setValue] = useState('');
+    const [color, setColor] = useState('');
     const [result, setResult] = useState([]);
     useEffect(() => {
         async function main() {
@@ -43,7 +45,7 @@ export const ImageEmbed = () => {
         }
     };
     const onTextStart = async () => {
-        const response2 = await axios.get(`/api/collections/noTextEmbedding`);
+        const response2 = await axios.get(`/api/collections/allTextEmbedding`);
         console.log(response2.data, textEmbedder);
         for (const r of response2.data) {
             if (!r.stylePrompt && !r.fullPrompt) {
@@ -56,8 +58,23 @@ export const ImageEmbed = () => {
             });
         }
     };
+    const onColorStart = async () => {
+        const response2 = await axios.get(`/api/collections/noColors`);
+        console.log(response2.data);
+        const colorThief = new ColorThief();
+        for (const r of response2.data) {
+            const image = document.querySelector('#image');
+            image.addEventListener('load', function () {
+                console.log(colorThief.getColors(image));
+            });
+            image.src = `/api/admin/images/${r.imageId}/binary`;
+        }
+    };
     const onChange = (e) => {
         setValue(e.target.value);
+    };
+    const onChangeColor = (e) => {
+        setColor(e.target.value);
     };
     const onClick = async () => {
         const response = await axios.get(`/api/collections/imageEmbedding`);
@@ -91,14 +108,21 @@ export const ImageEmbed = () => {
         console.log(result);
         setResult(result);
     };
+    const onColorClick = async () => {
+        const response = await axios.get(`/api/collections/${color}/similarColors`);
+        setResult(response.data);
+    };
     return (React.createElement("div", null,
         React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),
         React.createElement("button", { onClick: onStart }, "\uC774\uBBF8\uC9C0 \uC784\uBCA0\uB529 \uC2DC\uC791"),
         React.createElement("button", { onClick: onTextStart }, "\uD14D\uC2A4\uD2B8 \uC784\uBCA0\uB529 \uC2DC\uC791"),
+        React.createElement("button", { onClick: onColorStart }, "\uCEEC\uB7EC \uD314\uB808\uD2B8 \uC2DC\uC791"),
         React.createElement("br", null),
         React.createElement("input", { value: value, onChange: onChange }),
         React.createElement("button", { onClick: onClick }, "\uC774\uBBF8\uC9C0 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
         React.createElement("button", { onClick: onTextClick }, "\uD14D\uC2A4\uD2B8 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
+        React.createElement("input", { value: color, onChange: onChangeColor }),
+        React.createElement("button", { onClick: onColorClick }, "\uCEEC\uB7EC \uC720\uC0AC\uB3C4 \uC870\uD68C"),
         React.createElement("div", null, result.slice(0, 20).map((v) => (React.createElement("div", null,
             React.createElement("img", { src: `/api/admin/images/${v.imageId}/thumb`, alt: "", width: 128, height: 128 }),
             React.createElement("div", null,

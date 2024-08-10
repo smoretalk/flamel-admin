@@ -1,8 +1,8 @@
 import React, {ChangeEventHandler, useEffect, useState} from "react";
-import { useTranslation } from 'adminjs';
 import { FilesetResolver, ImageEmbedder } from '@mediapipe/tasks-vision';
 import { FilesetResolver as TextFilesetResolver, TextEmbedder } from '@mediapipe/tasks-text';
 import axios from "axios";
+import ColorThief from 'colorthief';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -10,6 +10,7 @@ export const ImageEmbed: React.FC = () => {
   const [embedder, setEmbedder] = useState<ImageEmbedder>(null);
   const [textEmbedder, setTextEmbedder] = useState<TextEmbedder>(null);
   const [value, setValue] = useState('');
+  const [color, setColor] = useState('');
   const [result, setResult] = useState<{ imageId: number; similar?: number; text?: string}[]>([]);
 
   useEffect(() => {
@@ -57,7 +58,7 @@ export const ImageEmbed: React.FC = () => {
   };
 
   const onTextStart = async () => {
-    const response2 = await axios.get<{ imageId: number; stylePrompt: string | null; fullPrompt: string | null }[]>(`/api/collections/noTextEmbedding`);
+    const response2 = await axios.get<{ imageId: number; stylePrompt: string | null; fullPrompt: string | null }[]>(`/api/collections/allTextEmbedding`);
     console.log(response2.data, textEmbedder);
     for (const r of response2.data) {
       if (!r.stylePrompt && !r.fullPrompt) {
@@ -71,8 +72,25 @@ export const ImageEmbed: React.FC = () => {
     }
   };
 
+  const onColorStart = async () => {
+    const response2 = await axios.get<{ imageId: number; }[]>(`/api/collections/noColors`);
+    console.log(response2.data);
+    const colorThief = new ColorThief();
+    for (const r of response2.data) {
+      const image = document.querySelector('#image') as HTMLImageElement;
+      image.addEventListener('load', function() {
+        console.log(colorThief.getColors(image));
+      });
+      image.src = `/api/admin/images/${r.imageId}/binary`;
+    }
+  };
+
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setValue(e.target.value);
+  }
+
+  const onChangeColor: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setColor(e.target.value);
   }
 
   const onClick = async () => {
@@ -115,15 +133,23 @@ export const ImageEmbed: React.FC = () => {
     setResult(result);
   }
 
+  const onColorClick = async () => {
+    const response = await axios.get<{ imageId: number; }[]>(`/api/collections/${color}/similarColors`);
+    setResult(response.data);
+  };
+
   return (
     <div>
       <img id='image' alt='' width={256} height={256} />
       <button onClick={onStart}>이미지 임베딩 시작</button>
       <button onClick={onTextStart}>텍스트 임베딩 시작</button>
+      <button onClick={onColorStart}>컬러 팔레트 시작</button>
       <br/>
       <input value={value} onChange={onChange} />
       <button onClick={onClick}>이미지 유사도 조회</button>
       <button onClick={onTextClick}>텍스트 유사도 조회</button>
+      <input value={color} onChange={onChangeColor} />
+      <button onClick={onColorClick}>컬러 유사도 조회</button>
       <div>
         {result.slice(0, 20).map((v) => (
           <div>
