@@ -174,7 +174,7 @@ export const ImageEmbed = () => {
         const response = await axios.get(`/api/collections/allColors`);
         response.data.forEach((color) => {
             const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, '')));
-            color.similar = color.dominant ? deltaE(lab, lab2) * 0.8 : deltaE(lab, lab2);
+            color.similar = deltaE(lab, lab2);
         });
         const unique = Object.values(response.data.reduce((acc, obj) => ({ ...acc, [obj.imageId]: obj }), {}));
         const sorted = unique.toSorted((a, b) => a.similar - b.similar);
