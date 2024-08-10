@@ -2,7 +2,6 @@ import React, {ChangeEventHandler, useEffect, useState} from "react";
 import { FilesetResolver, ImageEmbedder } from '@mediapipe/tasks-vision';
 import { FilesetResolver as TextFilesetResolver, TextEmbedder } from '@mediapipe/tasks-text';
 import axios from "axios";
-import ColorThief from 'colorthief';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -88,7 +87,7 @@ export const ImageEmbed: React.FC = () => {
   const onColorStart = async () => {
     const response2 = await axios.get<{ imageId: number; }[]>(`/api/collections/noColors`);
     console.log(response2.data);
-    const colorThief = new ColorThief();
+    const colorThief = new window.ColorThief();
     for (const r of response2.data) {
       const image = document.querySelector('#image') as HTMLImageElement;
       image.addEventListener('load', function() {
@@ -153,24 +152,25 @@ export const ImageEmbed: React.FC = () => {
 
   return (
     <div>
-      <img id='image' alt='' width={256} height={256} />
+      <img id='image' alt='' width={256} height={256}/>
       <button onClick={onStart} disabled={disabled}>이미지 임베딩 시작</button>
       <button onClick={onTextStart} disabled={disabled}>텍스트 임베딩 시작</button>
       <button onClick={onColorStart}>컬러 팔레트 시작</button>
       <br/>
-      <input value={value} onChange={onChange} />
+      <input value={value} onChange={onChange}/>
       <button onClick={onClick} disabled={disabled}>이미지 유사도 조회</button>
       <button onClick={onTextClick} disabled={disabled}>텍스트 유사도 조회</button>
-      <input value={color} onChange={onChangeColor} />
+      <input value={color} onChange={onChangeColor}/>
       <button onClick={onColorClick}>컬러 유사도 조회</button>
       <div>
         {result.slice(0, 20).map((v) => (
           <div>
-            <img src={`/api/admin/images/${v.imageId}/thumb`} alt=""  width={128} height={128}/>
+            <img src={`/api/admin/images/${v.imageId}/thumb`} alt="" width={128} height={128}/>
             <div>{v.imageId} {v.similar}</div>
           </div>
         ))}
       </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     </div>
   );
 };

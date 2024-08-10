@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { FilesetResolver, ImageEmbedder } from '@mediapipe/tasks-vision';
 import { FilesetResolver as TextFilesetResolver, TextEmbedder } from '@mediapipe/tasks-text';
 import axios from "axios";
-import ColorThief from 'colorthief';
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 export const ImageEmbed = () => {
     const [embedder, setEmbedder] = useState(null);
@@ -75,7 +74,7 @@ export const ImageEmbed = () => {
     const onColorStart = async () => {
         const response2 = await axios.get(`/api/collections/noColors`);
         console.log(response2.data);
-        const colorThief = new ColorThief();
+        const colorThief = new window.ColorThief();
         for (const r of response2.data) {
             const image = document.querySelector('#image');
             image.addEventListener('load', function () {
@@ -142,7 +141,8 @@ export const ImageEmbed = () => {
             React.createElement("div", null,
                 v.imageId,
                 " ",
-                v.similar)))))));
+                v.similar))))),
+        React.createElement("script", { src: "https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js" })));
 };
 export default ImageEmbed;
 //# sourceMappingURL=ImageEmbed.js.map

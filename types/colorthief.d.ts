@@ -1,8 +1,8 @@
-declare module "colorthief" {
-  class ColorThief {
-    constructor();
-    getColors(image: HTMLImageElement): [number, number, number][];
-    getColor(image: HTMLImageElement): [number, number, number];
-  }
-  export default ColorThief;
+class ColorThief {
+  constructor();
+  getColors(image: HTMLImageElement): [number, number, number][];
+  getColor(image: HTMLImageElement): [number, number, number];
+}
+interface Window {
+  ColorThief: typeof ColorThief;
 }
