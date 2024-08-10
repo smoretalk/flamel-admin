@@ -89,6 +89,7 @@ export const ImageEmbed = () => {
                     console.log(result);
                     for (const rr of result.slice(0, 4)) {
                         const hsv = rgb2hsv(...rr);
+                        console.log('hsv', hsv, rr);
                         await axios.post(`/api/collections/${r.imageId}/color/${hsv.join(',')}`);
                     }
                     image.removeEventListener('load', loadEvent);
