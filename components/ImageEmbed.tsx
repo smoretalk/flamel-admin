@@ -88,12 +88,19 @@ export const ImageEmbed: React.FC = () => {
     const response2 = await axios.get<{ imageId: number; }[]>(`/api/collections/noColors`);
     console.log(response2.data);
     const colorThief = new window.ColorThief();
+    const image = document.querySelector('#image') as HTMLImageElement;
     for (const r of response2.data) {
-      const image = document.querySelector('#image') as HTMLImageElement;
-      image.addEventListener('load', function() {
-        console.log(colorThief.getColors(image));
-      });
-      image.src = `/api/admin/images/${r.imageId}/binary`;
+      await new Promise((resolve, reject) => {
+        console.log(r);
+        const loadEvent = function() {
+          const result = colorThief.getColors(image);
+          console.log(result);
+          image.removeEventListener('load', loadEvent)
+          resolve(result);
+        };
+        image.addEventListener('load', loadEvent);
+        image.src = `/api/admin/images/${r.imageId}/binary`;
+      })
     }
   };
 
