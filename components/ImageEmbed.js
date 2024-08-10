@@ -174,11 +174,11 @@ export const ImageEmbed = () => {
         const response = await axios.get(`/api/collections/allColors`);
         response.data.forEach((color) => {
             const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, '')));
-            color.similar = deltaE(lab, lab2);
+            color.similar = color.dominant ? deltaE(lab, lab2) * 0.8 : deltaE(lab, lab2);
         });
         const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
         console.log(sorted);
-        setResult(sorted);
+        setResult(Object.values(sorted.reduce((acc, obj) => ({ ...acc, [obj.imageId]: obj }), {})));
     };
     return (React.createElement("div", null,
         React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),
