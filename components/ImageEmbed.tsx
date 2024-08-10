@@ -128,10 +128,15 @@ export const ImageEmbed: React.FC = () => {
         const loadEvent = async function() {
           const result = colorThief.getPalette(image);
           console.log(result);
+          let i = 0;
           for (const rr of result.slice(0, 4)) {
             const hsv = rgb2hsv(...rr);
             console.log('hsv', hsv, rr);
-            await axios.post(`/api/collections/${r.imageId}/color/${hsv.join(',')}`)
+            await axios.post(`/api/collections/${r.imageId}/colors`, {
+              hsv: hsv.join(','),
+              dominant: i === 0,
+            })
+            i++;
           }
           image.removeEventListener('load', loadEvent)
           resolve(result);
