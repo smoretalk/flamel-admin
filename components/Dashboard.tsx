@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
   Box,
   Button, DropZone,
@@ -7,17 +7,18 @@ import {
   Illustration,
   Text
 } from "@adminjs/design-system";
-import { styled } from '@adminjs/design-system/styled-components';
 
-import { useTranslation } from 'adminjs';
+import {useTranslation} from 'adminjs';
 import axios from "axios";
+import CouponIssueSection from "./CouponIssueSection.js";
+import Card from "./Card.js";
 
 const pageHeaderHeight = 284;
 const pageHeaderPaddingY = 74;
 const pageHeaderPaddingX = 250;
 
 export const DashboardHeader: React.FC = () => {
-  const { translateMessage } = useTranslation();
+  const {translateMessage} = useTranslation();
   return (
     <Box position="relative" overflow="hidden" data-css="default-dashboard">
       <Box
@@ -27,7 +28,7 @@ export const DashboardHeader: React.FC = () => {
         opacity={[0.2, 0.4, 1]}
         animate
       >
-        <Illustration variant="Rocket" />
+        <Illustration variant="Rocket"/>
       </Box>
       <Box
         position="absolute"
@@ -36,7 +37,7 @@ export const DashboardHeader: React.FC = () => {
         opacity={[0.2, 0.4, 1]}
         animate
       >
-        <Illustration variant="Moon" />
+        <Illustration variant="Moon"/>
       </Box>
       <Box
         bg="grey100"
@@ -55,50 +56,10 @@ export const DashboardHeader: React.FC = () => {
   );
 };
 
-type BoxType = {
-  variant: string;
-  title: string;
-  subtitle: string;
-  href: string;
-};
-
-type Props = {
-  theme: {
-    colors: {
-      grey100: string,
-      primary100: string
-    },
-    shadows: {
-      cardHover: string
-    }
-    space: {
-      md: string,
-    },
-  },
-  flex: boolean,
-}
-const Card = styled(Box)`
-  display: ${({ flex }: Props): string => (flex ? 'flex' : 'block')};
-  color: ${({ theme }: Props) => theme.colors.grey100};
-  height: 100%;
-  text-decoration: none;
-  border: 1px solid transparent;
-  border-radius: ${({ theme }: Props) => theme.space.md};
-  transition: all 0.1s ease-in;
-  &:hover {
-    border: 1px solid ${({ theme }: Props) => theme.colors.primary100};
-    box-shadow: ${({ theme }: Props) => theme.shadows.cardHover};
-  }
-`;
-
-Card.defaultProps = {
-  variant: 'container',
-  boxShadow: 'card',
-};
 
 export const Dashboard: React.FC = (props) => {
   console.log('dashboard props', props);
-  const { translateMessage, translateButton } = useTranslation();
+  const {translateMessage, translateButton} = useTranslation();
   const [imageFiles, setImageFiles] = useState<File[]>([])
   const [themeFiles, setThemeFiles] = useState<File[]>([])
   const [styleFiles, setStyleFiles] = useState<File[]>([])
@@ -163,7 +124,7 @@ export const Dashboard: React.FC = (props) => {
 
   return (
     <Box>
-      <DashboardHeader />
+      <DashboardHeader/>
       <Box
         mt={['xl', 'xl', '-100px']}
         mb="xl"
@@ -177,72 +138,65 @@ export const Dashboard: React.FC = (props) => {
       >
         <Box width={[1, 1 / 2, 1 / 2, 1 / 4]} p="lg">
           <Card as="a">
-            <Text textAlign="center">
-              <Icon icon="Image" />
-              <H5 mt="lg">{translateMessage('uploadCollectionImages1x')}</H5>
-              <Text>{translateMessage('uploadCollectionImages1x_detail')}</Text>
-              <DropZone
-                files={imageFiles}
-                multiple
-                translations={{
-                  placeholder: '클릭하거나 파일을 드롭하세요',
-                }}
-                onChange={uploadImageFiles('1x')}
-              />
-            </Text>
+            <Icon icon="Image"/>
+            <H5 mt="lg">{translateMessage('uploadCollectionImages1x')}</H5>
+            <Text>{translateMessage('uploadCollectionImages1x_detail')}</Text>
+            <DropZone
+              files={imageFiles}
+              multiple
+              translations={{
+                placeholder: '클릭하거나 파일을 드롭하세요',
+              }}
+              onChange={uploadImageFiles('1x')}
+            />
           </Card>
         </Box>
         <Box width={[1, 1 / 2, 1 / 2, 1 / 4]} p="lg">
           <Card as="a">
-            <Text textAlign="center">
-              <Icon icon="Image" />
-              <H5 mt="lg">{translateMessage('uploadCollectionImages2x')}</H5>
-              <Text>{translateMessage('uploadCollectionImages2x_detail')}</Text>
-              <DropZone
-                files={imageFiles}
-                multiple
-                translations={{
-                  placeholder: '클릭하거나 파일을 드롭하세요',
-                }}
-                onChange={uploadImageFiles('2x')}
-              />
-            </Text>
+            <Icon icon="Image"/>
+            <H5 mt="lg">{translateMessage('uploadCollectionImages2x')}</H5>
+            <Text>{translateMessage('uploadCollectionImages2x_detail')}</Text>
+            <DropZone
+              files={imageFiles}
+              multiple
+              translations={{
+                placeholder: '클릭하거나 파일을 드롭하세요',
+              }}
+              onChange={uploadImageFiles('2x')}
+            />
           </Card>
         </Box>
         <Box width={[1, 1 / 2, 1 / 2, 1 / 4]} p="lg">
           <Card as="a">
-            <Text textAlign="center">
-              <Icon icon="Image" />
-              <H5 mt="lg">{translateMessage('uploadCollectionTheme')}</H5>
-              <Text>{translateMessage('uploadCollectionTheme_detail')}</Text>
-              <DropZone
-                  files={themeFiles}
-                  multiple
-                  translations={{
-                    placeholder: '클릭하거나 파일을 드롭하세요',
-                  }}
-                  onChange={uploadThemeFiles}
-              />
-            </Text>
+            <Icon icon="Image"/>
+            <H5 mt="lg">{translateMessage('uploadCollectionTheme')}</H5>
+            <Text>{translateMessage('uploadCollectionTheme_detail')}</Text>
+            <DropZone
+              files={themeFiles}
+              multiple
+              translations={{
+                placeholder: '클릭하거나 파일을 드롭하세요',
+              }}
+              onChange={uploadThemeFiles}
+            />
           </Card>
         </Box>
         <Box width={[1, 1 / 2, 1 / 2, 1 / 4]} p="lg">
           <Card as="a">
-            <Text textAlign="center">
-              <Icon icon="Image" />
-              <H5 mt="lg">{translateMessage('uploadCollectionStyle')}</H5>
-              <Text>{translateMessage('uploadCollectionStyle_detail')}</Text>
-              <DropZone
-                files={styleFiles}
-                multiple
-                translations={{
-                  placeholder: '클릭하거나 파일을 드롭하세요',
-                }}
-                onChange={uploadStyleFiles}
-              />
-            </Text>
+            <Icon icon="Image"/>
+            <H5 mt="lg">{translateMessage('uploadCollectionStyle')}</H5>
+            <Text>{translateMessage('uploadCollectionStyle_detail')}</Text>
+            <DropZone
+              files={styleFiles}
+              multiple
+              translations={{
+                placeholder: '클릭하거나 파일을 드롭하세요',
+              }}
+              onChange={uploadStyleFiles}
+            />
           </Card>
         </Box>
+        <CouponIssueSection/>
         <Box width={[1, 1, 1 / 2]} p="lg">
           <Card
             as="a"
@@ -251,7 +205,7 @@ export const Dashboard: React.FC = (props) => {
             target="_blank"
           >
             <Box flexShrink={0}>
-              <Illustration variant="SlackLogo" />
+              <Illustration variant="SlackLogo"/>
             </Box>
             <Box ml="xl">
               <H5>{translateMessage('community_title')}</H5>
@@ -267,7 +221,7 @@ export const Dashboard: React.FC = (props) => {
             target="_blank"
           >
             <Box flexShrink={0}>
-              <Illustration variant="GithubLogo" />
+              <Illustration variant="GithubLogo"/>
             </Box>
             <Box ml="xl">
               <H5>{translateMessage('foundBug_title')}</H5>
@@ -277,7 +231,7 @@ export const Dashboard: React.FC = (props) => {
         </Box>
         <Card width={1} m="lg">
           <Text textAlign="center">
-            <Illustration variant="AdminJSLogo" />
+            <Illustration variant="AdminJSLogo"/>
             <H5>{translateMessage('needMoreSolutions_title')}</H5>
             <Text>{translateMessage('needMoreSolutions_subtitle')}</Text>
             <Text mt="xxl">

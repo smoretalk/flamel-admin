@@ -10,6 +10,7 @@ export const ImageEmbed: React.FC = () => {
   const [embedder, setEmbedder] = useState<ImageEmbedder>(null);
   const [textEmbedder, setTextEmbedder] = useState<TextEmbedder>(null);
   const [value, setValue] = useState('');
+  const [disabled, setDisabled] = useState(true);
   const [color, setColor] = useState('');
   const [result, setResult] = useState<{ imageId: number; similar?: number; text?: string}[]>([]);
 
@@ -38,6 +39,7 @@ export const ImageEmbed: React.FC = () => {
       setEmbedder(imageEmbedder);
       setTextEmbedder(textEmbedder);
       alert('모델 준비 완료');
+      setDisabled(false);
     }
     main();
   }, []);
@@ -58,15 +60,26 @@ export const ImageEmbed: React.FC = () => {
   };
 
   const onTextStart = async () => {
-    const response2 = await axios.get<{ imageId: number; stylePrompt: string | null; fullPrompt: string | null }[]>(`/api/collections/allTextEmbedding`);
+    const response2 = await axios.get<{ imageId: number; koTitle: string | null; enTitle: string | null; fullPrompt: string | null }[]>(`/api/collections/allTextEmbedding`);
     console.log(response2.data, textEmbedder);
+    const map = new Map<number, { en: Set<string>, ko: Set<string>, full: string }>();
     for (const r of response2.data) {
-      if (!r.stylePrompt && !r.fullPrompt) {
-        continue;
+      const obj = map.get(r.imageId);
+      if (obj) {
+        obj.en.add(r.enTitle);
+        obj.ko.add(r.koTitle);
+      } else {
+        map.set(r.imageId, {
+          en: new Set([r.enTitle]),
+          ko: new Set([r.koTitle]),
+          full: r.fullPrompt,
+        });
       }
-      const textEmbedderResult = textEmbedder.embed(r.stylePrompt || r.fullPrompt);
-      console.log(r.imageId, textEmbedderResult, r.stylePrompt || r.fullPrompt);
-      await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
+    }
+    for (const m of map) {
+      const textEmbedderResult = textEmbedder.embed(m[1].full + ' ' + Array.from(m[1].en).join(' ') + ' ' + Array.from(m[1].ko).join(' ' ));
+      console.log(m, textEmbedderResult);
+      await axios.patch(`/api/collections/${m[0]}/textEmbed`, {
         vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
       });
     }
@@ -86,7 +99,7 @@ export const ImageEmbed: React.FC = () => {
   };
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setValue(e.target.value);
+    setValue(e.target.value || '');
   }
 
   const onChangeColor: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -141,13 +154,13 @@ export const ImageEmbed: React.FC = () => {
   return (
     <div>
       <img id='image' alt='' width={256} height={256} />
-      <button onClick={onStart}>이미지 임베딩 시작</button>
-      <button onClick={onTextStart}>텍스트 임베딩 시작</button>
+      <button onClick={onStart} disabled={disabled}>이미지 임베딩 시작</button>
+      <button onClick={onTextStart} disabled={disabled}>텍스트 임베딩 시작</button>
       <button onClick={onColorStart}>컬러 팔레트 시작</button>
       <br/>
       <input value={value} onChange={onChange} />
-      <button onClick={onClick}>이미지 유사도 조회</button>
-      <button onClick={onTextClick}>텍스트 유사도 조회</button>
+      <button onClick={onClick} disabled={disabled}>이미지 유사도 조회</button>
+      <button onClick={onTextClick} disabled={disabled}>텍스트 유사도 조회</button>
       <input value={color} onChange={onChangeColor} />
       <button onClick={onColorClick}>컬러 유사도 조회</button>
       <div>

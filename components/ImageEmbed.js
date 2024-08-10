@@ -8,6 +8,7 @@ export const ImageEmbed = () => {
     const [embedder, setEmbedder] = useState(null);
     const [textEmbedder, setTextEmbedder] = useState(null);
     const [value, setValue] = useState('');
+    const [disabled, setDisabled] = useState(true);
     const [color, setColor] = useState('');
     const [result, setResult] = useState([]);
     useEffect(() => {
@@ -27,6 +28,7 @@ export const ImageEmbed = () => {
             setEmbedder(imageEmbedder);
             setTextEmbedder(textEmbedder);
             alert('모델 준비 완료');
+            setDisabled(false);
         }
         main();
     }, []);
@@ -47,13 +49,25 @@ export const ImageEmbed = () => {
     const onTextStart = async () => {
         const response2 = await axios.get(`/api/collections/allTextEmbedding`);
         console.log(response2.data, textEmbedder);
+        const map = new Map();
         for (const r of response2.data) {
-            if (!r.stylePrompt && !r.fullPrompt) {
-                continue;
+            const obj = map.get(r.imageId);
+            if (obj) {
+                obj.en.add(r.enTitle);
+                obj.ko.add(r.koTitle);
             }
-            const textEmbedderResult = textEmbedder.embed(r.stylePrompt || r.fullPrompt);
-            console.log(r.imageId, textEmbedderResult, r.stylePrompt || r.fullPrompt);
-            await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
+            else {
+                map.set(r.imageId, {
+                    en: new Set([r.enTitle]),
+                    ko: new Set([r.koTitle]),
+                    full: r.fullPrompt,
+                });
+            }
+        }
+        for (const m of map) {
+            const textEmbedderResult = textEmbedder.embed(m[1].full + ' ' + Array.from(m[1].en).join(' ') + ' ' + Array.from(m[1].ko).join(' '));
+            console.log(m, textEmbedderResult);
+            await axios.patch(`/api/collections/${m[0]}/textEmbed`, {
                 vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
             });
         }
@@ -71,7 +85,7 @@ export const ImageEmbed = () => {
         }
     };
     const onChange = (e) => {
-        setValue(e.target.value);
+        setValue(e.target.value || '');
     };
     const onChangeColor = (e) => {
         setColor(e.target.value);
@@ -114,13 +128,13 @@ export const ImageEmbed = () => {
     };
     return (React.createElement("div", null,
         React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),
-        React.createElement("button", { onClick: onStart }, "\uC774\uBBF8\uC9C0 \uC784\uBCA0\uB529 \uC2DC\uC791"),
-        React.createElement("button", { onClick: onTextStart }, "\uD14D\uC2A4\uD2B8 \uC784\uBCA0\uB529 \uC2DC\uC791"),
+        React.createElement("button", { onClick: onStart, disabled: disabled }, "\uC774\uBBF8\uC9C0 \uC784\uBCA0\uB529 \uC2DC\uC791"),
+        React.createElement("button", { onClick: onTextStart, disabled: disabled }, "\uD14D\uC2A4\uD2B8 \uC784\uBCA0\uB529 \uC2DC\uC791"),
         React.createElement("button", { onClick: onColorStart }, "\uCEEC\uB7EC \uD314\uB808\uD2B8 \uC2DC\uC791"),
         React.createElement("br", null),
         React.createElement("input", { value: value, onChange: onChange }),
-        React.createElement("button", { onClick: onClick }, "\uC774\uBBF8\uC9C0 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
-        React.createElement("button", { onClick: onTextClick }, "\uD14D\uC2A4\uD2B8 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
+        React.createElement("button", { onClick: onClick, disabled: disabled }, "\uC774\uBBF8\uC9C0 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
+        React.createElement("button", { onClick: onTextClick, disabled: disabled }, "\uD14D\uC2A4\uD2B8 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
         React.createElement("input", { value: color, onChange: onChangeColor }),
         React.createElement("button", { onClick: onColorClick }, "\uCEEC\uB7EC \uC720\uC0AC\uB3C4 \uC870\uD68C"),
         React.createElement("div", null, result.slice(0, 20).map((v) => (React.createElement("div", null,
