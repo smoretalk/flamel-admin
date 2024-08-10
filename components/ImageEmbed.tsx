@@ -206,12 +206,14 @@ export const ImageEmbed: React.FC = () => {
     // setResult(response.data);
     const rgb = color.split(',').map((v) => parseFloat(v)) as [number, number, number];
     const lab = rgb2lab(rgb);
-    const response = await axios.get<{ imageId: number; color: string; delta?: number }[]>(`/api/collections/allColors`);
+    const response = await axios.get<{ imageId: number; color: string; dominant: boolean; similar?: number }[]>(`/api/collections/allColors`);
     response.data.forEach((color) => {
       const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, ''))) as [number, number, number]
-      color.delta = deltaE(lab, lab2);
+      color.similar = deltaE(lab, lab2);
     });
-    setResult(response.data.toSorted((a, b) => a.delta - b.delta));
+    const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
+    console.log(sorted);
+    setResult(sorted);
   };
 
   return (
