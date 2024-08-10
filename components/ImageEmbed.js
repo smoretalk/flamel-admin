@@ -176,10 +176,11 @@ export const ImageEmbed = () => {
             const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, '')));
             color.similar = deltaE(lab, lab2);
         });
-        const unique = Object.values(response.data.reduce((acc, obj) => ({ ...acc, [obj.imageId]: obj }), {}));
-        const sorted = unique.toSorted((a, b) => a.similar - b.similar);
-        console.log(sorted);
-        setResult(sorted);
+        const uniq = (arr, track = new Set()) => arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
+        const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
+        const unique = uniq(sorted);
+        console.log(unique);
+        setResult(unique);
     };
     return (React.createElement("div", null,
         React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),

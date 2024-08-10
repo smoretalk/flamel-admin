@@ -212,10 +212,12 @@ export const ImageEmbed: React.FC = () => {
       const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, ''))) as [number, number, number]
       color.similar = deltaE(lab, lab2);
     });
-    const unique = Object.values(response.data.reduce((acc, obj) => ({ ...acc, [obj.imageId]: obj }), {})) as Result[];
-    const sorted = unique.toSorted((a, b) => a.similar - b.similar);
-    console.log(sorted);
-    setResult(sorted);
+    const uniq = (arr: { imageId: number }[], track = new Set()) =>
+      arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
+    const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
+    const unique = uniq(sorted);
+    console.log(unique);
+    setResult(unique);
   };
 
   return (
