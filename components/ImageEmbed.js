@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FilesetResolver, ImageEmbedder } from '@mediapipe/tasks-vision';
 import { FilesetResolver as TextFilesetResolver, TextEmbedder } from '@mediapipe/tasks-text';
 import axios from "axios";
+import { Palette } from 'auto-palette';
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 export const ImageEmbed = () => {
     const [embedder, setEmbedder] = useState(null);
@@ -71,55 +72,34 @@ export const ImageEmbed = () => {
             });
         }
     };
-    function rgb2lab(rgb) {
-        let r = rgb[0] / 255, g = rgb[1] / 255, b = rgb[2] / 255, x, y, z;
-        r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
-        g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
-        b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
-        x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-        y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
-        z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-        x = (x > 0.008856) ? Math.pow(x, 1 / 3) : (7.787 * x) + 16 / 116;
-        y = (y > 0.008856) ? Math.pow(y, 1 / 3) : (7.787 * y) + 16 / 116;
-        z = (z > 0.008856) ? Math.pow(z, 1 / 3) : (7.787 * z) + 16 / 116;
-        return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)];
-    }
-    function deltaE(labA, labB) {
-        let deltaL = labA[0] - labB[0];
-        let deltaA = labA[1] - labB[1];
-        let deltaB = labA[2] - labB[2];
-        let c1 = Math.sqrt(labA[1] * labA[1] + labA[2] * labA[2]);
-        let c2 = Math.sqrt(labB[1] * labB[1] + labB[2] * labB[2]);
-        let deltaC = c1 - c2;
-        let deltaH = deltaA * deltaA + deltaB * deltaB - deltaC * deltaC;
-        deltaH = deltaH < 0 ? 0 : Math.sqrt(deltaH);
-        let sc = 1.0 + 0.045 * c1;
-        let sh = 1.0 + 0.015 * c1;
-        let deltaLKlsl = deltaL / (1.0);
-        let deltaCkcsc = deltaC / (sc);
-        let deltaHkhsh = deltaH / (sh);
-        let i = deltaLKlsl * deltaLKlsl + deltaCkcsc * deltaCkcsc + deltaHkhsh * deltaHkhsh;
-        return i < 0 ? 0 : Math.sqrt(i);
-    }
+    const convertToHex = (color) => {
+        if (color < 0) {
+            color = 0;
+        }
+        else if (color > 255) {
+            color = 255;
+        }
+        ;
+        const hex = color.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    };
+    const rgb2hex = (r, g, b) => ((convertToHex(r) + convertToHex(g) + convertToHex(b)).toUpperCase());
     const onColorStart = async () => {
         const response2 = await axios.get(`/api/collections/noColors`);
         console.log(response2.data);
-        const colorThief = new window.ColorThief();
         const image = document.querySelector('#image');
         for (const r of response2.data) {
             await new Promise((resolve, reject) => {
                 console.log(r);
                 const loadEvent = async function () {
-                    const result = colorThief.getPalette(image);
-                    console.log(result);
+                    const palette = Palette.extract(image);
+                    const swatches = palette.findSwatches(5);
+                    console.log(swatches);
                     let i = 0;
-                    for (const rr of result.slice(0, 4)) {
-                        const lab = rgb2lab(rr);
-                        console.log('lab', lab, rr);
-                        await axios.post(`/api/collections/${r.imageId}/colors`, {
-                            hsv: lab.join(','),
-                            dominant: i === 0,
-                        });
+                    for (const rr of swatches) {
+                        const lab = rr.color.toLAB();
+                        const rgb = rr.color.toRGB();
+                        console.log(r.imageId, lab, rgb, rgb2hex(rgb.r, rgb.g, rgb.b), rr.population, rr.name);
                         i++;
                     }
                     image.removeEventListener('load', loadEvent);
@@ -169,18 +149,6 @@ export const ImageEmbed = () => {
         setResult(result);
     };
     const onColorClick = async () => {
-        const rgb = color.split(',').map((v) => parseFloat(v));
-        const lab = rgb2lab(rgb);
-        const response = await axios.get(`/api/collections/allColors`);
-        response.data.forEach((color) => {
-            const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, '')));
-            color.similar = deltaE(lab, lab2);
-        });
-        const uniq = (arr, track = new Set()) => arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
-        const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
-        const unique = uniq(sorted);
-        console.log(unique);
-        setResult(unique);
     };
     return (React.createElement("div", null,
         React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),
