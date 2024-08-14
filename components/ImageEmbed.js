@@ -93,8 +93,14 @@ export const ImageEmbed = () => {
     const onColorStart = async () => {
         const response2 = await axios.get(`/api/collections/noColors`);
         console.log(response2.data);
+        const filtered = response2.data.filter((v) => {
+            if (color) {
+                return v.imageId.toString() === color;
+            }
+            return true;
+        });
         const image = document.querySelector('#image');
-        for (const r of response2.data) {
+        for (const r of filtered) {
             await new Promise((resolve, reject) => {
                 console.log(r);
                 const loadEvent = async function () {
@@ -175,9 +181,9 @@ export const ImageEmbed = () => {
         React.createElement("input", { type: "color", id: "color4", name: "head", value: color4 }),
         React.createElement("input", { type: "color", id: "color5", name: "head", value: color5 }),
         React.createElement("br", null),
-        React.createElement("button", { onClick: onStart, disabled: disabled }, "\uC774\uBBF8\uC9C0 \uC784\uBCA0\uB529 \uC2DC\uC791"),
-        React.createElement("button", { onClick: onTextStart, disabled: disabled }, "\uD14D\uC2A4\uD2B8 \uC784\uBCA0\uB529 \uC2DC\uC791"),
-        React.createElement("button", { onClick: onColorStart }, "\uCEEC\uB7EC \uD314\uB808\uD2B8 \uC2DC\uC791"),
+        React.createElement("button", { onClick: onStart, disabled: disabled }, "\uC804\uCCB4 \uC774\uBBF8\uC9C0 \uC784\uBCA0\uB529 \uC2DC\uC791"),
+        React.createElement("button", { onClick: onTextStart, disabled: disabled }, "\uC804\uCCB4 \uD14D\uC2A4\uD2B8 \uC784\uBCA0\uB529 \uC2DC\uC791"),
+        React.createElement("button", { onClick: onColorStart }, "\uC804\uCCB4 \uCEEC\uB7EC \uD314\uB808\uD2B8 \uC2DC\uC791"),
         React.createElement("br", null),
         React.createElement("input", { value: value, onChange: onChange }),
         React.createElement("button", { onClick: onClick, disabled: disabled }, "\uC774\uBBF8\uC9C0 \uC720\uC0AC\uB3C4 \uC870\uD68C"),

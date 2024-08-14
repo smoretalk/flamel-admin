@@ -106,8 +106,14 @@ export const ImageEmbed: React.FC = () => {
   const onColorStart = async () => {
     const response2 = await axios.get<{ imageId: number; }[]>(`/api/collections/noColors`);
     console.log(response2.data);
+    const filtered = response2.data.filter((v) => {
+      if (color) {
+        return v.imageId.toString() === color;
+      }
+      return true;
+    });
     const image = document.querySelector('#image') as HTMLImageElement;
-    for (const r of response2.data) {
+    for (const r of filtered) {
       await new Promise((resolve, reject) => {
         console.log(r);
         const loadEvent = async function() {
@@ -222,9 +228,9 @@ export const ImageEmbed: React.FC = () => {
       <input type="color" id="color4" name="head" value={color4}/>
       <input type="color" id="color5" name="head" value={color5}/>
       <br/>
-      <button onClick={onStart} disabled={disabled}>이미지 임베딩 시작</button>
-      <button onClick={onTextStart} disabled={disabled}>텍스트 임베딩 시작</button>
-      <button onClick={onColorStart}>컬러 팔레트 시작</button>
+      <button onClick={onStart} disabled={disabled}>전체 이미지 임베딩 시작</button>
+      <button onClick={onTextStart} disabled={disabled}>전체 텍스트 임베딩 시작</button>
+      <button onClick={onColorStart}>전체 컬러 팔레트 시작</button>
       <br/>
       <input value={value} onChange={onChange}/>
       <button onClick={onClick} disabled={disabled}>이미지 유사도 조회</button>
