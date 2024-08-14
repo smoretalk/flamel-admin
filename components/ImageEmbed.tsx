@@ -6,11 +6,17 @@ import { Palette } from 'auto-palette';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-type Result = { imageId: number; similar?: number; text?: string };
+type Result = { imageId: number; similar?: string; text?: string };
 export const ImageEmbed: React.FC = () => {
   const [embedder, setEmbedder] = useState<ImageEmbedder>(null);
   const [textEmbedder, setTextEmbedder] = useState<TextEmbedder>(null);
   const [value, setValue] = useState('');
+  const [color1, setColor1] = useState('');
+  const [color2, setColor2] = useState('');
+  const [color3, setColor3] = useState('');
+  const [color4, setColor4] = useState('');
+  const [color5, setColor5] = useState('');
+  const colorSetter = [setColor1, setColor2, setColor3, setColor4, setColor5];
   const [disabled, setDisabled] = useState(true);
   const [color, setColor] = useState('');
   const [result, setResult] = useState<Result[]>([]);
@@ -105,23 +111,34 @@ export const ImageEmbed: React.FC = () => {
       await new Promise((resolve, reject) => {
         console.log(r);
         const loadEvent = async function() {
-          const palette = Palette.extract(image);
+          const palette = Palette.extract(image, {
+            maxSwatches: 5,
+            filters: [],
+          });
           const swatches = palette.findSwatches(5);
 
           console.log(swatches);
+          for (const setter of colorSetter) {
+            setter('');
+          }
           let i = 0;
           for (const rr of swatches) {
             const lab = rr.color.toLAB();
             const rgb = rr.color.toRGB();
-            console.log(r.imageId, lab, rgb, rgb2hex(rgb.r, rgb.g, rgb.b), rr.population, rr.name);
+            const hex = '#' + rgb2hex(rgb.r, rgb.g, rgb.b);
+            colorSetter[i](hex);
+            console.log(r.imageId, lab, rgb, hex, rr.population, rr.name);
             // await axios.post(`/api/collections/${r.imageId}/colors`, {
-            //   hsv: lab.join(','),
-            //   dominant: i === 0,
+            //   color: [lab.l, lab.a, lab.b],
+            //   rgb: hex,
+            //   percentage: rr.population,
             // })
             i++;
           }
           image.removeEventListener('load', loadEvent)
-          resolve(result);
+          setTimeout(() => {
+            resolve(result);
+          }, 2000)
         };
         image.addEventListener('load', loadEvent);
         image.src = `/api/admin/images/${r.imageId}/binary`;
@@ -147,9 +164,9 @@ export const ImageEmbed: React.FC = () => {
       );
       return {
         imageId: v.imageId,
-        similar,
+        similar: similar.toString(),
       }
-    }).toSorted((a, b) => b.similar - a.similar);
+    }).toSorted((a, b) => parseFloat(b.similar) - parseFloat(a.similar));
     console.log(result);
     setResult(result);
   }
@@ -170,9 +187,9 @@ export const ImageEmbed: React.FC = () => {
       );
       return {
         imageId: v.imageId,
-        similar,
+        similar: similar.toString(),
       }
-    }).toSorted((a, b) => b.similar - a.similar);
+    }).toSorted((a, b) => parseFloat(b.similar) - parseFloat(a.similar));
     console.log(result);
     setResult(result);
   }
@@ -198,6 +215,13 @@ export const ImageEmbed: React.FC = () => {
   return (
     <div>
       <img id='image' alt='' width={256} height={256}/>
+      <br/>
+      <input type="color" id="color1" name="head" value={color1}/>
+      <input type="color" id="color2" name="head" value={color2}/>
+      <input type="color" id="color3" name="head" value={color3}/>
+      <input type="color" id="color4" name="head" value={color4}/>
+      <input type="color" id="color5" name="head" value={color5}/>
+      <br/>
       <button onClick={onStart} disabled={disabled}>이미지 임베딩 시작</button>
       <button onClick={onTextStart} disabled={disabled}>텍스트 임베딩 시작</button>
       <button onClick={onColorStart}>컬러 팔레트 시작</button>
@@ -205,6 +229,7 @@ export const ImageEmbed: React.FC = () => {
       <input value={value} onChange={onChange}/>
       <button onClick={onClick} disabled={disabled}>이미지 유사도 조회</button>
       <button onClick={onTextClick} disabled={disabled}>텍스트 유사도 조회</button>
+      <br/>
       <input value={color} onChange={onChangeColor}/>
       <button onClick={onColorClick}>컬러 유사도 조회</button>
       <div>

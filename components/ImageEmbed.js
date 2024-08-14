@@ -8,6 +8,12 @@ export const ImageEmbed = () => {
     const [embedder, setEmbedder] = useState(null);
     const [textEmbedder, setTextEmbedder] = useState(null);
     const [value, setValue] = useState('');
+    const [color1, setColor1] = useState('');
+    const [color2, setColor2] = useState('');
+    const [color3, setColor3] = useState('');
+    const [color4, setColor4] = useState('');
+    const [color5, setColor5] = useState('');
+    const colorSetter = [setColor1, setColor2, setColor3, setColor4, setColor5];
     const [disabled, setDisabled] = useState(true);
     const [color, setColor] = useState('');
     const [result, setResult] = useState([]);
@@ -92,18 +98,28 @@ export const ImageEmbed = () => {
             await new Promise((resolve, reject) => {
                 console.log(r);
                 const loadEvent = async function () {
-                    const palette = Palette.extract(image);
+                    const palette = Palette.extract(image, {
+                        maxSwatches: 5,
+                        filters: [],
+                    });
                     const swatches = palette.findSwatches(5);
                     console.log(swatches);
+                    for (const setter of colorSetter) {
+                        setter('');
+                    }
                     let i = 0;
                     for (const rr of swatches) {
                         const lab = rr.color.toLAB();
                         const rgb = rr.color.toRGB();
-                        console.log(r.imageId, lab, rgb, rgb2hex(rgb.r, rgb.g, rgb.b), rr.population, rr.name);
+                        const hex = '#' + rgb2hex(rgb.r, rgb.g, rgb.b);
+                        colorSetter[i](hex);
+                        console.log(r.imageId, lab, rgb, hex, rr.population, rr.name);
                         i++;
                     }
                     image.removeEventListener('load', loadEvent);
-                    resolve(result);
+                    setTimeout(() => {
+                        resolve(result);
+                    }, 2000);
                 };
                 image.addEventListener('load', loadEvent);
                 image.src = `/api/admin/images/${r.imageId}/binary`;
@@ -123,9 +139,9 @@ export const ImageEmbed = () => {
             const similar = ImageEmbedder.cosineSimilarity({ floatEmbedding: JSON.parse(target.imageEmbedding), headName: 'feature', headIndex: 0 }, { floatEmbedding: JSON.parse(v.imageEmbedding), headName: 'feature', headIndex: 0 });
             return {
                 imageId: v.imageId,
-                similar,
+                similar: similar.toString(),
             };
-        }).toSorted((a, b) => b.similar - a.similar);
+        }).toSorted((a, b) => parseFloat(b.similar) - parseFloat(a.similar));
         console.log(result);
         setResult(result);
     };
@@ -142,9 +158,9 @@ export const ImageEmbed = () => {
             const similar = TextEmbedder.cosineSimilarity({ floatEmbedding: JSON.parse(target.textEmbedding), headName: 'feature', headIndex: 0 }, { floatEmbedding: JSON.parse(v.textEmbedding), headName: 'feature', headIndex: 0 });
             return {
                 imageId: v.imageId,
-                similar,
+                similar: similar.toString(),
             };
-        }).toSorted((a, b) => b.similar - a.similar);
+        }).toSorted((a, b) => parseFloat(b.similar) - parseFloat(a.similar));
         console.log(result);
         setResult(result);
     };
@@ -152,6 +168,13 @@ export const ImageEmbed = () => {
     };
     return (React.createElement("div", null,
         React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),
+        React.createElement("br", null),
+        React.createElement("input", { type: "color", id: "color1", name: "head", value: color1 }),
+        React.createElement("input", { type: "color", id: "color2", name: "head", value: color2 }),
+        React.createElement("input", { type: "color", id: "color3", name: "head", value: color3 }),
+        React.createElement("input", { type: "color", id: "color4", name: "head", value: color4 }),
+        React.createElement("input", { type: "color", id: "color5", name: "head", value: color5 }),
+        React.createElement("br", null),
         React.createElement("button", { onClick: onStart, disabled: disabled }, "\uC774\uBBF8\uC9C0 \uC784\uBCA0\uB529 \uC2DC\uC791"),
         React.createElement("button", { onClick: onTextStart, disabled: disabled }, "\uD14D\uC2A4\uD2B8 \uC784\uBCA0\uB529 \uC2DC\uC791"),
         React.createElement("button", { onClick: onColorStart }, "\uCEEC\uB7EC \uD314\uB808\uD2B8 \uC2DC\uC791"),
@@ -159,6 +182,7 @@ export const ImageEmbed = () => {
         React.createElement("input", { value: value, onChange: onChange }),
         React.createElement("button", { onClick: onClick, disabled: disabled }, "\uC774\uBBF8\uC9C0 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
         React.createElement("button", { onClick: onTextClick, disabled: disabled }, "\uD14D\uC2A4\uD2B8 \uC720\uC0AC\uB3C4 \uC870\uD68C"),
+        React.createElement("br", null),
         React.createElement("input", { value: color, onChange: onChangeColor }),
         React.createElement("button", { onClick: onColorClick }, "\uCEEC\uB7EC \uC720\uC0AC\uB3C4 \uC870\uD68C"),
         React.createElement("div", null, result.slice(0, 20).map((v) => (React.createElement("div", null,
