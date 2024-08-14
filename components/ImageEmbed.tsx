@@ -206,7 +206,7 @@ export const ImageEmbed: React.FC = () => {
   const onColorClick = async () => {
     const rgb = color.split(',').map((v) => parseInt(v)) as [number, number, number];
     const target = Color.fromRGB({ r: rgb[0], g: rgb[1], b: rgb[2] });
-    const response = await axios.get<{ imageId: number; color?: string; percentage: boolean; similar?: number }[]>(`/api/collections/allColors`);
+    const response = await axios.get<{ imageId: number; color?: string; percentage: number; similar?: number }[]>(`/api/collections/allColors`);
     response.data.forEach((color) => {
       if (!color.color) {
         color.similar = Infinity;
@@ -218,7 +218,7 @@ export const ImageEmbed: React.FC = () => {
     });
     const uniq = (arr: { imageId: number }[], track = new Set()) =>
       arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
-    const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
+    const sorted = response.data.toSorted((a, b) => a.similar * a.percentage - b.similar * b.percentage);
     const unique = uniq(sorted);
     console.log(unique);
     setResult(unique);

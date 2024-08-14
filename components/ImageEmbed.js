@@ -192,7 +192,7 @@ export const ImageEmbed = () => {
             color.similar = target.differenceTo(comparison);
         });
         const uniq = (arr, track = new Set()) => arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
-        const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
+        const sorted = response.data.toSorted((a, b) => a.similar * a.percentage - b.similar * b.percentage);
         const unique = uniq(sorted);
         console.log(unique);
         setResult(unique);
