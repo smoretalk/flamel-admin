@@ -119,9 +119,8 @@ export const ImageEmbed: React.FC = () => {
         const loadEvent = async function() {
           const palette = Palette.extract(image, {
             maxSwatches: 5,
-            filters: [],
           });
-          const swatches = palette.findSwatches(5);
+          const swatches = palette.findSwatches(5, 'vivid');
 
           console.log(swatches);
           for (const setter of colorSetter) {
