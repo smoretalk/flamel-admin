@@ -141,6 +141,7 @@ export const ImageEmbed: React.FC = () => {
             await axios.post(`/api/collections/${r.imageId}/colors`, {
               lab: [lab.l, lab.a, lab.b],
               rgb: hex,
+              name: rr.name,
               percentage: rr.population / total,
             })
             i++;
