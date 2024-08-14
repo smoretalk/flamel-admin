@@ -13,6 +13,7 @@ export const ImageEmbed = () => {
     const [color3, setColor3] = useState('');
     const [color4, setColor4] = useState('');
     const [color5, setColor5] = useState('');
+    const [usePercentage, setUsePercentage] = useState(false);
     const colorSetter = [setColor1, setColor2, setColor3, setColor4, setColor5];
     const [disabled, setDisabled] = useState(true);
     const [color, setColor] = useState('');
@@ -192,7 +193,12 @@ export const ImageEmbed = () => {
             color.similar = target.differenceTo(comparison);
         });
         const uniq = (arr, track = new Set()) => arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
-        const sorted = response.data.toSorted((a, b) => a.similar * a.percentage - b.similar * b.percentage);
+        const sorted = response.data.toSorted((a, b) => {
+            if (usePercentage) {
+                return a.similar / a.percentage - b.similar / b.percentage;
+            }
+            return a.similar - b.similar;
+        });
         const unique = uniq(sorted);
         console.log(unique);
         setResult(unique);
@@ -216,6 +222,9 @@ export const ImageEmbed = () => {
         React.createElement("br", null),
         React.createElement("input", { value: color, onChange: onChangeColor }),
         React.createElement("button", { onClick: onColorClick }, "\uCEEC\uB7EC \uC720\uC0AC\uB3C4 \uC870\uD68C"),
+        React.createElement("label", { htmlFor: "" },
+            "\uD37C\uC13C\uD2F0\uC9C0 \uBC18\uC601",
+            React.createElement("input", { type: "checkbox", checked: usePercentage, onChange: (e) => setUsePercentage(e.target.checked) })),
         React.createElement("div", null, result.slice(0, 20).map((v) => (React.createElement("div", null,
             React.createElement("img", { src: `/api/admin/images/${v.imageId}/thumb`, alt: "", width: 128, height: 128 }),
             React.createElement("div", null,

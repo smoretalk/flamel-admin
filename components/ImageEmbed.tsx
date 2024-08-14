@@ -16,6 +16,7 @@ export const ImageEmbed: React.FC = () => {
   const [color3, setColor3] = useState('');
   const [color4, setColor4] = useState('');
   const [color5, setColor5] = useState('');
+  const [usePercentage, setUsePercentage] = useState(false);
   const colorSetter = [setColor1, setColor2, setColor3, setColor4, setColor5];
   const [disabled, setDisabled] = useState(true);
   const [color, setColor] = useState('');
@@ -218,7 +219,12 @@ export const ImageEmbed: React.FC = () => {
     });
     const uniq = (arr: { imageId: number }[], track = new Set()) =>
       arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
-    const sorted = response.data.toSorted((a, b) => a.similar * a.percentage - b.similar * b.percentage);
+    const sorted = response.data.toSorted((a, b) => {
+      if (usePercentage) {
+        return a.similar / a.percentage - b.similar / b.percentage
+      }
+      return a.similar - b.similar
+    });
     const unique = uniq(sorted);
     console.log(unique);
     setResult(unique);
@@ -244,6 +250,10 @@ export const ImageEmbed: React.FC = () => {
       <br/>
       <input value={color} onChange={onChangeColor}/>
       <button onClick={onColorClick}>컬러 유사도 조회</button>
+      <label htmlFor="">
+        퍼센티지 반영
+        <input type="checkbox" checked={usePercentage} onChange={(e) => setUsePercentage(e.target.checked)} />
+      </label>
       <div>
         {result.slice(0, 20).map((v) => (
           <div>
