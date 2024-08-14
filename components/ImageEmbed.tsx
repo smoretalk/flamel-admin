@@ -2,7 +2,7 @@ import React, {ChangeEventHandler, useEffect, useState} from "react";
 import { FilesetResolver, ImageEmbedder } from '@mediapipe/tasks-vision';
 import { FilesetResolver as TextFilesetResolver, TextEmbedder } from '@mediapipe/tasks-text';
 import axios from "axios";
-import {opacityFilter, Palette} from 'auto-palette';
+import {Color, opacityFilter, Palette} from 'auto-palette';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -204,21 +204,20 @@ export const ImageEmbed: React.FC = () => {
   }
 
   const onColorClick = async () => {
-    // const response = await axios.get<{ imageId: number; }[]>(`/api/collections/${color}/similarColors`);
-    // setResult(response.data);
-    // const rgb = color.split(',').map((v) => parseFloat(v)) as [number, number, number];
-    // const lab = rgb2lab(rgb);
-    // const response = await axios.get<{ imageId: number; color: string; dominant: boolean; similar?: number }[]>(`/api/collections/allColors`);
-    // response.data.forEach((color) => {
-    //   const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, ''))) as [number, number, number]
-    //   color.similar = deltaE(lab, lab2);
-    // });
-    // const uniq = (arr: { imageId: number }[], track = new Set()) =>
-    //   arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
-    // const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
-    // const unique = uniq(sorted);
-    // console.log(unique);
-    // setResult(unique);
+    const rgb = color.split(',').map((v) => parseInt(v)) as [number, number, number];
+    const target = Color.fromRGB({ r: rgb[0], g: rgb[1], b: rgb[2] });
+    const response = await axios.get<{ imageId: number; color: string; dominant: boolean; similar?: number }[]>(`/api/collections/allColors`);
+    response.data.forEach((color) => {
+      const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, ''))) as [number, number, number]
+      const comparison = Color.fromLAB({ l: lab2[0], a: lab2[1], b: lab2[2] });
+      color.similar = target.differenceTo(comparison);
+    });
+    const uniq = (arr: { imageId: number }[], track = new Set()) =>
+      arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
+    const sorted = response.data.toSorted((a, b) => a.similar - b.similar);
+    const unique = uniq(sorted);
+    console.log(unique);
+    setResult(unique);
   };
 
   return (
