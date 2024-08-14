@@ -44,7 +44,7 @@ export default function CouponIssueSection({}) {
                 credit,
                 expiresAt: date,
                 type: type.value,
-                email,
+                email: email || null,
                 maxCount: maxCount || null,
             });
             setCode('');

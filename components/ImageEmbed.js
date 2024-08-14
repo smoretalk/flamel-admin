@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FilesetResolver, ImageEmbedder } from '@mediapipe/tasks-vision';
 import { FilesetResolver as TextFilesetResolver, TextEmbedder } from '@mediapipe/tasks-text';
 import axios from "axios";
-import { Palette } from 'auto-palette';
+import { opacityFilter, Palette } from 'auto-palette';
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 export const ImageEmbed = () => {
     const [embedder, setEmbedder] = useState(null);
@@ -106,6 +106,7 @@ export const ImageEmbed = () => {
                 const loadEvent = async function () {
                     const palette = Palette.extract(image, {
                         maxSwatches: 5,
+                        filters: [opacityFilter(0.5)]
                     });
                     const swatches = palette.findSwatches(5, 'vivid');
                     console.log(swatches);
