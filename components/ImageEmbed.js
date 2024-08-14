@@ -183,6 +183,10 @@ export const ImageEmbed = () => {
         const target = Color.fromRGB({ r: rgb[0], g: rgb[1], b: rgb[2] });
         const response = await axios.get(`/api/collections/allColors`);
         response.data.forEach((color) => {
+            if (!color.color) {
+                color.similar = Infinity;
+                return;
+            }
             const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, '')));
             const comparison = Color.fromLAB({ l: lab2[0], a: lab2[1], b: lab2[2] });
             color.similar = target.differenceTo(comparison);
