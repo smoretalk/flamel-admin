@@ -114,18 +114,25 @@ export const ImageEmbed = () => {
                         setter('');
                     }
                     let i = 0;
+                    let total = 0;
+                    for (const rr of swatches) {
+                        total += rr.population;
+                    }
                     for (const rr of swatches) {
                         const lab = rr.color.toLAB();
                         const rgb = rr.color.toRGB();
                         const hex = '#' + rgb2hex(rgb.r, rgb.g, rgb.b);
                         colorSetter[i](hex);
                         console.log(r.imageId, lab, rgb, hex, rr.population, rr.name);
+                        await axios.post(`/api/collections/${r.imageId}/colors`, {
+                            lab: [lab.l, lab.a, lab.b],
+                            rgb: hex,
+                            percentage: rr.population / total,
+                        });
                         i++;
                     }
                     image.removeEventListener('load', loadEvent);
-                    setTimeout(() => {
-                        resolve(result);
-                    }, 2000);
+                    resolve(result);
                 };
                 image.addEventListener('load', loadEvent);
                 image.src = `/api/admin/images/${r.imageId}/binary`;
