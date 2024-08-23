@@ -56,25 +56,12 @@ export const ImageEmbed = () => {
     const onTextStart = async () => {
         const response2 = await axios.get(`/api/collections/allTextEmbedding`);
         console.log(response2.data, textEmbedder);
-        const map = new Map();
         for (const r of response2.data) {
-            const obj = map.get(r.imageId);
-            if (obj) {
-                obj.en.add(r.enTitle);
-                obj.ko.add(r.koTitle);
-            }
-            else {
-                map.set(r.imageId, {
-                    en: new Set([r.enTitle]),
-                    ko: new Set([r.koTitle]),
-                    full: r.fullPrompt,
-                });
-            }
-        }
-        for (const m of map) {
-            const textEmbedderResult = textEmbedder.embed(m[1].full + ' ' + Array.from(m[1].en).join(' ') + ' ' + Array.from(m[1].ko).join(' '));
-            console.log(m, textEmbedderResult);
-            await axios.patch(`/api/collections/${m[0]}/textEmbed`, {
+            const htmlImageElement = document.querySelector('#image');
+            htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
+            const response2 = await axios.get(`/api/collections/${r.imageId}/caption`);
+            const textEmbedderResult = textEmbedder.embed(response2.data);
+            await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
                 vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
             });
         }
