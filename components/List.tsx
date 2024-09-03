@@ -47,7 +47,7 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
         if (isCollection && isCollection !== 'false') {
           setNewResource({
             ...resource,
-            listProperties: resourceFinder(['idQuerySaver', 'displayImage', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.prompt', 'CollectionInfo.Theme', 'CollectionInfo.enabled', 'CollectionInfo.is2x', 'Collection.rank']),
+            listProperties: resourceFinder(['idQuerySaver', 'displayImage', 'CollectionInfo.Style', 'CollectionInfo.priority', 'CollectionInfo.prompt', 'CollectionInfo.Theme', 'CollectionInfo.enabled', 'CollectionInfo.is2x', 'CollectionInfo.rank']),
           })
         } else {
           setNewResource({
