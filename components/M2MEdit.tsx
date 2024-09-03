@@ -27,6 +27,10 @@ type KoTag = {
   koTagId: number,
   title: string
 };
+type Theme = {
+  themeId: number,
+  code: string;
+}
 const EditManyToManyInput: FC<CombinedProps> = (props) => {
   const [copyTarget, setCopyTarget] = useState('');
   const {onChange, property, record} = props;
@@ -73,14 +77,28 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   };
   const error = record?.errors[property.path];
 
-  const selectedValues: Array<{ id: number, enTagId: number, koTagId: number, title: string }> = flat.get(record.params as Record<string, Record<string, typeof selectedValues>>, property.path) || [];
+  const isEnTag = (type: string, data: EnTag | KoTag | Theme): data is EnTag => {
+    return type === 'CollectionEnTag';
+  }
+  const isKoTag = (type: string, data: EnTag | KoTag | Theme): data is KoTag => {
+    return type === 'CollectionKoTag';
+  }
+  const isTheme = (type: string, data: EnTag | KoTag | Theme): data is Theme => {
+    return type === 'CollectionTheme';
+  }
+
+  const selectedValues: Array<EnTag | KoTag | Theme> = flat.get(record.params as Record<string, Record<string, typeof selectedValues>>, property.path) || [];
   const selectedId = record?.params[property.path] as string | undefined;
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();
   const [loadingRecord, setLoadingRecord] = useState(0);
   const selectedValue = record?.populated[property.path] ?? loadedRecord;
+  const isTagType = property.reference === 'CollectionEnTag' || property.reference === 'CollectionKoTag';
   const selectedValuesToOptions: Array<{ value: number, label: string }> = selectedValues.map((selectedValue) => ({
-    value: selectedValue.id || selectedValue.enTagId || selectedValue.koTagId,
-    label: selectedValue.title,
+    value: isEnTag(property.reference, selectedValue) ? selectedValue.enTagId
+      : isKoTag(property.reference, selectedValue) ? selectedValue.koTagId
+      : isTheme(property.reference, selectedValue) ? selectedValue.themeId
+      : null,
+    label: isTheme(property.reference, selectedValue) ? selectedValue.code : selectedValue.title,
   }));
   console.log('selectedValuesToOptions', selectedValuesToOptions);
   const [selectedOptions, setSelectedOptions] = useState(
@@ -105,10 +123,6 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         });
     }
   }, [selectedValue, selectedId, resourceId]);
-
-  const isEnTag = (type: 'CollectionEnTag' | 'CollectionKoTag', data: EnTag | KoTag): data is EnTag => {
-    return type === 'CollectionEnTag';
-  }
 
   const onCreateOption = (option: string) => {
     console.log('onCreate', option);
@@ -165,14 +179,16 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
         isClearable
         isDisabled={property.isDisabled}
         isLoading={!!loadingRecord}
-        onCreateOption={onCreateOption}
+        onCreateOption={isTagType ? onCreateOption : () => {}}
         {...property.props}
       />
       <FormMessage>{error?.message}</FormMessage>
-      <div>
-        <input id="copyTarget" value={copyTarget} onChange={onChangeCopyTarget} placeholder="태그를 복사할 이미지 아이디를 넣으세요."/>
-        <button onClick={onCopyTag}>복사</button>
-      </div>
+      {isTagType && (
+        <div>
+          <input id="copyTarget" value={copyTarget} onChange={onChangeCopyTarget} placeholder="태그를 복사할 이미지 아이디를 넣으세요."/>
+          <button onClick={onCopyTag}>복사</button>
+        </div>
+      )}
     </FormGroup>
   );
 };

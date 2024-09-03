@@ -37,14 +37,27 @@ const EditManyToManyInput = (props) => {
         }));
     };
     const error = record?.errors[property.path];
+    const isEnTag = (type, data) => {
+        return type === 'CollectionEnTag';
+    };
+    const isKoTag = (type, data) => {
+        return type === 'CollectionKoTag';
+    };
+    const isTheme = (type, data) => {
+        return type === 'CollectionTheme';
+    };
     const selectedValues = flat.get(record.params, property.path) || [];
     const selectedId = record?.params[property.path];
     const [loadedRecord, setLoadedRecord] = useState();
     const [loadingRecord, setLoadingRecord] = useState(0);
     const selectedValue = record?.populated[property.path] ?? loadedRecord;
+    const isTagType = property.reference === 'CollectionEnTag' || property.reference === 'CollectionKoTag';
     const selectedValuesToOptions = selectedValues.map((selectedValue) => ({
-        value: selectedValue.id || selectedValue.enTagId || selectedValue.koTagId,
-        label: selectedValue.title,
+        value: isEnTag(property.reference, selectedValue) ? selectedValue.enTagId
+            : isKoTag(property.reference, selectedValue) ? selectedValue.koTagId
+                : isTheme(property.reference, selectedValue) ? selectedValue.themeId
+                    : null,
+        label: isTheme(property.reference, selectedValue) ? selectedValue.code : selectedValue.title,
     }));
     console.log('selectedValuesToOptions', selectedValuesToOptions);
     const [selectedOptions, setSelectedOptions] = useState(selectedValuesToOptions);
@@ -66,9 +79,6 @@ const EditManyToManyInput = (props) => {
             });
         }
     }, [selectedValue, selectedId, resourceId]);
-    const isEnTag = (type, data) => {
-        return type === 'CollectionEnTag';
-    };
     const onCreateOption = (option) => {
         console.log('onCreate', option);
         axios.post(`/api/collections/tags/${property.reference}/${option}`)
@@ -107,11 +117,11 @@ const EditManyToManyInput = (props) => {
     };
     return (React.createElement(FormGroup, { error: Boolean(error) },
         React.createElement(Label, null, translateProperty(property.label)),
-        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, onCreateOption: onCreateOption, ...property.props }),
+        React.createElement(SelectAsyncCreatable, { isMulti: true, cacheOptions: true, value: selectedOptions, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, onCreateOption: isTagType ? onCreateOption : () => { }, ...property.props }),
         React.createElement(FormMessage, null, error?.message),
-        React.createElement("div", null,
+        isTagType && (React.createElement("div", null,
             React.createElement("input", { id: "copyTarget", value: copyTarget, onChange: onChangeCopyTarget, placeholder: "\uD0DC\uADF8\uB97C \uBCF5\uC0AC\uD560 \uC774\uBBF8\uC9C0 \uC544\uC774\uB514\uB97C \uB123\uC73C\uC138\uC694." }),
-            React.createElement("button", { onClick: onCopyTag }, "\uBCF5\uC0AC"))));
+            React.createElement("button", { onClick: onCopyTag }, "\uBCF5\uC0AC")))));
 };
 export default EditManyToManyInput;
 //# sourceMappingURL=M2MEdit.js.map
