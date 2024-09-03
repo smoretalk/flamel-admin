@@ -3,6 +3,7 @@ export declare const componentLoader: ComponentLoader;
 export declare const Components: {
     Dashboard: string;
     DisplayLink: string;
+    DisplayRank: string;
     DisplayNestedImage: string;
     PrintImage: string;
     DisplayImage: string;

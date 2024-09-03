@@ -13,6 +13,10 @@ export const Components = {
     'DisplayLink',
     path.resolve(__dirname, 'components', 'DisplayLink'),
   ),
+  DisplayRank: componentLoader.add(
+    'DisplayRank',
+    path.resolve(__dirname, 'components', 'DisplayRank'),
+  ),
   DisplayNestedImage: componentLoader.add(
     'DisplayNestedImage',
     path.resolve(__dirname, 'components', 'DisplayNestedImage'),

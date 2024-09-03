@@ -9,6 +9,7 @@ componentLoader.override('DefaultFilterProperty', path.resolve(__dirname, 'compo
 export const Components = {
     Dashboard: componentLoader.add('Dashboard', path.resolve(__dirname, 'components', 'Dashboard')),
     DisplayLink: componentLoader.add('DisplayLink', path.resolve(__dirname, 'components', 'DisplayLink')),
+    DisplayRank: componentLoader.add('DisplayRank', path.resolve(__dirname, 'components', 'DisplayRank')),
     DisplayNestedImage: componentLoader.add('DisplayNestedImage', path.resolve(__dirname, 'components', 'DisplayNestedImage')),
     PrintImage: componentLoader.add('PrintImage', path.resolve(__dirname, 'components', 'PrintImage')),
     DisplayImage: componentLoader.add('DisplayImage', path.resolve(__dirname, 'components', 'DisplayImage')),
