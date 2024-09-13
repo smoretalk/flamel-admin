@@ -25,18 +25,17 @@ class JSONBEntry extends React.PureComponent {
             React.createElement(JSONBEntry, { paramObject: value }))))));
     }
 }
-export default class ShowJSONB extends React.PureComponent {
-    render() {
-        const { property, record } = this.props;
-        const { translateProperty } = useTranslation();
-        const matchingParams = _.chain(record.params)
-            .omitBy(_.isNil)
-            .pickBy((value, key) => key.startsWith(property.name))
-            .value();
-        const paramObject = flat.get(matchingParams, property.name);
-        return (React.createElement(FormGroup, null,
-            React.createElement(Label, null, translateProperty(property.label)),
-            React.createElement(JSONBEntry, { paramObject: paramObject })));
-    }
-}
+const ShowJSONB = (props) => {
+    const { property, record } = props;
+    const { translateProperty } = useTranslation();
+    const matchingParams = _.chain(record.params)
+        .omitBy(_.isNil)
+        .pickBy((value, key) => key.startsWith(property.name))
+        .value();
+    const paramObject = flat.get(matchingParams, property.name);
+    return (React.createElement(FormGroup, null,
+        React.createElement(Label, null, translateProperty(property.label)),
+        React.createElement(JSONBEntry, { paramObject: paramObject })));
+};
+export default React.memo(ShowJSONB);
 //# sourceMappingURL=ShowJSONB.js.map

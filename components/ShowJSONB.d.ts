@@ -1,5 +1,4 @@
 import React from 'react';
 import { ShowPropertyProps } from "adminjs";
-export default class ShowJSONB extends React.PureComponent<ShowPropertyProps> {
-    render(): React.JSX.Element;
-}
+declare const _default: React.MemoExoticComponent<(props: ShowPropertyProps) => React.JSX.Element>;
+export default _default;

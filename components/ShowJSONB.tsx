@@ -42,23 +42,23 @@ class JSONBEntry extends React.PureComponent<{ paramObject: ReactNode }> {
   }
 }
 
-export default class ShowJSONB extends React.PureComponent<ShowPropertyProps> {
-  override render() {
-    const { property, record } = this.props;
-    const {translateProperty} = useTranslation();
+const ShowJSONB = (props: ShowPropertyProps) => {
+  const { property, record } = props;
+  const {translateProperty} = useTranslation();
 
-    const matchingParams = _.chain(record.params)
-      .omitBy(_.isNil)
-      .pickBy((value, key) => key.startsWith(property.name))
-      .value() as { [key: string]: FlattenValue };
+  const matchingParams = _.chain(record.params)
+    .omitBy(_.isNil)
+    .pickBy((value, key) => key.startsWith(property.name))
+    .value() as { [key: string]: FlattenValue };
 
-    const paramObject = flat.get(matchingParams, property.name);
+  const paramObject = flat.get(matchingParams, property.name);
 
-    return (
-      <FormGroup>
-        <Label>{translateProperty(property.label)}</Label>
-        <JSONBEntry paramObject={paramObject}/>
-      </FormGroup>
-    );
-  }
+  return (
+    <FormGroup>
+      <Label>{translateProperty(property.label)}</Label>
+      <JSONBEntry paramObject={paramObject}/>
+    </FormGroup>
+  );
 }
+
+export default React.memo(ShowJSONB)
