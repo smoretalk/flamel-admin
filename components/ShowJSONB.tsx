@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import _ from 'lodash'
 import { unflatten } from 'flat'
 import { Badge, Section, FormGroup, Label } from '@adminjs/design-system'
-import {ShowPropertyProps, flat, FlattenValue} from "adminjs";
+import {ShowPropertyProps, flat, FlattenValue, useTranslation} from "adminjs";
 
 const mapBoolean = (value: unknown) => {
   if (typeof value === 'undefined') {
@@ -32,7 +32,7 @@ class JSONBEntry extends React.PureComponent<{ paramObject: ReactNode }> {
     return (
       <Section>
         {Object.entries(paramObject).map(([key, value]) => (
-          <FormGroup>
+          <FormGroup key={key}>
             <Label>{key}</Label>
             <JSONBEntry paramObject={value}/>
           </FormGroup>
@@ -45,6 +45,7 @@ class JSONBEntry extends React.PureComponent<{ paramObject: ReactNode }> {
 export default class ShowJSONB extends React.PureComponent<ShowPropertyProps> {
   override render() {
     const { property, record } = this.props;
+    const {translateProperty} = useTranslation();
 
     const matchingParams = _.chain(record.params)
       .omitBy(_.isNil)
@@ -55,7 +56,7 @@ export default class ShowJSONB extends React.PureComponent<ShowPropertyProps> {
 
     return (
       <FormGroup>
-        <Label>{property.label}</Label>
+        <Label>{translateProperty(property.label)}</Label>
         <JSONBEntry paramObject={paramObject}/>
       </FormGroup>
     );

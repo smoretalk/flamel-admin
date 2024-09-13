@@ -2,9 +2,10 @@ import * as React from 'react';
 import { Box, Label } from '@adminjs/design-system';
 import ReactJson from '@microlink/react-json-view';
 import * as _ from 'lodash';
-import { flat } from "adminjs";
+import { flat, useTranslation } from "adminjs";
 const EditJSONB = (props) => {
     const { property, record, onChange } = props;
+    const { translateProperty } = useTranslation();
     const matchingParams = _.chain(record.params)
         .pickBy((value, key) => key.startsWith(property.name))
         .value();
@@ -25,7 +26,7 @@ const EditJSONB = (props) => {
         saveData(updated_src);
     };
     return (React.createElement(Box, { mb: "xl" },
-        React.createElement(Label, null, property.label),
+        React.createElement(Label, null, translateProperty(property.label)),
         React.createElement(ReactJson, { name: property.name, collapsed: false, src: paramObject || {}, onEdit: onEdit, onAdd: onAdd, onDelete: onDelete })));
 };
 export default EditJSONB;

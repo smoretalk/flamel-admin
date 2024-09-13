@@ -3,10 +3,12 @@ import { Box, Label } from '@adminjs/design-system';
 import ReactJson from '@microlink/react-json-view';
 import * as _ from 'lodash';
 import { unflatten } from 'flat';
-import {flat} from "adminjs";
+import {flat, useTranslation} from "adminjs";
 
 const EditJSONB = (props: any) => {
   const { property, record, onChange } = props;
+  const {translateProperty} = useTranslation();
+
   const matchingParams = _.chain(record.params)
     .pickBy((value, key) => key.startsWith(property.name))
     .value();
@@ -34,7 +36,7 @@ const EditJSONB = (props: any) => {
 
   return (
     <Box mb="xl">
-      <Label>{property.label}</Label>
+      <Label>{translateProperty(property.label)}</Label>
       {/* @ts-ignore */}
       <ReactJson
         name={property.name}
