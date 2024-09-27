@@ -66,7 +66,7 @@ export const convertFilter = (modelFields, filterObject) => {
             where[filter.property.foreignColumnName()] = convertParam(filter.property, modelFields, filter.value);
         }
         else if (filter.value === 'null') {
-            where[name] = { equals: null };
+            where[name] = null;
         }
         else if (filter.value === '!null') {
             where[name] = { not: null };

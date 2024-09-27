@@ -62,7 +62,7 @@ export const convertFilter = (modelFields: DMMF.Model['fields'], filterObject: F
         filter.value,
       );
     } else if (filter.value === 'null') {
-      where[name] = { equals: null };
+      where[name] = null;
     } else if (filter.value === '!null') {
       where[name] = { not: null }
     } else if (filter.value.toString().startsWith('-')) {
