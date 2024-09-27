@@ -62,7 +62,18 @@ export const convertFilter = (modelFields: DMMF.Model['fields'], filterObject: F
         filter.value,
       );
     } else if (filter.value === 'null') {
-      where[name] = null;
+      const prop = (filter.property as Property);
+      if (prop.depModelObject) {
+        if (prop.column.isRequired) {
+          // 컬럼이 NOT NULL인데 filter에서 null인지 조회한다는 것은 JOIN TABLE 자체가 없어야 말이 됨.
+          where[prop.depModel] = { is: null };
+        } else {
+          // 컬럼이 NULLable이면 컬럼이 null인지 조회하면 됨
+          where[prop.depModel] = { is: { [prop.column.name]: null } };
+        }
+      } else {
+        where[name] = { is: null };
+      }
     } else if (filter.value === '!null') {
       where[name] = { not: null }
     } else if (filter.value.toString().startsWith('-')) {
