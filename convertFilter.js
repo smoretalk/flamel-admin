@@ -76,7 +76,7 @@ export const convertFilter = (modelFields, filterObject) => {
                 }
             }
             else {
-                where[name] = { is: null };
+                where[name] = null;
             }
         }
         else if (filter.value === '!null') {

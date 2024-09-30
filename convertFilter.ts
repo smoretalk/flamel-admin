@@ -72,7 +72,7 @@ export const convertFilter = (modelFields: DMMF.Model['fields'], filterObject: F
           where[prop.depModel] = { is: { [prop.column.name]: null } };
         }
       } else {
-        where[name] = { is: null };
+        where[name] = null;
       }
     } else if (filter.value === '!null') {
       where[name] = { not: null }
