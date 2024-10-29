@@ -1,11 +1,11 @@
 import {BaseResource, Filter, flat, FlattenParams, ParamsType} from 'adminjs';
-import { type Enums } from "@adminjs/prisma";
-import type { DMMF } from '@prisma/client/runtime/library.js';
-import { Property } from "./customProperty.js";
-import { convertParam } from "./convertParam.js";
-import { convertFilter } from './convertFilter.js';
+import {type Enums} from "@adminjs/prisma";
+import type {DMMF} from '@prisma/client/runtime/library.js';
+import {Property} from "./customProperty.js";
+import {convertParam} from "./convertParam.js";
+import {convertFilter} from './convertFilter.js';
 import CustomRecord from "./customRecord.js";
-import { Prisma } from '@prisma/client';
+import {Prisma} from '@prisma/client';
 
 type ReadonlyDeep_2<O> = {
   +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
@@ -21,7 +21,14 @@ export const getEnums = (clientModule?: { Prisma: { dmmf: DMMF.Document } }) => 
   }, {} as { [key: string]: DMMF.DatamodelEnum });
 };
 
-type Args = { model: DMMF.Model, client: any, clientModule?: { Prisma: { dmmf: DMMF.Document } }, include?: object, depModels?: { alias: string, model: DMMF.Model}[] };
+type Args = {
+  model: DMMF.Model,
+  client: any,
+  clientModule?: { Prisma: { dmmf: DMMF.Document } },
+  include?: object,
+  depModels?: { alias: string, model: DMMF.Model }[]
+};
+
 export class CustomResource extends BaseResource {
   model: DMMF.Model;
   client: any;
@@ -30,10 +37,12 @@ export class CustomResource extends BaseResource {
   propertiesObject: { [key: string]: Property };
   include;
   depModels: ReadonlyDeep_2<{}>;
+  depModelsResource: { name: string; resource: CustomResource }[];
   depModelsObject;
+
   constructor(args: Args) {
     super(args);
-    const { model, client, clientModule, include, depModels } = args;
+    const {model, client, clientModule, include, depModels} = args;
     this.model = model;
     this.client = client;
     this.enums = getEnums(clientModule);
@@ -42,6 +51,13 @@ export class CustomResource extends BaseResource {
     this.include = include || {};
     this.depModels = depModels || [];
     this.depModelsObject = depModels?.map((model) => this.prepareDepModelProperties(model));
+    this.depModelsResource = depModels?.map((model) => ({
+      name: model.alias,
+      resource: new CustomResource({
+        model: model.model,
+        client,
+      })
+    }));
     this.depModelsObject?.forEach((depModels) => {
       this.propertiesObject = {
         ...depModels,
@@ -49,30 +65,42 @@ export class CustomResource extends BaseResource {
       }
     });
   }
+
   override databaseName() {
     return 'prisma';
   }
+
   override databaseType(): string {
     return (this.client as any)._engineConfig?.activeProvider ?? 'database';
   }
+
   override id() {
     return this.model.name;
   }
+
   override properties(): Property[] {
     return [...Object.values(this.propertiesObject)];
   }
+
   override property(path: string) {
     return this.propertiesObject[path] ?? null;
   }
+
   override build(params: object): CustomRecord {
     return new CustomRecord(flat.unflatten(params), this);
   }
+
   override async count(filter: Filter) {
-    return this.manager.count({ where: convertFilter(this.model.fields, filter) });
+    return this.manager.count({where: convertFilter(this.model.fields, filter)});
   }
-  override async find(filter: Filter, params: { limit?: number, offset?: number, sort?: { direction?: string, sortBy?: string } } = {}): Promise<CustomRecord[]> {
-    const { limit = 10, offset = 0, sort = {} } = params;
-    const { direction, sortBy } = sort;
+
+  override async find(filter: Filter, params: {
+    limit?: number,
+    offset?: number,
+    sort?: { direction?: string, sortBy?: string }
+  } = {}): Promise<CustomRecord[]> {
+    const {limit = 10, offset = 0, sort = {}} = params;
+    const {direction, sortBy} = sort;
     const where = convertFilter(this.model.fields, filter);
     const orderBy = flat.unflatten({
       [sortBy]: direction,
@@ -87,6 +115,7 @@ export class CustomResource extends BaseResource {
     });
     return results.map((result) => new CustomRecord(this.prepareReturnValues(result), this));
   }
+
   override async findOne(id: string): Promise<CustomRecord> {
     const idProperties = this.properties().filter((p) => p.isId())
     if (!idProperties.length) {
@@ -108,6 +137,7 @@ export class CustomResource extends BaseResource {
       return null;
     return new CustomRecord(this.prepareReturnValues(result), this);
   }
+
   override async findMany(ids: string[]): Promise<CustomRecord[]> {
     const idProperties = this.properties().filter((p) => p.isId())
     if (!idProperties.length) {
@@ -129,11 +159,13 @@ export class CustomResource extends BaseResource {
     });
     return results.map((result) => new CustomRecord(this.prepareReturnValues(result), this));
   }
+
   override async create(params: FlattenParams) {
     const preparedParams = this.prepareParams(params);
-    const result = await this.manager.create({ data: preparedParams });
+    const result = await this.manager.create({data: preparedParams});
     return this.prepareReturnValues(result);
   }
+
   override async update(pk: unknown, params = {}) {
     const idProperties = this.properties().filter((p) => p.isId())
     if (!idProperties.length) {
@@ -154,6 +186,7 @@ export class CustomResource extends BaseResource {
     });
     return this.prepareReturnValues(result);
   }
+
   override async delete(id: string) {
     const idProperties = this.properties().filter((p) => p.isId())
     if (!idProperties.length) {
@@ -171,13 +204,14 @@ export class CustomResource extends BaseResource {
       },
     });
   }
+
   static override isAdapterFor(args: Args) {
-    const { model, client } = args;
+    const {model, client} = args;
     return !!model?.name && !!model?.fields.length && !!client?.[lowerCase(model.name)];
   }
 
   prepareProperties() {
-    const { fields = [] } = this.model;
+    const {fields = []} = this.model;
     return fields.reduce((memo: { [k: string]: Property }, field) => {
       if (field.isReadOnly && !field.isId) {
         return memo;
@@ -187,9 +221,10 @@ export class CustomResource extends BaseResource {
       return memo;
     }, {});
   }
+
   prepareDepModelProperties(modelObj: { alias: string, model: DMMF.Model }) {
-    const { model } = modelObj;
-    const { fields = [], name } = model;
+    const {model} = modelObj;
+    const {fields = [], name} = model;
     return fields.reduce((memo: { [k: string]: Property }, field) => {
       if (field.isReadOnly && !field.isId) {
         return memo;
@@ -202,6 +237,7 @@ export class CustomResource extends BaseResource {
       return memo;
     }, {});
   }
+
   prepareParams(params: FlattenParams) {
     const preparedParams: { [k: string]: unknown } = {};
     for (const property of this.properties()) {
@@ -265,7 +301,7 @@ export class CustomResource extends BaseResource {
         // eslint-disable-next-line no-continue
         continue;
       }
-      if (Array.isArray(param) ) {
+      if (Array.isArray(param)) {
         // 다대다 관계
         preparedValues[key] = param;
       }
@@ -287,6 +323,7 @@ export class CustomResource extends BaseResource {
       (sequelizeObject) => new CustomRecord(sequelizeObject.toJSON(), this),
     );
   }
+
   // 일대다용도
   async saveRecord(where: object, resourceId: string, ids: { imageId: number }) {
     const update = ids;
@@ -311,7 +348,9 @@ export class CustomResource extends BaseResource {
   }
 
   // 다대다용도
-  async saveRecords(key: string, idValue: string, resourceId: string, targetKey: string, ids: { id: string | number }[]) {
+  async saveRecords(key: string, idValue: string, resourceId: string, targetKey: string, ids: {
+    id: string | number
+  }[]) {
     if (resourceId.includes('.')) { // 중첩된 다대다관계이면
       // 중첩된 리소스로 타고 들어가서 다대다 수행
       const split = resourceId.split('.');
@@ -328,7 +367,7 @@ export class CustomResource extends BaseResource {
       if (result?.[middle]) {
         const middleId = result[middle][key]; // TODO: 다른 아이디도 가능하게 만들기
         await (this.client[lowerCase(middle)] as any).update({
-          where: { [key]: middleId},
+          where: {[key]: middleId},
           data: {
             [last]: {
               set: ids.map((v) => {
@@ -343,7 +382,7 @@ export class CustomResource extends BaseResource {
       }
     } else {
       await this.manager.update({
-        where: { [key]: idValue },
+        where: {[key]: idValue},
         data: {
           [resourceId]: {
             set: ids.map((v) => {

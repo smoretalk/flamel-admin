@@ -46,6 +46,10 @@ export declare class CustomResource extends BaseResource {
     };
     include: object;
     depModels: ReadonlyDeep_2<{}>;
+    depModelsResource: {
+        name: string;
+        resource: CustomResource;
+    }[];
     depModelsObject: {
         [k: string]: Property;
     }[];

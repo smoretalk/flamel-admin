@@ -19,6 +19,7 @@ export class CustomResource extends BaseResource {
     propertiesObject;
     include;
     depModels;
+    depModelsResource;
     depModelsObject;
     constructor(args) {
         super(args);
@@ -31,6 +32,13 @@ export class CustomResource extends BaseResource {
         this.include = include || {};
         this.depModels = depModels || [];
         this.depModelsObject = depModels?.map((model) => this.prepareDepModelProperties(model));
+        this.depModelsResource = depModels?.map((model) => ({
+            name: model.alias,
+            resource: new CustomResource({
+                model: model.model,
+                client,
+            })
+        }));
         this.depModelsObject?.forEach((depModels) => {
             this.propertiesObject = {
                 ...depModels,
