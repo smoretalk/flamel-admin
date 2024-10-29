@@ -189,8 +189,11 @@ export class CustomResource extends BaseResource {
     prepareParams(params) {
         const preparedParams = {};
         for (const property of this.properties()) {
-            const param = flat.get(params, property.path());
-            const key = property.path();
+            let key = property.path();
+            if (property.depModel) {
+                key = `${property.depModel}.${key}`;
+            }
+            const param = flat.get(params, key);
             if (param === undefined)
                 continue;
             const type = property.type();

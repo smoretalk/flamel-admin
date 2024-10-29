@@ -205,8 +205,11 @@ export class CustomResource extends BaseResource {
   prepareParams(params: FlattenParams) {
     const preparedParams: { [k: string]: unknown } = {};
     for (const property of this.properties()) {
-      const param: object[] = flat.get(params, property.path());
-      const key = property.path();
+      let key = property.path();
+      if (property.depModel) {
+        key = `${property.depModel}.${key}`;
+      }
+      const param: object[] = flat.get(params, key);
 
       // eslint-disable-next-line no-continue
       if (param === undefined)
