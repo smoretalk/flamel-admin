@@ -29,5 +29,6 @@ export declare const Components: {
     LimitTextLength: string;
     ImageEmbed: string;
     CopyAndAssign: string;
+    AddEditedImage: string;
     ReferenceEditWithFilter: string;
 };

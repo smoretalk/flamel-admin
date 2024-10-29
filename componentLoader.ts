@@ -84,5 +84,6 @@ export const Components = {
   LimitTextLength: componentLoader.add('LimitTextLength', path.resolve(__dirname, 'components', 'LimitTextLength')),
   ImageEmbed: componentLoader.add('ImageEmbed', path.resolve(__dirname, 'components', 'ImageEmbed')),
   CopyAndAssign: componentLoader.add('CopyAndAssign', path.resolve(__dirname, 'components', 'CopyAndAssign')),
+  AddEditedImage: componentLoader.add('AddEditedImage', path.resolve(__dirname, 'components', 'AddEditedImage')),
   ReferenceEditWithFilter: componentLoader.add('ReferenceEditWithFilter', path.resolve(__dirname, 'components', 'ReferenceEditWithFilter')),
 }
