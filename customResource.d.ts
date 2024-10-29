@@ -84,9 +84,7 @@ export declare class CustomResource extends BaseResource {
     }): {
         [k: string]: Property;
     };
-    prepareParams(params: FlattenParams): {
-        [k: string]: unknown;
-    };
+    prepareParams(params: FlattenParams): unknown;
     isNonArrayObject(target: object): boolean;
     prepareReturnValues(params: FlattenParams): {
         [k: string]: unknown;

@@ -231,7 +231,7 @@ export class CustomResource extends BaseResource {
         preparedParams[key] = convertParam(property, this.model.fields, param);
       }
     }
-    return preparedParams;
+    return flat.unflatten(preparedParams);
   }
 
   isNonArrayObject(target: object) {
