@@ -21,7 +21,7 @@ export default function AddEditedImage(props: EditPropertyProps) {
     axios.post(`/api/images/${record.id}/editedImage`, formData)
       .then((response) => {
         alert('편집 이미지를 추가했습니다.');
-        location.href = `/admin/resources/Style/records/${response.data.imageId}/show`;
+        location.href = `/admin/resources/Image/records/${response.data.imageId}/show`;
       })
       .catch(console.error);
   }
