@@ -1,8 +1,9 @@
 import { Button, DrawerContent, DrawerFooter, Icon, MessageBox, Table, TableBody, TableCell, TableRow, Text } from '@adminjs/design-system';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { getActionElementCss, ApiClient, ActionHeader, BasePropertyComponent, withNotice, useTranslation } from 'adminjs';
+import { ApiClient, ActionHeader, BasePropertyComponent, withNotice, useTranslation } from 'adminjs';
 import { appendForceRefresh } from "../utils/append-force-refresh.js";
+export const getActionElementCss = (resourceId, actionName, suffix) => `${resourceId}-${actionName}-${suffix}`;
 const BulkCollectionApprove = (props) => {
     const { resource, records, action, addNotice } = props;
     const navigate = useNavigate();
