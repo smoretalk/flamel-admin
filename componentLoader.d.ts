@@ -6,6 +6,8 @@ export declare const Components: {
     DisplayRank: string;
     DisplayNestedImage: string;
     PrintImage: string;
+    BulkCollectionApprove: string;
+    BulkCollectionReject: string;
     DisplayImage: string;
     DisplayImageBig: string;
     DisplayStyleImage: string;

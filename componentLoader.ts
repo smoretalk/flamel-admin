@@ -25,6 +25,14 @@ export const Components = {
     'PrintImage',
     path.resolve(__dirname, 'components', 'PrintImage'),
   ),
+  BulkCollectionApprove: componentLoader.add(
+    'BulkCollectionApprove',
+    path.resolve(__dirname, 'components', 'BulkCollectionApprove'),
+  ),
+  BulkCollectionReject: componentLoader.add(
+    'BulkCollectionReject',
+    path.resolve(__dirname, 'components', 'BulkCollectionReject'),
+  ),
   DisplayImage: componentLoader.add(
     'DisplayImage',
     path.resolve(__dirname, 'components', 'DisplayImage'),

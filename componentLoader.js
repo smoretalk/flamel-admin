@@ -12,6 +12,8 @@ export const Components = {
     DisplayRank: componentLoader.add('DisplayRank', path.resolve(__dirname, 'components', 'DisplayRank')),
     DisplayNestedImage: componentLoader.add('DisplayNestedImage', path.resolve(__dirname, 'components', 'DisplayNestedImage')),
     PrintImage: componentLoader.add('PrintImage', path.resolve(__dirname, 'components', 'PrintImage')),
+    BulkCollectionApprove: componentLoader.add('BulkCollectionApprove', path.resolve(__dirname, 'components', 'BulkCollectionApprove')),
+    BulkCollectionReject: componentLoader.add('BulkCollectionReject', path.resolve(__dirname, 'components', 'BulkCollectionReject')),
     DisplayImage: componentLoader.add('DisplayImage', path.resolve(__dirname, 'components', 'DisplayImage')),
     DisplayImageBig: componentLoader.add('DisplayImageBig', path.resolve(__dirname, 'components', 'DisplayImageBig')),
     DisplayStyleImage: componentLoader.add('DisplayStyleImage', path.resolve(__dirname, 'components', 'DisplayStyleImage')),

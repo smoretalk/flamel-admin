@@ -16,9 +16,9 @@ export declare const getEnums: (clientModule?: {
         readonly name: string;
         readonly values: readonly {
             readonly name: string;
-            readonly dbName: string;
+            readonly dbName: string | null;
         }[];
-        readonly dbName?: string;
+        readonly dbName?: string | null;
         readonly documentation?: string;
     };
 };
