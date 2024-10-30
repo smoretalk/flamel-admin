@@ -2,7 +2,7 @@
 import { Prisma } from '@prisma/client';
 import { BaseDatabase } from 'adminjs';
 import { CustomResource } from './customResource.js';
-import type { DMMF } from '@prisma/client/runtime/library.js';
+import { DMMF } from '@prisma/client/runtime/library.js';
 
 type ClientModule = { Prisma: { dmmf: DMMF.Document } };
 export class Database extends BaseDatabase {
