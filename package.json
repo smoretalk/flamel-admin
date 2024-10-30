@@ -9,6 +9,14 @@
     "./customProperty": {
       "types": "./customProperty.d.ts",
       "default": "./customProperty.js"
+    },
+    "./customResource": {
+      "types": "./customResource.d.ts",
+      "default": "./customResource.js"
+    },
+    "./customRecord": {
+      "types": "./customRecord.d.ts",
+      "default": "./customRecord.js"
     }
   },
   "scripts": {
