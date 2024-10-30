@@ -5,7 +5,6 @@ import {Property} from "./customProperty.js";
 import {convertParam} from "./convertParam.js";
 import {convertFilter} from './convertFilter.js';
 import CustomRecord from "./customRecord.js";
-import {Prisma} from '@prisma/client';
 
 type ReadonlyDeep_2<O> = {
   +readonly [K in keyof O]: ReadonlyDeep_2<O[K]>;
@@ -241,10 +240,7 @@ export class CustomResource extends BaseResource {
   prepareParams(params: FlattenParams) {
     const preparedParams: { [k: string]: unknown } = {};
     for (const property of this.properties()) {
-      let key = property.path();
-      if (property.depModel) {
-        key = `${property.depModel}.${key}`;
-      }
+      const key = property.path();
       const param: object[] = flat.get(params, key);
 
       // eslint-disable-next-line no-continue
