@@ -33,7 +33,7 @@ export default function TagToThemeSection({}) {
     e.preventDefault();
     console.log('submitting', tag, themeId);
     try {
-      await axios.patch(`/api/collection/tags/${tag}/connectTheme?themeId=${themeId}`, {}, {
+      await axios.patch(`/api/collections/tags/${tag}/connectTheme?themeId=${themeId}`, {}, {
         timeout: 60_000,
       });
       setTag('');
