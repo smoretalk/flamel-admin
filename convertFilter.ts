@@ -1,5 +1,5 @@
 import {Filter, flat } from "adminjs";
-import type { DMMF } from '@prisma/client/runtime/library.js';
+import { DMMF } from '@prisma/client/runtime/library.js';
 import {Property} from "./customProperty.js";
 import {convertParam} from "./convertParam.js";
 

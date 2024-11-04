@@ -5,7 +5,7 @@ import {
 } from 'adminjs';
 import { CustomResource } from './customResource.js';
 import { Components } from './componentLoader.js';
-import type { DMMF } from '@prisma/client/runtime/library.js';
+import { DMMF } from '@prisma/client/runtime/library.js';
 
 export const after: After<RecordActionResponse> = async (
   response,

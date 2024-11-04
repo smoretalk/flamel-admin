@@ -1,6 +1,6 @@
 import {BaseResource, Filter, flat, FlattenParams, ParamsType} from 'adminjs';
-import {type Enums} from "@adminjs/prisma";
-import type {DMMF} from '@prisma/client/runtime/library.js';
+import {Enums} from "@adminjs/prisma";
+import {DMMF} from '@prisma/client/runtime/library.js';
 import {Property} from "./customProperty.js";
 import {convertParam} from "./convertParam.js";
 import {convertFilter} from './convertFilter.js';

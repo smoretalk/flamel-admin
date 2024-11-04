@@ -1,5 +1,5 @@
 import { BaseProperty, PropertyType } from 'adminjs';
-import type { DMMF } from '@prisma/client/runtime/library.js';
+import { DMMF } from '@prisma/client/runtime/library.js';
 import { Enums } from "@adminjs/prisma";
 export declare class Property extends BaseProperty {
     column: DMMF.Field;

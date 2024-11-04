@@ -1,5 +1,5 @@
 import React from "react";
-import type { ShowPropertyProps } from 'adminjs';
+import { ShowPropertyProps } from 'adminjs';
 declare const LLMPromptIdLink: React.FC<ShowPropertyProps & {
     where: 'show' | 'list';
 }>;
