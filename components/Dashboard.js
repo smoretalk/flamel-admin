@@ -4,6 +4,7 @@ import { useTranslation } from 'adminjs';
 import axios from "axios";
 import CouponIssueSection from "./CouponIssueSection.js";
 import Card from "./Card.js";
+import TagToThemeSection from "./TagToThemeSection.js";
 const pageHeaderHeight = 284;
 const pageHeaderPaddingY = 74;
 const pageHeaderPaddingX = 250;
@@ -119,6 +120,7 @@ export const Dashboard = (props) => {
                             placeholder: '클릭하거나 파일을 드롭하세요',
                         }, onChange: uploadStyleFiles }))),
             React.createElement(CouponIssueSection, null),
+            React.createElement(TagToThemeSection, null),
             React.createElement(Box, { width: [1, 1, 1 / 2], p: "lg" },
                 React.createElement(Card, { as: "a", flex: true, href: "https://smoretalk-io.slack.com/ssb/redirect", target: "_blank" },
                     React.createElement(Box, { flexShrink: 0 },

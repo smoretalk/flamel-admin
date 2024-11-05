@@ -89,7 +89,7 @@ export default function CouponIssueSection({}) {
           { value: 'basic', label: 'basic 요금제' },
         ]} value={type} onChange={onChangeType} /></Box>
         <Box><Label>쿠폰코드</Label><Input onChange={onChangeCode} type="text" placeholder="쿠폰 코드" required value={code} style={{width: '100%'}} /></Box>
-        <Box><Label>크레딧</Label><Input onChange={onChangeCredit} type="number" placeholder="크레딧 수" value={credit} style={{width: '100%'}} /></Box>
+        <Box><Label>크레딧or기간</Label><Input onChange={onChangeCredit} type="number" placeholder="크레딧 수 or 기간(basic)" value={credit} style={{width: '100%'}} /></Box>
         <Box><Label>발행량</Label><Input onChange={onChangeMaxCount} type="number" placeholder="발행량(비워두면 1)" value={maxCount} style={{width: '100%'}} /></Box>
         <Box><Label>사용자</Label><Input onChange={onChangeEmail} placeholder="지급 대상 이메일(빈칸이면 누구나 가능)" value={email} style={{width: '100%'}} /></Box>
         <Box><Label>만료기한</Label><DatePicker onChange={onChangeDate} propertyType="date" value={date?.toString()} /></Box>

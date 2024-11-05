@@ -12,6 +12,7 @@ import {useTranslation} from 'adminjs';
 import axios from "axios";
 import CouponIssueSection from "./CouponIssueSection.js";
 import Card from "./Card.js";
+import TagToThemeSection from "./TagToThemeSection.js";
 
 const pageHeaderHeight = 284;
 const pageHeaderPaddingY = 74;
@@ -197,6 +198,7 @@ export const Dashboard: React.FC = (props) => {
           </Card>
         </Box>
         <CouponIssueSection/>
+        <TagToThemeSection/>
         <Box width={[1, 1, 1 / 2]} p="lg">
           <Card
             as="a"
