@@ -28,7 +28,7 @@ const List = ({ resource, setTag }) => {
                     setNewResource({
                         ...resource,
                         listProperties: resourceFinder([
-                            'idQuerySaver',
+                            'imageId',
                             'displayImage',
                             'CollectionInfo.Style',
                             'CollectionInfo.priority',
@@ -44,7 +44,7 @@ const List = ({ resource, setTag }) => {
                     setNewResource({
                         ...resource,
                         listProperties: resourceFinder([
-                            'idQuerySaver',
+                            'imageId',
                             'displayImage',
                             'createdAt',
                             'Owner',

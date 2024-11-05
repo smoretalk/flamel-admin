@@ -48,7 +48,7 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
           setNewResource({
             ...resource,
             listProperties: resourceFinder([
-              'idQuerySaver',
+              'imageId',
               'displayImage',
               'CollectionInfo.Style',
               'CollectionInfo.priority',
@@ -63,7 +63,7 @@ const List: React.FC<ActionProps> = ({resource, setTag}) => {
           setNewResource({
             ...resource,
             listProperties: resourceFinder([
-              'idQuerySaver',
+              'imageId',
               'displayImage',
               'createdAt',
               'Owner',
