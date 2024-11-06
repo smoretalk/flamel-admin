@@ -27,6 +27,7 @@ export const Components = {
     ManyToManyShow: componentLoader.add('ManyToManyShow', path.resolve(__dirname, 'components', 'M2MShow')),
     ManyToManyList: componentLoader.add('ManyToManyList', path.resolve(__dirname, 'components', 'M2MList')),
     M2MFilter: componentLoader.add('M2MFilter', path.resolve(__dirname, 'components', 'M2MFilter')),
+    JsonDiff: componentLoader.add('JsonDiff', path.resolve(__dirname, 'components', 'JsonDiff')),
     ImageList: componentLoader.add('ImageList', path.resolve(__dirname, 'components', 'List')),
     PreserveQueryList: componentLoader.add('PreserveQueryList', path.resolve(__dirname, 'components', 'PreserveQueryList')),
     EditJSONB: componentLoader.add('EditJSONB', path.resolve(__dirname, 'components', 'EditJSONB')),

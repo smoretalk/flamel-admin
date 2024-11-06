@@ -21,6 +21,7 @@ export declare const Components: {
     ManyToManyShow: string;
     ManyToManyList: string;
     M2MFilter: string;
+    JsonDiff: string;
     ImageList: string;
     PreserveQueryList: string;
     EditJSONB: string;
