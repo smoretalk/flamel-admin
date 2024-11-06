@@ -46,6 +46,7 @@ export const manyToManyComponent = (reference) => ({
         show: Components.ManyToManyShow,
         edit: Components.ManyToManyEdit,
         list: Components.ManyToManyList,
+        filter: Components.DefaultFilterProperty,
     },
 });
 export const injectManyToManySupport = (options, properties) => {

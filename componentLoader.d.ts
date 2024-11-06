@@ -20,6 +20,7 @@ export declare const Components: {
     ManyToManyEdit: string;
     ManyToManyShow: string;
     ManyToManyList: string;
+    DefaultFilterProperty: string;
     ImageList: string;
     PreserveQueryList: string;
     EditJSONB: string;

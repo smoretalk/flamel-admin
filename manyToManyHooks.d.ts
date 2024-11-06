@@ -13,6 +13,7 @@ export declare const manyToManyComponent: (reference: string) => {
         show: string;
         edit: string;
         list: string;
+        filter: string;
     };
 };
 export declare const injectManyToManySupport: (options: ResourceOptions, properties: {
