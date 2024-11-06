@@ -14,7 +14,15 @@ export const convertFilter = (modelFields, filterObject) => {
     const uuidRegex = /^[0-9A-F]{8}-[0-9A-F]{4}-[5|4|3|2|1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i;
     const { filters = {} } = filterObject;
     return Object.entries(filters).reduce((where, [name, filter]) => {
-        if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property?.type())) {
+        const prop = modelFields.fields.find((v) => v.name === name);
+        if (prop?.relationName && prop?.relationFromFields.length === 0) {
+            where[name] = {
+                some: {
+                    themeId: filter.value
+                }
+            };
+        }
+        else if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property?.type())) {
             if (filter.property.type() === 'number') {
                 const regex = filter.value.match(/([<>]=?)\s*(\d+)/);
                 if (regex?.[1] === '<') {
@@ -63,7 +71,7 @@ export const convertFilter = (modelFields, filterObject) => {
             where[name] = { equals: filter.value };
         }
         else if (filter.property?.type() === 'reference' && filter.property?.foreignColumnName()) {
-            where[filter.property.foreignColumnName()] = convertParam(filter.property, modelFields, filter.value);
+            where[filter.property.foreignColumnName()] = convertParam(filter.property, modelFields.fields, filter.value);
         }
         else if (filter.value === 'null') {
             const prop = filter.property;

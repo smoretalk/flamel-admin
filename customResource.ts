@@ -90,7 +90,7 @@ export class CustomResource extends BaseResource {
   }
 
   override async count(filter: Filter) {
-    return this.manager.count({where: convertFilter(this.model.fields, filter)});
+    return this.manager.count({where: convertFilter(this.model, filter)});
   }
 
   override async find(filter: Filter, params: {
@@ -100,7 +100,7 @@ export class CustomResource extends BaseResource {
   } = {}): Promise<CustomRecord[]> {
     const {limit = 10, offset = 0, sort = {}} = params;
     const {direction, sortBy} = sort;
-    const where = convertFilter(this.model.fields, filter);
+    const where = convertFilter(this.model, filter);
     const orderBy = flat.unflatten({
       [sortBy]: direction,
     })

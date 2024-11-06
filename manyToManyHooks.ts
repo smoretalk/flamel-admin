@@ -1,7 +1,7 @@
 import {
   RecordActionResponse,
   ResourceOptions, After, PropertyDecorator,
-  flat
+  flat, PropertyType
 } from 'adminjs';
 import { CustomResource } from './customResource.js';
 import { Components } from './componentLoader.js';
@@ -49,7 +49,7 @@ export const after: After<RecordActionResponse> = async (
   }
   return response;
 };
-export const manyToManyComponent = (reference: string) => ({
+export const manyToManyComponent = (reference: string, pk?: string, searchKey?: string) => ({
   isVisible: {
     list: true,
     show: true,
@@ -57,6 +57,11 @@ export const manyToManyComponent = (reference: string) => ({
     edit: true,
   },
   isArray: true,
+  props: {
+    pk,
+    searchKey,
+  },
+  type: 'reference' as PropertyType,
   reference: reference,
   components: {
     show: Components.ManyToManyShow,
@@ -68,14 +73,14 @@ export const manyToManyComponent = (reference: string) => ({
 
 export const injectManyToManySupport = (
   options: ResourceOptions,
-  properties: { propertyName: string; modelClassName: string }[],
+  properties: { propertyName: string; modelClassName: string, pk?: string, searchKey?: string }[],
 ): ResourceOptions => {
   properties.forEach((propForSupport) => {
     if (!options.properties) {
       options.properties = {};
     }
     options.properties[propForSupport.propertyName] = manyToManyComponent(
-      propForSupport.modelClassName,
+      propForSupport.modelClassName, propForSupport.pk, propForSupport.searchKey
     );
     if (!options.actions) {
       options.actions = {};
