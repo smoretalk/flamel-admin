@@ -23,12 +23,17 @@ export const convertFilter = (modelFields, filterObject) => {
                     }
                 };
             }
-            else {
+            else if (name === 'CollectionKoTags') {
                 where[name] = {
                     some: {
-                        title: {
-                            contains: filter.value
-                        }
+                        koTagId: parseInt(filter.value, 10)
+                    }
+                };
+            }
+            else if (name === 'CollectionEnTags') {
+                where[name] = {
+                    some: {
+                        enTagId: parseInt(filter.value, 10)
                     }
                 };
             }

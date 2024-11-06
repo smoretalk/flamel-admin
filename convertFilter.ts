@@ -27,12 +27,16 @@ export const convertFilter = (modelFields: DMMF.Model, filterObject: Filter): Re
             themeId: parseInt(filter.value as string, 10)
           }
         }
-      } else {
+      } else if (name === 'CollectionKoTags') {
         where[name] = {
           some: {
-            title: {
-              contains: filter.value as string
-            }
+            koTagId: parseInt(filter.value as string, 10)
+          }
+        }
+      } else if (name === 'CollectionEnTags') {
+        where[name] = {
+          some: {
+            enTagId: parseInt(filter.value as string, 10)
           }
         }
       }
