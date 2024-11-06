@@ -21,9 +21,19 @@ export const convertFilter = (modelFields: DMMF.Model, filterObject: Filter): Re
     const prop = modelFields.fields.find((v: { name: string, relationName?: string }) => v.name === name);
     if (prop?.relationName && prop?.relationFromFields.length === 0) {
       // 필터가 m2m인 경우
-      where[name] = {
-        some: {
-          themeId: filter.value
+      if (name === 'Theme') {
+        where[name] = {
+          some: {
+            themeId: parseInt(filter.value as string, 10)
+          }
+        }
+      } else {
+        where[name] = {
+          some: {
+            title: {
+              contains: filter.value as string
+            }
+          }
         }
       }
     } else if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property?.type())) {
