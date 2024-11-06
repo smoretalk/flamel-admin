@@ -16,11 +16,22 @@ export const convertFilter = (modelFields, filterObject) => {
     return Object.entries(filters).reduce((where, [name, filter]) => {
         const prop = modelFields.fields.find((v) => v.name === name);
         if (prop?.relationName && prop?.relationFromFields.length === 0) {
-            where[name] = {
-                some: {
-                    themeId: filter.value
-                }
-            };
+            if (name === 'Theme') {
+                where[name] = {
+                    some: {
+                        themeId: parseInt(filter.value, 10)
+                    }
+                };
+            }
+            else {
+                where[name] = {
+                    some: {
+                        title: {
+                            contains: filter.value
+                        }
+                    }
+                };
+            }
         }
         else if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property?.type())) {
             if (filter.property.type() === 'number') {
