@@ -9,16 +9,16 @@ const JsonDiff = (props) => {
     const before = {};
     const after = {};
     Object.entries(difference).forEach(([key, value]) => {
-        if (difference[key].before) {
-            before[key] = value;
+        if (value.before) {
+            before[key] = value.before;
         }
-        if (difference[key].after) {
-            after[key] = value;
+        if (value.after) {
+            after[key] = value.after;
         }
     });
     return (React.createElement(FormGroup, null,
         React.createElement(Label, null, translateProperty(property.label)),
-        React.createElement(DiffViewer, { oldValue: JSON.stringify(flat.unflatten(before)), newValue: JSON.stringify(flat.unflatten(after)) })));
+        React.createElement(DiffViewer, { oldValue: JSON.stringify(flat.unflatten(before), null, 2), newValue: JSON.stringify(flat.unflatten(after), null, 2) })));
 };
 export default React.memo(JsonDiff);
 //# sourceMappingURL=JsonDiff.js.map
