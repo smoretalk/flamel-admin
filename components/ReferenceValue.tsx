@@ -19,7 +19,7 @@ const ReferenceValue: React.FC<Props> = (props) => {
 
   const h = new ViewHelpers();
   // const refId = record.params[property.path];
-  const refId = record.id;
+  const refId = record[property.props.pk];
   // const populated = record.populated[property.path];
   // const value = (populated && populated.title) || refId;
 

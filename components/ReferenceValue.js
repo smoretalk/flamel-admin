@@ -10,7 +10,7 @@ const StyledLink = styled(Link) `
 const ReferenceValue = (props) => {
     const { property, record } = props;
     const h = new ViewHelpers();
-    const refId = record.id;
+    const refId = record[property.props.pk];
     const href = h.recordActionUrl({
         resourceId: property.reference,
         recordId: refId,
