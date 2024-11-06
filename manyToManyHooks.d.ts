@@ -1,6 +1,6 @@
 import { RecordActionResponse, ResourceOptions, After, PropertyType } from 'adminjs';
 export declare const after: After<RecordActionResponse>;
-export declare const manyToManyComponent: (reference: string, pk?: string, searchKey?: string) => {
+export declare const manyToManyComponent: (reference: string, pk?: string, searchKey?: string, title?: string) => {
     isVisible: {
         list: boolean;
         show: boolean;
@@ -11,6 +11,7 @@ export declare const manyToManyComponent: (reference: string, pk?: string, searc
     props: {
         pk: string;
         searchKey: string;
+        title: string;
     };
     type: PropertyType;
     reference: string;
@@ -26,4 +27,5 @@ export declare const injectManyToManySupport: (options: ResourceOptions, propert
     modelClassName: string;
     pk?: string;
     searchKey?: string;
+    title?: string;
 }[]) => ResourceOptions;

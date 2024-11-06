@@ -33,7 +33,7 @@ export const after = async (response, request, context) => {
     }
     return response;
 };
-export const manyToManyComponent = (reference, pk, searchKey) => ({
+export const manyToManyComponent = (reference, pk, searchKey, title) => ({
     isVisible: {
         list: true,
         show: true,
@@ -44,6 +44,7 @@ export const manyToManyComponent = (reference, pk, searchKey) => ({
     props: {
         pk,
         searchKey,
+        title,
     },
     type: 'reference',
     reference: reference,
@@ -59,7 +60,7 @@ export const injectManyToManySupport = (options, properties) => {
         if (!options.properties) {
             options.properties = {};
         }
-        options.properties[propForSupport.propertyName] = manyToManyComponent(propForSupport.modelClassName, propForSupport.pk, propForSupport.searchKey);
+        options.properties[propForSupport.propertyName] = manyToManyComponent(propForSupport.modelClassName, propForSupport.pk, propForSupport.searchKey, propForSupport.title);
         if (!options.actions) {
             options.actions = {};
         }

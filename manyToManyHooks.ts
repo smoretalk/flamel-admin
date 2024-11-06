@@ -49,7 +49,7 @@ export const after: After<RecordActionResponse> = async (
   }
   return response;
 };
-export const manyToManyComponent = (reference: string, pk?: string, searchKey?: string) => ({
+export const manyToManyComponent = (reference: string, pk?: string, searchKey?: string, title?: string) => ({
   isVisible: {
     list: true,
     show: true,
@@ -60,6 +60,7 @@ export const manyToManyComponent = (reference: string, pk?: string, searchKey?: 
   props: {
     pk,
     searchKey,
+    title,
   },
   type: 'reference' as PropertyType,
   reference: reference,
@@ -73,14 +74,14 @@ export const manyToManyComponent = (reference: string, pk?: string, searchKey?: 
 
 export const injectManyToManySupport = (
   options: ResourceOptions,
-  properties: { propertyName: string; modelClassName: string, pk?: string, searchKey?: string }[],
+  properties: { propertyName: string; modelClassName: string, pk?: string, searchKey?: string, title?: string }[],
 ): ResourceOptions => {
   properties.forEach((propForSupport) => {
     if (!options.properties) {
       options.properties = {};
     }
     options.properties[propForSupport.propertyName] = manyToManyComponent(
-      propForSupport.modelClassName, propForSupport.pk, propForSupport.searchKey
+      propForSupport.modelClassName, propForSupport.pk, propForSupport.searchKey, propForSupport.title
     );
     if (!options.actions) {
       options.actions = {};
