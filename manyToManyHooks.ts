@@ -62,7 +62,7 @@ export const manyToManyComponent = (reference: string) => ({
     show: Components.ManyToManyShow,
     edit: Components.ManyToManyEdit,
     list: Components.ManyToManyList,
-    filter: Components.DefaultFilterProperty,
+    filter: Components.M2MFilter,
   },
 });
 

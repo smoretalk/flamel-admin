@@ -75,9 +75,9 @@ export const Components = {
     'ManyToManyList',
     path.resolve(__dirname, 'components', 'M2MList'),
   ),
-  DefaultFilterProperty: componentLoader.add(
-    'DefaultFilterProperty',
-    path.resolve(__dirname, 'components', 'DefaultFilterProperty'),
+  M2MFilter: componentLoader.add(
+    'M2MFilter',
+    path.resolve(__dirname, 'components', 'M2MFilter'),
   ),
   ImageList: componentLoader.add('ImageList', path.resolve(__dirname, 'components', 'List')),
   PreserveQueryList: componentLoader.add('PreserveQueryList', path.resolve(__dirname, 'components', 'PreserveQueryList')),
