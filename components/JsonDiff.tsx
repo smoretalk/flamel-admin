@@ -23,7 +23,7 @@ const JsonDiff = (props: ShowPropertyProps) => {
   return (
     <FormGroup>
       <Label>{translateProperty(property.label)}</Label>
-      <DiffViewer oldValue={flat.unflatten(before)} newValue={flat.unflatten(after)} />
+      <DiffViewer oldValue={JSON.stringify(flat.unflatten(before))} newValue={JSON.stringify(flat.unflatten(after))} />
     </FormGroup>
   );
 }
