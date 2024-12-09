@@ -6,7 +6,7 @@ const ReferenceImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }
 ) => {
   const [errored, setErrored] = useState(false);
   const [src, setSrc] = useState(() => {
-    const referenceLink = props.record.params['GenerationInfo.referenceLink'];
+    const referenceLink = props.record.params[props.property.props.name || 'GenerationInfo.referenceLink'];
     if (referenceLink) {
       if (referenceLink.includes('/')) {
         return `/api/admin/owners/${referenceLink.split('/')[0]}/images/${referenceLink.split('/')[1]}`
@@ -32,7 +32,7 @@ const ReferenceImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }
           htmlFor="image"
           className="adminjs_Label"
         >
-          레퍼런스
+          참고 이미지
         </label>
       )}
       <div>
@@ -42,6 +42,7 @@ const ReferenceImageBig: React.FC<ShowPropertyProps & { where: 'show' | 'list' }
           alt={props.record.params.originalPrompt}
           src={src}
         />
+        {src}
       </div>
     </section>
   );
