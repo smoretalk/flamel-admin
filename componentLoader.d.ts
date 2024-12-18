@@ -30,6 +30,7 @@ export declare const Components: {
     LLMPromptIdLink: string;
     LimitTextLength: string;
     ImageEmbed: string;
+    PlanAndModel: string;
     CopyAndAssign: string;
     AddEditedImage: string;
     ReferenceEditWithFilter: string;

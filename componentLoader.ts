@@ -88,6 +88,7 @@ export const Components = {
   LLMPromptIdLink: componentLoader.add('LLMPromptIdLink', path.resolve(__dirname, 'components', 'LLMPromptIdLink')),
   LimitTextLength: componentLoader.add('LimitTextLength', path.resolve(__dirname, 'components', 'LimitTextLength')),
   ImageEmbed: componentLoader.add('ImageEmbed', path.resolve(__dirname, 'components', 'ImageEmbed')),
+  PlanAndModel: componentLoader.add('PlanAndModel', path.resolve(__dirname, 'components', 'PlanAndModel')),
   CopyAndAssign: componentLoader.add('CopyAndAssign', path.resolve(__dirname, 'components', 'CopyAndAssign')),
   AddEditedImage: componentLoader.add('AddEditedImage', path.resolve(__dirname, 'components', 'AddEditedImage')),
   ReferenceEditWithFilter: componentLoader.add('ReferenceEditWithFilter', path.resolve(__dirname, 'components', 'ReferenceEditWithFilter')),
