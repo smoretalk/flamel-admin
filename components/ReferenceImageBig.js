@@ -2,7 +2,7 @@ import React, { useState } from "react";
 const ReferenceImageBig = (props) => {
     const [errored, setErrored] = useState(false);
     const [src, setSrc] = useState(() => {
-        const referenceLink = props.record.params['GenerationInfo.referenceLink'];
+        const referenceLink = props.record.params[props.property.props.name || 'GenerationInfo.referenceLink'];
         if (referenceLink) {
             if (referenceLink.includes('/')) {
                 return `/api/admin/owners/${referenceLink.split('/')[0]}/images/${referenceLink.split('/')[1]}`;
@@ -20,9 +20,10 @@ const ReferenceImageBig = (props) => {
                 color: 'rgb(137, 138, 154)',
                 marginBottom: 4,
                 fontWeight: 300,
-            }, htmlFor: "image", className: "adminjs_Label" }, "\uB808\uD37C\uB7F0\uC2A4")),
+            }, htmlFor: "image", className: "adminjs_Label" }, "\uCC38\uACE0 \uC774\uBBF8\uC9C0")),
         React.createElement("div", null,
-            React.createElement("img", { width: 512, id: "image", alt: props.record.params.originalPrompt, src: src }))));
+            React.createElement("img", { width: 512, id: "image", alt: props.record.params.originalPrompt, src: src }),
+            src)));
 };
 export default ReferenceImageBig;
 //# sourceMappingURL=ReferenceImageBig.js.map
