@@ -37,27 +37,16 @@ const EditManyToManyInput = (props) => {
         }));
     };
     const error = record?.errors[property.path];
-    const isEnTag = (type, data) => {
-        return type === 'CollectionEnTag';
-    };
-    const isKoTag = (type, data) => {
-        return type === 'CollectionKoTag';
-    };
-    const isTheme = (type, data) => {
-        return type === 'CollectionTheme';
-    };
     const selectedValues = flat.get(record.params, property.path) || [];
     const selectedId = record?.params[property.path];
     const [loadedRecord, setLoadedRecord] = useState();
     const [loadingRecord, setLoadingRecord] = useState(0);
     const selectedValue = record?.populated[property.path] ?? loadedRecord;
     const isTagType = property.reference === 'CollectionEnTag' || property.reference === 'CollectionKoTag';
+    console.log('selectedValues', selectedValues, selectedValue, property.props);
     const selectedValuesToOptions = selectedValues.map((selectedValue) => ({
-        value: isEnTag(property.reference, selectedValue) ? selectedValue.enTagId
-            : isKoTag(property.reference, selectedValue) ? selectedValue.koTagId
-                : isTheme(property.reference, selectedValue) ? selectedValue.themeId
-                    : null,
-        label: isTheme(property.reference, selectedValue) ? selectedValue.code : selectedValue.title,
+        value: flat.get(selectedValue, property.props.pk),
+        label: flat.flatten(selectedValue)[property.props.title],
     }));
     console.log('selectedValuesToOptions', selectedValuesToOptions);
     const [selectedOptions, setSelectedOptions] = useState(selectedValuesToOptions);
@@ -80,13 +69,13 @@ const EditManyToManyInput = (props) => {
         }
     }, [selectedValue, selectedId, resourceId]);
     const onCreateOption = (option) => {
-        console.log('onCreate', option);
+        console.log('onCreate', option, property.props);
         axios.post(`/api/collections/tags/${property.reference}/${option}`)
             .then((response) => {
             console.log(`${option} 생성되었습니다.`, response);
             handleChange([...selectedOptions, {
-                    value: isEnTag(property.reference, response.data) ? response.data.enTagId : response.data.koTagId,
-                    label: response.data.title,
+                    value: flat.get(response.data, property.props.pk),
+                    label: flat.flatten(response.data)[property.props.title],
                 }].filter(Boolean));
         });
     };

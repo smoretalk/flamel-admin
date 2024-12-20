@@ -18,7 +18,7 @@ const JsonDiff = (props) => {
     });
     return (React.createElement(FormGroup, null,
         React.createElement(Label, null, translateProperty(property.label)),
-        React.createElement(DiffViewer, { oldValue: JSON.stringify(flat.unflatten(before), null, 2), newValue: JSON.stringify(flat.unflatten(after), null, 2) })));
+        React.createElement(DiffViewer.default, { oldValue: JSON.stringify(flat.unflatten(before), null, 2), newValue: JSON.stringify(flat.unflatten(after), null, 2) })));
 };
 export default React.memo(JsonDiff);
 //# sourceMappingURL=JsonDiff.js.map

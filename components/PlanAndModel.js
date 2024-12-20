@@ -55,7 +55,7 @@ export const PlanAndModel = () => {
                     setModelPlanRelationship((prev) => [...prev, {
                             apiName: res.data.apiName,
                             modelId: res.data.modelId,
-                            Plans: [{
+                            PlanModels: [{
                                     type: feature,
                                     Plan: {
                                         planId: id,
@@ -67,7 +67,7 @@ export const PlanAndModel = () => {
                     setModelEnterpriseRelationship((prev) => [...prev, {
                             apiName: res.data.apiName,
                             modelId: res.data.modelId,
-                            Enterprises: [{
+                            EnterpriseModels: [{
                                     type: feature,
                                     Enterprise: {
                                         userId: id,
@@ -79,13 +79,13 @@ export const PlanAndModel = () => {
                 .catch(console.error);
         }
         else if (actionMeta.action === 'remove-value') {
-            axios.delete(`/api/models/relationship/${target}?modelId=${actionMeta.removedValue.value}&${target}Id=${id}`)
+            axios.delete(`/api/models/relationship/${target}?modelId=${actionMeta.removedValue.value}&${target}Id=${id}&type=${feature}`)
                 .then((res) => {
                 if (target === 'plan') {
-                    setModelPlanRelationship((prev) => prev.filter((v) => !(v.modelId === res.data.modelId && v.Plans.find((p) => p.type === feature && p.Plan.planId === id))));
+                    setModelPlanRelationship((prev) => prev.filter((v) => !(v.modelId === res.data.modelId && v.PlanModels.find((p) => p.type === feature && p.Plan.planId === id))));
                 }
                 else {
-                    setModelEnterpriseRelationship((prev) => prev.filter((v) => !(v.modelId === res.data.modelId && v.Enterprises.find((p) => p.type === feature && p.Enterprise.userId === id))));
+                    setModelEnterpriseRelationship((prev) => prev.filter((v) => !(v.modelId === res.data.modelId && v.EnterpriseModels.find((p) => p.type === feature && p.Enterprise.userId === id))));
                 }
             })
                 .catch(console.error);
@@ -116,12 +116,22 @@ export const PlanAndModel = () => {
                             React.createElement("a", { href: `/admin/resources/Plan/records/${plan.params.planId}/show` }, plan.params.grade)),
                         features.map((item, index) => (React.createElement("td", { key: item, style: { padding: 20 } },
                             React.createElement("div", { style: { width: 300 } },
-                                React.createElement(Select, { isMulti: true, isClearable: false, onChange: onChange(item, 'plan', plan.params.planId), value: modelPlanRelationship.filter((v) => v.Plans.find((p) => p.Plan.planId === plan.params.planId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString() })), options: models.map((model) => {
+                                React.createElement(Select, { isMulti: true, isClearable: false, onChange: onChange(item, 'plan', plan.params.planId), value: modelPlanRelationship.filter((v) => v.PlanModels.find((p) => p.Plan.planId === plan.params.planId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString() })), options: models.map((model) => {
                                         return {
                                             label: model.params.apiName,
                                             value: model.params.modelId,
                                         };
-                                    }) })))))));
+                                    }), components: {
+                                        MultiValueLabel: (model) => React.createElement("a", { style: { overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap',
+                                                borderRadius: 2,
+                                                color: 'rgb(51, 51, 51)',
+                                                fontSize: '85%',
+                                                padding: '3px 3px 3px 6px',
+                                                boxSizing: 'border-box',
+                                            }, href: `/admin/resources/Model/records/${model.data.value}/show` }, model.data.label)
+                                    } })))))));
                 }),
                 React.createElement("tr", null,
                     React.createElement("td", null, "-"),
@@ -132,12 +142,22 @@ export const PlanAndModel = () => {
                             React.createElement("a", { href: `/admin/resources/Plan/records/${plan.params.planId}/show` }, plan.params.grade)),
                         features.map((item, index) => (React.createElement("td", { key: item, style: { padding: 20 } },
                             React.createElement("div", { style: { width: 300 } },
-                                React.createElement(Select, { isMulti: true, isClearable: false, onChange: onChange(item, 'plan', plan.params.planId), value: modelPlanRelationship.filter((v) => v.Plans.find((p) => p.Plan.planId === plan.params.planId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString() })), options: models.map((model) => {
+                                React.createElement(Select, { isMulti: true, isClearable: false, onChange: onChange(item, 'plan', plan.params.planId), value: modelPlanRelationship.filter((v) => v.PlanModels.find((p) => p.Plan.planId === plan.params.planId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString() })), options: models.map((model) => {
                                         return {
                                             label: model.params.apiName,
                                             value: model.params.modelId,
                                         };
-                                    }) })))))));
+                                    }), components: {
+                                        MultiValueLabel: (model) => React.createElement("a", { style: { overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap',
+                                                borderRadius: 2,
+                                                color: 'rgb(51, 51, 51)',
+                                                fontSize: '85%',
+                                                padding: '3px 3px 3px 6px',
+                                                boxSizing: 'border-box',
+                                            }, href: `/admin/resources/Model/records/${model.data.value}/show` }, model.data.label)
+                                    } })))))));
                 }),
                 enterprises.map((plan) => {
                     return (React.createElement("tr", { key: plan.params.userId },
@@ -149,12 +169,22 @@ export const PlanAndModel = () => {
                                 ")")),
                         features.map((item, index) => (React.createElement("td", { key: item, style: { padding: 20 } },
                             React.createElement("div", { style: { width: 300 } },
-                                React.createElement(Select, { isMulti: true, isClearable: false, onChange: onChange(item, 'enterprise', plan.params.userId), value: modelEnterpriseRelationship.filter((v) => v.Enterprises.find((p) => p.Enterprise.userId === plan.params.userId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString() })), options: models.map((model) => {
+                                React.createElement(Select, { isMulti: true, isClearable: false, onChange: onChange(item, 'enterprise', plan.params.userId), value: modelEnterpriseRelationship.filter((v) => v.EnterpriseModels.find((p) => p.Enterprise.userId === plan.params.userId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString() })), options: models.map((model) => {
                                         return {
                                             label: model.params.apiName,
-                                            value: model.params.modelId,
+                                            value: model.params.modelId.toString(),
                                         };
-                                    }) })))))));
+                                    }), components: {
+                                        MultiValueLabel: (model) => React.createElement("a", { style: { overflow: 'hidden',
+                                                textOverflow: 'ellipsis',
+                                                whiteSpace: 'nowrap',
+                                                borderRadius: 2,
+                                                color: 'rgb(51, 51, 51)',
+                                                fontSize: '85%',
+                                                padding: '3px 3px 3px 6px',
+                                                boxSizing: 'border-box',
+                                            }, href: `/admin/resources/Model/records/${model.data.value}/show` }, model.data.label)
+                                    } })))))));
                 })))));
 };
 export default PlanAndModel;

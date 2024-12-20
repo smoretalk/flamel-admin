@@ -37,6 +37,20 @@ export const convertFilter = (modelFields, filterObject) => {
                     }
                 };
             }
+            else if (name === 'PlanModels') {
+                where[name] = {
+                    some: {
+                        planId: parseInt(filter.value, 10)
+                    }
+                };
+            }
+            else if (name === 'EnterpriseModels') {
+                where[name] = {
+                    some: {
+                        enterpriseId: parseInt(filter.value, 10)
+                    }
+                };
+            }
         }
         else if (['boolean', 'number', 'float', 'object', 'array'].includes(filter.property?.type())) {
             if (filter.property.type() === 'number') {

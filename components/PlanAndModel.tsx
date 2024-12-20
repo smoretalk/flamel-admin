@@ -3,8 +3,8 @@ import {ApiClient} from "adminjs";
 import Select, {ActionMeta, MultiValue } from 'react-select';
 import axios from "axios";
 
-type PlanModel = { modelId: number; apiName: string; Plans: Array<{ type: string; Plan: { planId: number } }> };
-type EnterpriseModel = { modelId: number; apiName: string; Enterprises: Array<{ type: string; Enterprise: { userId: number } }> };
+type PlanModel = { modelId: number; apiName: string; PlanModels: Array<{ type: string; Plan: { planId: number } }> };
+type EnterpriseModel = { modelId: number; apiName: string; EnterpriseModels: Array<{ type: string; Enterprise: { userId: number } }> };
 export const PlanAndModel: React.FC = () => {
   const [plans, setPlans] = React.useState([]);
   const [models, setModels] = React.useState([]);
@@ -65,7 +65,7 @@ export const PlanAndModel: React.FC = () => {
             setModelPlanRelationship((prev) => [...prev, {
               apiName: res.data.apiName,
               modelId: res.data.modelId,
-              Plans: [{
+              PlanModels: [{
                 type: feature,
                 Plan: {
                   planId: id,
@@ -76,7 +76,7 @@ export const PlanAndModel: React.FC = () => {
             setModelEnterpriseRelationship((prev) => [...prev, {
               apiName: res.data.apiName,
               modelId: res.data.modelId,
-              Enterprises: [{
+              EnterpriseModels: [{
                 type: feature,
                 Enterprise: {
                   userId: id,
@@ -87,12 +87,12 @@ export const PlanAndModel: React.FC = () => {
         })
         .catch(console.error);
     } else if (actionMeta.action === 'remove-value') {
-      axios.delete(`/api/models/relationship/${target}?modelId=${actionMeta.removedValue.value}&${target}Id=${id}`)
+      axios.delete(`/api/models/relationship/${target}?modelId=${actionMeta.removedValue.value}&${target}Id=${id}&type=${feature}`)
         .then((res) => {
           if (target === 'plan') {
-            setModelPlanRelationship((prev) => prev.filter((v) => !(v.modelId === res.data.modelId && v.Plans.find((p) => p.type === feature && p.Plan.planId === id))));
+            setModelPlanRelationship((prev) => prev.filter((v) => !(v.modelId === res.data.modelId && v.PlanModels.find((p) => p.type === feature && p.Plan.planId === id))));
           } else {
-            setModelEnterpriseRelationship((prev) => prev.filter((v) => !(v.modelId === res.data.modelId && v.Enterprises.find((p) => p.type === feature && p.Enterprise.userId === id))));
+            setModelEnterpriseRelationship((prev) => prev.filter((v) => !(v.modelId === res.data.modelId && v.EnterpriseModels.find((p) => p.type === feature && p.Enterprise.userId === id))));
           }
         })
         .catch(console.error);
@@ -136,13 +136,28 @@ export const PlanAndModel: React.FC = () => {
                       isMulti
                       isClearable={false}
                       onChange={onChange(item, 'plan', plan.params.planId)}
-                      value={modelPlanRelationship.filter((v) => v.Plans.find((p) => p.Plan.planId === plan.params.planId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString()}))}
+                      value={modelPlanRelationship.filter((v) => v.PlanModels.find((p) => p.Plan.planId === plan.params.planId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString()}))}
                       options={models.map((model) => {
                         return {
                           label: model.params.apiName,
                           value: model.params.modelId,
                         };
                       })}
+                      components={{
+                        MultiValueLabel: (model) => <a
+                          style={{overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            borderRadius: 2,
+                            color: 'rgb(51, 51, 51)',
+                            fontSize: '85%',
+                            padding: '3px 3px 3px 6px',
+                            boxSizing:'border-box',
+                          }}
+                          href={`/admin/resources/Model/records/${model.data.value}/show`}>
+                          {model.data.label}
+                        </a>
+                      }}
                     />
                   </div>
                 </td>
@@ -170,13 +185,28 @@ export const PlanAndModel: React.FC = () => {
                       isMulti
                       isClearable={false}
                       onChange={onChange(item, 'plan', plan.params.planId)}
-                      value={modelPlanRelationship.filter((v) => v.Plans.find((p) => p.Plan.planId === plan.params.planId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString()}))}
+                      value={modelPlanRelationship.filter((v) => v.PlanModels.find((p) => p.Plan.planId === plan.params.planId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString()}))}
                       options={models.map((model) => {
                         return {
                           label: model.params.apiName,
                           value: model.params.modelId,
                         };
                       })}
+                      components={{
+                        MultiValueLabel: (model) => <a
+                          style={{overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            borderRadius: 2,
+                            color: 'rgb(51, 51, 51)',
+                            fontSize: '85%',
+                            padding: '3px 3px 3px 6px',
+                            boxSizing:'border-box',
+                          }}
+                          href={`/admin/resources/Model/records/${model.data.value}/show`}>
+                          {model.data.label}
+                        </a>
+                      }}
                     />
                   </div>
                 </td>
@@ -196,13 +226,28 @@ export const PlanAndModel: React.FC = () => {
                       isMulti
                       isClearable={false}
                       onChange={onChange(item, 'enterprise', plan.params.userId)}
-                      value={modelEnterpriseRelationship.filter((v) => v.Enterprises.find((p) => p.Enterprise.userId === plan.params.userId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString()}))}
+                      value={modelEnterpriseRelationship.filter((v) => v.EnterpriseModels.find((p) => p.Enterprise.userId === plan.params.userId && item === p.type)).map((v) => ({ label: v.apiName, value: v.modelId.toString()}))}
                       options={models.map((model) => {
                         return {
                           label: model.params.apiName,
-                          value: model.params.modelId,
+                          value: model.params.modelId.toString(),
                         };
                       })}
+                      components={{
+                        MultiValueLabel: (model) => <a
+                          style={{overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            borderRadius: 2,
+                            color: 'rgb(51, 51, 51)',
+                            fontSize: '85%',
+                            padding: '3px 3px 3px 6px',
+                            boxSizing:'border-box',
+                          }}
+                          href={`/admin/resources/Model/records/${model.data.value}/show`}>
+                          {model.data.label}
+                        </a>
+                      }}
                     />
                   </div>
                 </td>

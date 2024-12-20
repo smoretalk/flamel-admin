@@ -1,8 +1,8 @@
 import React from 'react';
-import {styled, useTheme} from '@adminjs/design-system/styled-components';
+import {styled} from '@adminjs/design-system/styled-components';
 import { Link } from 'react-router-dom';
 import { Button } from '@adminjs/design-system';
-import { ViewHelpers, PropertyJSON } from 'adminjs';
+import {ViewHelpers, PropertyJSON, flat} from 'adminjs';
 
 interface Props {
   property: PropertyJSON;
@@ -41,15 +41,16 @@ const ReferenceValue: React.FC<Props> = (props) => {
   //     </StyledLink>
   //   );
   // }
+  console.log(record, property.props.title, flat.get(record, property.props.title));
   const href = h.recordActionUrl({
-    resourceId: property.reference,
+    resourceId: property.props.reference || property.reference,
     recordId: refId,
     actionName: 'show',
   });
   return (
     <StyledLink to={href}>
       <Button size="xs" rounded variant="outlined">
-        {record[property.props.title]}
+        {(flat.flatten(record) as Record<string, string>)[property.props.title]}
       </Button>
     </StyledLink>
   );
