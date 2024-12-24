@@ -1,4 +1,4 @@
-import { Box, Button, DatePicker, H5, Icon, Input, Label, Select } from "@adminjs/design-system";
+import { Box, Button, CheckBox, DatePicker, H5, Icon, Input, Label, Select, } from "@adminjs/design-system";
 import React, { useState } from "react";
 import Card from "./Card.js";
 import { useTranslation } from "adminjs";
@@ -10,7 +10,9 @@ export default function CouponIssueSection({}) {
     const [email, setEmail] = useState('');
     const [maxCount, setMaxCount] = useState(null);
     const [code, setCode] = useState('');
+    const [reason, setReason] = useState('');
     const [credit, setCredit] = useState(0);
+    const [sendEmail, setSendEmail] = useState(false);
     function onChangeDate(date) {
         console.log(date);
         if (date) {
@@ -37,7 +39,7 @@ export default function CouponIssueSection({}) {
     }
     async function onSubmit(e) {
         e.preventDefault();
-        console.log('submitting', code, credit, date, type, maxCount, email);
+        console.log('submitting', code, credit, date, type, maxCount, email, reason, sendEmail);
         try {
             await axios.post('/api/coupons', {
                 code,
@@ -46,6 +48,8 @@ export default function CouponIssueSection({}) {
                 type: type.value,
                 email: email || null,
                 maxCount: maxCount || null,
+                reason,
+                sendEmail,
             });
             setCode('');
             alert("쿠폰이 발급되었습니다!");
@@ -56,6 +60,12 @@ export default function CouponIssueSection({}) {
                 alert(err.response.data?.data);
             }
         }
+    }
+    function onChangeSendEmail(e) {
+        setSendEmail(e.target.checked);
+    }
+    function onChangeReason(e) {
+        setReason(e.target.value);
     }
     return (React.createElement(Box, { width: [1, 1, 1 / 2], p: "lg" },
         React.createElement(Card, { as: "form", onSubmit: onSubmit },
@@ -85,6 +95,12 @@ export default function CouponIssueSection({}) {
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uB9CC\uB8CC\uAE30\uD55C"),
                 React.createElement(DatePicker, { onChange: onChangeDate, propertyType: "date", value: date?.toString() })),
+            React.createElement(Box, null,
+                React.createElement(Label, null, "\uCFE0\uD3F0 \uBC1C\uAE09 \uC0AC\uC720(HTML)"),
+                React.createElement(Input, { onChange: onChangeReason, type: "text", placeholder: "\uCFE0\uD3F0 \uBC1C\uAE09 \uC0AC\uC720", required: true, value: reason, style: { width: '100%' } })),
+            React.createElement(Box, null,
+                React.createElement(Label, null, "\uC774\uBA54\uC77C \uC804\uC1A1 \uC5EC\uBD80"),
+                React.createElement(CheckBox, { onChange: onChangeSendEmail })),
             React.createElement(Box, null,
                 React.createElement(Button, { variant: "contained", onClick: onSubmit }, "\uC0DD\uC131")))));
 }
