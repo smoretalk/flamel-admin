@@ -100,7 +100,7 @@ export default function CouponIssueSection({}) {
                 React.createElement(Input, { onChange: onChangeReason, type: "text", placeholder: "\uCFE0\uD3F0 \uBC1C\uAE09 \uC0AC\uC720", required: true, value: reason, style: { width: '100%' } })),
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uC774\uBA54\uC77C \uC804\uC1A1 \uC5EC\uBD80"),
-                React.createElement(CheckBox, { onChange: onChangeSendEmail })),
+                React.createElement(CheckBox, { onChange: onChangeSendEmail, checked: sendEmail })),
             React.createElement(Box, null,
                 React.createElement(Button, { variant: "contained", onClick: onSubmit }, "\uC0DD\uC131")))));
 }

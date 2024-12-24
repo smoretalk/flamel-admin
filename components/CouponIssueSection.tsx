@@ -103,7 +103,7 @@ export default function CouponIssueSection({}) {
         <Box><Label>사용자</Label><Input onChange={onChangeEmail} placeholder="지급 대상 이메일(빈칸이면 누구나 가능)" value={email} style={{width: '100%'}} /></Box>
         <Box><Label>만료기한</Label><DatePicker onChange={onChangeDate} propertyType="date" value={date?.toString()} /></Box>
         <Box><Label>쿠폰 발급 사유(HTML)</Label><Input onChange={onChangeReason} type="text" placeholder="쿠폰 발급 사유" required value={reason} style={{width: '100%'}} /></Box>
-        <Box><Label>이메일 전송 여부</Label><CheckBox onChange={onChangeSendEmail} /></Box>
+        <Box><Label>이메일 전송 여부</Label><CheckBox onChange={onChangeSendEmail} checked={sendEmail} /></Box>
         <Box><Button variant="contained" onClick={onSubmit}>생성</Button></Box>
       </Card>
     </Box>
