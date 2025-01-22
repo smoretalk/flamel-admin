@@ -1,14 +1,7 @@
 import React from 'react';
 import { FormGroup, Label } from '@adminjs/design-system';
 import { flat, useTranslation } from "adminjs";
-import RDV from "react-diff-viewer-continued/lib/src/index.js";
-let ReactDiffViewer;
-if (typeof RDV.default !== 'undefined') {
-    ReactDiffViewer = RDV.default;
-}
-else {
-    ReactDiffViewer = RDV;
-}
+import Viewer from "react-json-view-compare";
 const JsonDiff = (props) => {
     const { property, record } = props;
     const { translateProperty } = useTranslation();
@@ -25,7 +18,7 @@ const JsonDiff = (props) => {
     });
     return (React.createElement(FormGroup, null,
         React.createElement(Label, null, translateProperty(property.label)),
-        React.createElement(ReactDiffViewer, { oldValue: JSON.stringify(flat.unflatten(before), null, 2), newValue: JSON.stringify(flat.unflatten(after), null, 2) })));
+        React.createElement(Viewer, { oldData: flat.unflatten(before), newData: flat.unflatten(after) })));
 };
 export default React.memo(JsonDiff);
 //# sourceMappingURL=JsonDiff.js.map
