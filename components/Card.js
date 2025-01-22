@@ -13,9 +13,5 @@ const Card = styled(Box) `
     box-shadow: ${({ theme }) => theme.shadows.cardHover};
   }
 `;
-Card.defaultProps = {
-    variant: 'container',
-    boxShadow: 'card',
-};
 export default Card;
 //# sourceMappingURL=Card.js.map

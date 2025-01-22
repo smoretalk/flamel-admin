@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import type { ActionProps } from 'adminjs';
 import { saveAs } from 'file-saver';
-import format from 'date-fns/format';
+import {format} from 'date-fns/format';
 import axios from 'axios';
 
 export const getExportedFileName = (extension: string) =>

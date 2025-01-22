@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { saveAs } from 'file-saver';
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 import axios from 'axios';
 export const getExportedFileName = (extension) => `export-${format(Date.now(), 'yyyy-MM-dd_HH-mm')}.${extension}`;
 const ExportCsv = ({ resource }) => {
