@@ -1,15 +1,12 @@
 import {
   Box,
-  Button,
+  Button, CheckBox,
   DatePicker,
-  DropDown,
-  DropDownItem,
   H5,
   Icon,
   Input,
   Label,
   Select,
-  Text
 } from "@adminjs/design-system";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import Card from "./Card.js";
@@ -23,7 +20,9 @@ export default function CouponIssueSection({}) {
   const [email, setEmail] = useState('');
   const [maxCount, setMaxCount] = useState<number | null>(null);
   const [code, setCode] = useState<string>('');
+  const [reason, setReason] = useState<string>('');
   const [credit, setCredit] = useState<number>(0);
+  const [sendEmail, setSendEmail] = useState(false);
 
   function onChangeDate(date: string | null) {
     console.log(date);
@@ -56,7 +55,7 @@ export default function CouponIssueSection({}) {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log('submitting', code, credit, date, type, maxCount, email);
+    console.log('submitting', code, credit, date, type, maxCount, email, reason, sendEmail);
     try {
       await axios.post('/api/coupons', {
         code,
@@ -65,6 +64,8 @@ export default function CouponIssueSection({}) {
         type: type.value,
         email: email || null,
         maxCount: maxCount || null,
+        reason,
+        sendEmail,
       });
       setCode('');
       alert("쿠폰이 발급되었습니다!");
@@ -74,6 +75,15 @@ export default function CouponIssueSection({}) {
         alert(err.response.data?.data);
       }
     }
+  }
+
+  function onChangeSendEmail(e: ChangeEvent<HTMLInputElement>) {
+    console.log(e.target.checked);
+    setSendEmail(e.target.checked);
+  }
+
+  function onChangeReason(e: ChangeEvent<HTMLInputElement>) {
+    setReason(e.target.value);
   }
 
   return (
@@ -93,6 +103,8 @@ export default function CouponIssueSection({}) {
         <Box><Label>발행량</Label><Input onChange={onChangeMaxCount} type="number" placeholder="발행량(비워두면 1)" value={maxCount} style={{width: '100%'}} /></Box>
         <Box><Label>사용자</Label><Input onChange={onChangeEmail} placeholder="지급 대상 이메일(빈칸이면 누구나 가능)" value={email} style={{width: '100%'}} /></Box>
         <Box><Label>만료기한</Label><DatePicker onChange={onChangeDate} propertyType="date" value={date?.toString()} /></Box>
+        <Box><Label>쿠폰 발급 사유(HTML)</Label><Input onChange={onChangeReason} type="text" placeholder="쿠폰 발급 사유" required value={reason} style={{width: '100%'}} /></Box>
+        <Box><Label>이메일 전송 여부 <CheckBox onChange={onChangeSendEmail} checked={sendEmail} /></Label></Box>
         <Box><Button variant="contained" onClick={onSubmit}>생성</Button></Box>
       </Card>
     </Box>
