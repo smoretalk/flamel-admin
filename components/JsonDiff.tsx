@@ -1,8 +1,7 @@
-import React, { ReactNode } from 'react'
-import _ from 'lodash'
-import { Badge, Section, FormGroup, Label } from '@adminjs/design-system'
-import {ShowPropertyProps, flat, FlattenValue, useTranslation} from "adminjs";
-import { default as DiffViewer } from "react-diff-viewer-continued";
+import React from 'react'
+import { FormGroup, Label } from '@adminjs/design-system'
+import {ShowPropertyProps, flat, useTranslation} from "adminjs";
+import Viewer from "react-json-view-compare";
 
 const JsonDiff = (props: ShowPropertyProps) => {
   const { property, record } = props;
@@ -23,7 +22,7 @@ const JsonDiff = (props: ShowPropertyProps) => {
   return (
     <FormGroup>
       <Label>{translateProperty(property.label)}</Label>
-      <DiffViewer.default oldValue={JSON.stringify(flat.unflatten(before), null, 2)} newValue={JSON.stringify(flat.unflatten(after), null, 2)} />
+      <Viewer oldData={flat.unflatten(before)} newData={flat.unflatten(after)} />
     </FormGroup>
   );
 }

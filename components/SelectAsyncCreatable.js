@@ -1,4 +1,3 @@
-import noop from 'lodash/noop.js';
 import React, { lazy } from 'react';
 import { cssClass } from '@adminjs/design-system';
 const ReactAsyncSelect = lazy(() => import('react-select/async-creatable'));
@@ -10,10 +9,6 @@ export const SelectAsyncCreatable = (props) => {
             onChange(selected);
     };
     return (React.createElement(SelectAsyncComponent, { className: cssClass('Select'), value: value, onChange: handleChange, isClearable: true, onCreateOption: onCreateOption, ...selectProps }));
-};
-SelectAsyncCreatable.defaultProps = {
-    variant: 'default',
-    onChange: noop,
 };
 export default SelectAsyncCreatable;
 //# sourceMappingURL=SelectAsyncCreatable.js.map

@@ -46,8 +46,4 @@ const Card = styled(Box)`
   }
 `;
 
-Card.defaultProps = {
-  variant: 'container',
-  boxShadow: 'card',
-};
 export default Card;
