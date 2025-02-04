@@ -24,8 +24,12 @@ export const convertParam = (property: Property, fields: readonly { name: string
   }
   if (type === 'reference') {
     const foreignColumn = fields.find((field) => field.name === property.foreignColumnName());
-    if (!foreignColumn)
+    if (!foreignColumn) {
+      if (Array.isArray(value) && value.length === 0) {
+        return undefined;
+      }
       return value;
+    }
     if (value === undefined || value === null)
       return value;
     const foreignColumnType = foreignColumn.type;
