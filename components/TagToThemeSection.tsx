@@ -38,6 +38,10 @@ export default function TagToThemeSection({}) {
       alert('태그를 하나라도 입력해주세요');
       return;
     }
+    if (!themeId) {
+      alert('대주제 아이디를 입력해주세요');
+      return;
+    }
     try {
       await axios.patch(`/api/collections/tags/${filtered.join(',')}/connectTheme?themeId=${themeId}`, {}, {
         timeout: 60_000,
@@ -53,7 +57,8 @@ export default function TagToThemeSection({}) {
   }
 
   function onClickPlus(index: number) {
-    return () => {
+    return (e: MouseEvent) => {
+      e.preventDefault();
       setTags((prev) => {
         return prev.concat('');
       })
@@ -61,7 +66,8 @@ export default function TagToThemeSection({}) {
   }
 
   function onClickMinus(index: number) {
-    return () => {
+    return (e: MouseEvent) => {
+      e.preventDefault();
       setTags((prev) => {
         return prev.slice(0, index).concat(prev.slice(index + 1));
       })
@@ -77,12 +83,12 @@ export default function TagToThemeSection({}) {
           <Box>
             <Label>태그 {index+1} (&& 관계)</Label>
             <Input onChange={onChangeTag(index)} type="text" placeholder="입력" required value={tag} style={{width: '100%'}} />
-            <Button onClick={onClickPlus(index)}><Icon icon="Plus" /></Button>
-            <Button onClick={onClickMinus(index)}><Icon icon="Minus" /></Button>
+            <Button type="button" onClick={onClickPlus(index)}><Icon icon="Plus" /></Button>
+            <Button type="button" onClick={onClickMinus(index)}><Icon icon="Minus" /></Button>
           </Box>
         ))}
         <Box><Label>대주제아이디</Label><Input onChange={onChangeTheme} type="number" placeholder="숫자" required value={themeId} style={{width: '100%'}} /></Box>
-        <Box><Button variant="contained" onClick={onSubmit}>추가</Button></Box>
+        <Box><Button type="submit" variant="contained" onClick={onSubmit}>추가</Button></Box>
       </Card>
     </Box>
   )

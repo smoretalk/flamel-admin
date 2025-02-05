@@ -27,6 +27,10 @@ export default function TagToThemeSection({}) {
             alert('태그를 하나라도 입력해주세요');
             return;
         }
+        if (!themeId) {
+            alert('대주제 아이디를 입력해주세요');
+            return;
+        }
         try {
             await axios.patch(`/api/collections/tags/${filtered.join(',')}/connectTheme?themeId=${themeId}`, {}, {
                 timeout: 60_000,
@@ -42,14 +46,16 @@ export default function TagToThemeSection({}) {
         }
     }
     function onClickPlus(index) {
-        return () => {
+        return (e) => {
+            e.preventDefault();
             setTags((prev) => {
                 return prev.concat('');
             });
         };
     }
     function onClickMinus(index) {
-        return () => {
+        return (e) => {
+            e.preventDefault();
             setTags((prev) => {
                 return prev.slice(0, index).concat(prev.slice(index + 1));
             });
@@ -65,14 +71,14 @@ export default function TagToThemeSection({}) {
                     index + 1,
                     " (&& \uAD00\uACC4)"),
                 React.createElement(Input, { onChange: onChangeTag(index), type: "text", placeholder: "\uC785\uB825", required: true, value: tag, style: { width: '100%' } }),
-                React.createElement(Button, { onClick: onClickPlus(index) },
+                React.createElement(Button, { type: "button", onClick: onClickPlus(index) },
                     React.createElement(Icon, { icon: "Plus" })),
-                React.createElement(Button, { onClick: onClickMinus(index) },
+                React.createElement(Button, { type: "button", onClick: onClickMinus(index) },
                     React.createElement(Icon, { icon: "Minus" }))))),
             React.createElement(Box, null,
                 React.createElement(Label, null, "\uB300\uC8FC\uC81C\uC544\uC774\uB514"),
                 React.createElement(Input, { onChange: onChangeTheme, type: "number", placeholder: "\uC22B\uC790", required: true, value: themeId, style: { width: '100%' } })),
             React.createElement(Box, null,
-                React.createElement(Button, { variant: "contained", onClick: onSubmit }, "\uCD94\uAC00")))));
+                React.createElement(Button, { type: "submit", variant: "contained", onClick: onSubmit }, "\uCD94\uAC00")))));
 }
 //# sourceMappingURL=TagToThemeSection.js.map
