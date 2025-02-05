@@ -1,15 +1,10 @@
 import {
   Box,
   Button,
-  DatePicker,
-  DropDown,
-  DropDownItem,
   H5,
   Icon,
   Input,
   Label,
-  Select,
-  Text
 } from "@adminjs/design-system";
 import React, {ChangeEvent, FormEvent, useState} from "react";
 import Card from "./Card.js";
@@ -18,11 +13,17 @@ import axios from "axios";
 
 export default function TagToThemeSection({}) {
   const { translateMessage } = useTranslation();
-  const [tag, setTag] = useState('');
+  const [tags, setTags] = useState<string[]>(['']);
   const [themeId, setThemeId] = useState<number | null>(null);
 
-  function onChangeTag(e: ChangeEvent<HTMLInputElement>) {
-    setTag(e.target.value);
+  function onChangeTag(index: number) {
+    return (e: ChangeEvent<HTMLInputElement>) => {
+      setTags((prev) => {
+        const next = [...prev];
+        next[index] = e.target.value;
+        return next;
+      });
+    }
   }
 
   function onChangeTheme(e: ChangeEvent<HTMLInputElement>) {
@@ -31,12 +32,17 @@ export default function TagToThemeSection({}) {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log('submitting', tag, themeId);
+    console.log('submitting', tags, themeId);
+    const filtered = tags.filter((v) => !v.trim());
+    if (filtered.length === 0) {
+      alert('태그를 하나라도 입력해주세요');
+      return;
+    }
     try {
-      await axios.patch(`/api/collections/tags/${tag}/connectTheme?themeId=${themeId}`, {}, {
+      await axios.patch(`/api/collections/tags/${filtered.join(',')}/connectTheme?themeId=${themeId}`, {}, {
         timeout: 60_000,
       });
-      setTag('');
+      setTags([]);
       alert("태그가 추가되었습니다");
     } catch (err) {
       console.error(err);
@@ -46,12 +52,35 @@ export default function TagToThemeSection({}) {
     }
   }
 
+  function onClickPlus(index: number) {
+    return () => {
+      setTags((prev) => {
+        return prev.concat('');
+      })
+    }
+  }
+
+  function onClickMinus(index: number) {
+    return () => {
+      setTags((prev) => {
+        return [...prev.splice(index, 1)];
+      })
+    }
+  }
+
   return (
     <Box width={[1, 1, 1 / 2]} p="lg">
       <Card as="form" onSubmit={onSubmit}>
         <Icon icon="Gift" />
         <H5 mt="lg">{translateMessage('tagToTheme_title')}</H5>
-        <Box><Label>태그</Label><Input onChange={onChangeTag} type="text" placeholder="입력" required value={tag} style={{width: '100%'}} /></Box>
+        {tags.map((tag, index) => (
+          <Box>
+            <Label>태그 {index+1} (&& 관계)</Label>
+            <Input onChange={onChangeTag(index)} type="text" placeholder="입력" required value={tag} style={{width: '100%'}} />
+            <Button onClick={onClickPlus(index)}><Icon icon="Plus" /></Button>
+            <Button onClick={onClickMinus(index)}><Icon icon="Minus" /></Button>
+          </Box>
+        ))}
         <Box><Label>대주제아이디</Label><Input onChange={onChangeTheme} type="number" placeholder="숫자" required value={themeId} style={{width: '100%'}} /></Box>
         <Box><Button variant="contained" onClick={onSubmit}>추가</Button></Box>
       </Card>
