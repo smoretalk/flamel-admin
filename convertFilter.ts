@@ -12,6 +12,10 @@ export const safeParseJSON = (json: string) => {
   }
 };
 
+const isKnownId = (name: string) => {
+  return ['userId', 'imageId'].includes(name);
+}
+
 export const convertFilter = (modelFields: DMMF.Model, filterObject: Filter): Record<string, any> => {
   if (!filterObject) return {};
 
@@ -112,6 +116,8 @@ export const convertFilter = (modelFields: DMMF.Model, filterObject: Filter): Re
       where[name] = { not: null }
     } else if (filter.value.toString().startsWith('-')) {
       where[name] = { not: filter.value.toString().slice(1) }
+    } else if (isKnownId(name)) {
+      where[name] = parseInt(filter.value as string);
     } else {
       where[name] = { contains: filter.value.toString() };
     }

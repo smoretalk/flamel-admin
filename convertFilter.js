@@ -8,6 +8,9 @@ export const safeParseJSON = (json) => {
         return null;
     }
 };
+const isKnownId = (name) => {
+    return ['userId', 'imageId'].includes(name);
+};
 export const convertFilter = (modelFields, filterObject) => {
     if (!filterObject)
         return {};
@@ -122,6 +125,9 @@ export const convertFilter = (modelFields, filterObject) => {
         }
         else if (filter.value.toString().startsWith('-')) {
             where[name] = { not: filter.value.toString().slice(1) };
+        }
+        else if (isKnownId(name)) {
+            where[name] = parseInt(filter.value);
         }
         else {
             where[name] = { contains: filter.value.toString() };
