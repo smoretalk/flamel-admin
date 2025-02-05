@@ -32,8 +32,7 @@ export default function TagToThemeSection({}) {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log('submitting', tags, themeId);
-    const filtered = tags.filter((v) => !v.trim());
+    const filtered = tags.filter((v) => v.trim());
     if (filtered.length === 0) {
       alert('태그를 하나라도 입력해주세요');
       return;
