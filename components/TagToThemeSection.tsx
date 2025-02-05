@@ -45,7 +45,7 @@ export default function TagToThemeSection({}) {
       await axios.patch(`/api/collections/tags/${filtered.join(',')}/connectTheme?themeId=${themeId}`, {}, {
         timeout: 60_000,
       });
-      setTags([]);
+      setTags(['']);
       alert("태그가 추가되었습니다");
     } catch (err) {
       console.error(err);
@@ -67,6 +67,9 @@ export default function TagToThemeSection({}) {
   function onClickMinus(index: number) {
     return (e: MouseEvent) => {
       e.preventDefault();
+      if (tags.length === 1) {
+        return;
+      }
       setTags((prev) => {
         return prev.slice(0, index).concat(prev.slice(index + 1));
       })
@@ -76,7 +79,7 @@ export default function TagToThemeSection({}) {
   return (
     <Box width={[1, 1, 1 / 2]} p="lg">
       <Card as="form" onSubmit={onSubmit}>
-        <Icon icon="Gift" />
+        <Icon icon="Tag" />
         <H5 mt="lg">{translateMessage('tagToTheme_title')}</H5>
         {tags.map((tag, index) => (
           <Box>

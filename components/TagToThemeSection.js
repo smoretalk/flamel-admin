@@ -34,7 +34,7 @@ export default function TagToThemeSection({}) {
             await axios.patch(`/api/collections/tags/${filtered.join(',')}/connectTheme?themeId=${themeId}`, {}, {
                 timeout: 60_000,
             });
-            setTags([]);
+            setTags(['']);
             alert("태그가 추가되었습니다");
         }
         catch (err) {
@@ -55,6 +55,9 @@ export default function TagToThemeSection({}) {
     function onClickMinus(index) {
         return (e) => {
             e.preventDefault();
+            if (tags.length === 1) {
+                return;
+            }
             setTags((prev) => {
                 return prev.slice(0, index).concat(prev.slice(index + 1));
             });
@@ -62,7 +65,7 @@ export default function TagToThemeSection({}) {
     }
     return (React.createElement(Box, { width: [1, 1, 1 / 2], p: "lg" },
         React.createElement(Card, { as: "form", onSubmit: onSubmit },
-            React.createElement(Icon, { icon: "Gift" }),
+            React.createElement(Icon, { icon: "Tag" }),
             React.createElement(H5, { mt: "lg" }, translateMessage('tagToTheme_title')),
             tags.map((tag, index) => (React.createElement(Box, null,
                 React.createElement(Label, null,
