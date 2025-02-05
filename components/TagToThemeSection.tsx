@@ -63,7 +63,7 @@ export default function TagToThemeSection({}) {
   function onClickMinus(index: number) {
     return () => {
       setTags((prev) => {
-        return [...prev.splice(index, 1)];
+        return prev.slice(0, index).concat(prev.slice(index + 1));
       })
     }
   }
