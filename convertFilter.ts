@@ -13,7 +13,7 @@ export const safeParseJSON = (json: string) => {
 };
 
 const isKnownId = (name: string) => {
-  return ['userId', 'imageId'].includes(name);
+  return ['userId', 'imageId', 'couponId', 'styleId', 'themeId'].includes(name);
 }
 
 export const convertFilter = (modelFields: DMMF.Model, filterObject: Filter): Record<string, any> => {

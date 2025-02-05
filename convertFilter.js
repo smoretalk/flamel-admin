@@ -9,7 +9,7 @@ export const safeParseJSON = (json) => {
     }
 };
 const isKnownId = (name) => {
-    return ['userId', 'imageId'].includes(name);
+    return ['userId', 'imageId', 'couponId', 'styleId', 'themeId'].includes(name);
 };
 export const convertFilter = (modelFields, filterObject) => {
     if (!filterObject)
