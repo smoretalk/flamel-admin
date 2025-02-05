@@ -306,6 +306,7 @@ export class CustomResource extends BaseResource {
       if (!foreignColumnName)
         continue;
       preparedValues[key] = params[foreignColumnName];
+      preparedValues[foreignColumnName] = params[foreignColumnName];
     }
     return preparedValues;
   }
