@@ -9,7 +9,7 @@ export const safeParseJSON = (json) => {
     }
 };
 const isKnownId = (name) => {
-    return ['userId', 'imageId', 'couponId', 'styleId', 'themeId'].includes(name);
+    return ['userId', 'imageId', 'couponId', 'styleId', 'themeId', 'collectionInfoId'].includes(name);
 };
 export const convertFilter = (modelFields, filterObject) => {
     if (!filterObject)
@@ -128,6 +128,9 @@ export const convertFilter = (modelFields, filterObject) => {
         }
         else if (isKnownId(name)) {
             where[name] = parseInt(filter.value);
+        }
+        else if (/^".*"$/.test(filter.value)) {
+            where[name] = filter.value.slice(1).slice(0, -1);
         }
         else {
             where[name] = { contains: filter.value.toString() };

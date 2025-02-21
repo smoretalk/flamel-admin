@@ -13,7 +13,7 @@ export const safeParseJSON = (json: string) => {
 };
 
 const isKnownId = (name: string) => {
-  return ['userId', 'imageId', 'couponId', 'styleId', 'themeId'].includes(name);
+  return ['userId', 'imageId', 'couponId', 'styleId', 'themeId', 'collectionInfoId'].includes(name);
 }
 
 export const convertFilter = (modelFields: DMMF.Model, filterObject: Filter): Record<string, any> => {
@@ -118,6 +118,8 @@ export const convertFilter = (modelFields: DMMF.Model, filterObject: Filter): Re
       where[name] = { not: filter.value.toString().slice(1) }
     } else if (isKnownId(name)) {
       where[name] = parseInt(filter.value as string);
+    } else if (/^".*"$/.test(filter.value as string)) { // 정확한 검색
+      where[name] = (filter.value as string).slice(1).slice(0, -1); // 따옴표 제거하고
     } else {
       where[name] = { contains: filter.value.toString() };
     }
