@@ -17,7 +17,7 @@ const BulkCollectionReject = (props) => {
         setLoading(true);
         const recordIds = records.map((r) => r.params.collectionInfoId);
         api.bulkAction({
-            resourceId: 'CollectionInfo',
+            resourceId: 'Image',
             actionName: action.name,
             recordIds,
             method: 'post',
