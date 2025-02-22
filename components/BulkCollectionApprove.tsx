@@ -24,7 +24,7 @@ const BulkCollectionApprove: React.FC<ActionProps & AddNoticeProps> = (props) =>
   const handleClick = (): void => {
     const api = new ApiClient()
     setLoading(true)
-    const recordIds = records.map((r) => r.id)
+    const recordIds = records.map((r) => r.params.collectionInfoId)
     api.bulkAction({
       resourceId: 'CollectionInfo',
       actionName: action.name,

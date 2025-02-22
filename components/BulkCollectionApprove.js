@@ -15,7 +15,7 @@ const BulkCollectionApprove = (props) => {
     const handleClick = () => {
         const api = new ApiClient();
         setLoading(true);
-        const recordIds = records.map((r) => r.id);
+        const recordIds = records.map((r) => r.params.collectionInfoId);
         api.bulkAction({
             resourceId: 'CollectionInfo',
             actionName: action.name,
