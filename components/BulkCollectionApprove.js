@@ -17,7 +17,7 @@ const BulkCollectionApprove = (props) => {
         setLoading(true);
         const recordIds = records.map((r) => r.id);
         api.bulkAction({
-            resourceId: resource.id,
+            resourceId: 'CollectionInfo',
             actionName: action.name,
             recordIds,
             method: 'post',
