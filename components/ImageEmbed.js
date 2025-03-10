@@ -46,11 +46,16 @@ export const ImageEmbed = () => {
             const htmlImageElement = document.querySelector('#image');
             htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
             await sleep(2000);
-            const imageEmbedderResult = embedder.embed(htmlImageElement);
-            console.log(r.imageId, imageEmbedderResult);
-            await axios.patch(`/api/collections/${r.imageId}/imageEmbed`, {
-                vector: JSON.stringify(imageEmbedderResult.embeddings[0].floatEmbedding),
-            });
+            try {
+                const imageEmbedderResult = embedder.embed(htmlImageElement);
+                console.log(r.imageId, imageEmbedderResult);
+                await axios.patch(`/api/collections/${r.imageId}/imageEmbed`, {
+                    vector: JSON.stringify(imageEmbedderResult.embeddings[0].floatEmbedding),
+                });
+            }
+            catch (err) {
+                console.error(err);
+            }
         }
     };
     const onTextStart = async () => {
@@ -60,10 +65,15 @@ export const ImageEmbed = () => {
             const htmlImageElement = document.querySelector('#image');
             htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
             const response2 = await axios.get(`/api/collections/${r.imageId}/caption`);
-            const textEmbedderResult = textEmbedder.embed(response2.data);
-            await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
-                vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
-            });
+            try {
+                const textEmbedderResult = textEmbedder.embed(response2.data);
+                await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
+                    vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
+                });
+            }
+            catch (err) {
+                console.error(err);
+            }
         }
     };
     const convertToHex = (color) => {
