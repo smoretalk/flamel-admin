@@ -29,6 +29,10 @@ export const Components = {
     'BulkCollectionApprove',
     path.resolve(__dirname, 'components', 'BulkCollectionApprove'),
   ),
+  BulkPremiumCollectionApprove: componentLoader.add(
+    'BulkPremiumCollectionApprove',
+    path.resolve(__dirname, 'components', 'BulkPremiumCollectionApprove'),
+  ),
   BulkCollectionReject: componentLoader.add(
     'BulkCollectionReject',
     path.resolve(__dirname, 'components', 'BulkCollectionReject'),

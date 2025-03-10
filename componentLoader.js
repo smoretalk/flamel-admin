@@ -13,6 +13,7 @@ export const Components = {
     DisplayNestedImage: componentLoader.add('DisplayNestedImage', path.resolve(__dirname, 'components', 'DisplayNestedImage')),
     PrintImage: componentLoader.add('PrintImage', path.resolve(__dirname, 'components', 'PrintImage')),
     BulkCollectionApprove: componentLoader.add('BulkCollectionApprove', path.resolve(__dirname, 'components', 'BulkCollectionApprove')),
+    BulkPremiumCollectionApprove: componentLoader.add('BulkPremiumCollectionApprove', path.resolve(__dirname, 'components', 'BulkPremiumCollectionApprove')),
     BulkCollectionReject: componentLoader.add('BulkCollectionReject', path.resolve(__dirname, 'components', 'BulkCollectionReject')),
     DisplayImage: componentLoader.add('DisplayImage', path.resolve(__dirname, 'components', 'DisplayImage')),
     DisplayImageBig: componentLoader.add('DisplayImageBig', path.resolve(__dirname, 'components', 'DisplayImageBig')),

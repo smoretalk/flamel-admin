@@ -7,6 +7,7 @@ export declare const Components: {
     DisplayNestedImage: string;
     PrintImage: string;
     BulkCollectionApprove: string;
+    BulkPremiumCollectionApprove: string;
     BulkCollectionReject: string;
     DisplayImage: string;
     DisplayImageBig: string;
