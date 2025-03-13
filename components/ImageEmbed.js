@@ -59,7 +59,7 @@ export const ImageEmbed = () => {
         }
     };
     const onTextStart = async () => {
-        const response2 = await axios.get(`/api/collections/allTextEmbedding`);
+        const response2 = await axios.get(`/api/collections/noTextEmbedding`);
         console.log(response2.data, textEmbedder);
         for (const r of response2.data) {
             const htmlImageElement = document.querySelector('#image');

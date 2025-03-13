@@ -72,7 +72,7 @@ export const ImageEmbed: React.FC = () => {
   };
 
   const onTextStart = async () => {
-    const response2 = await axios.get<{ imageId: number }[]>(`/api/collections/allTextEmbedding`);
+    const response2 = await axios.get<{ imageId: number }[]>(`/api/collections/noTextEmbedding`);
     console.log(response2.data, textEmbedder);
     for (const r of response2.data) {
       const htmlImageElement = document.querySelector('#image') as HTMLImageElement;
