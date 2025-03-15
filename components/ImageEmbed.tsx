@@ -53,7 +53,7 @@ export const ImageEmbed: React.FC = () => {
   }, []);
 
   const onStart = async () => {
-    const response2 = await axios.get<{ imageId: number }[]>(`/api/collections/noImageEmbedding`);
+    const response2 = await axios.get<{ imageId: number; collectionInfoId: number; }[]>(`/api/collections/noImageEmbedding`);
     console.log(response2.data, embedder);
     for (const r of response2.data) {
       const htmlImageElement = document.querySelector('#image') as HTMLImageElement;
@@ -62,7 +62,7 @@ export const ImageEmbed: React.FC = () => {
       try {
         const imageEmbedderResult = embedder.embed(htmlImageElement);
         console.log(r.imageId, imageEmbedderResult);
-        await axios.patch(`/api/collections/${r.imageId}/imageEmbed`, {
+        await axios.patch(`/api/collections/${r.collectionInfoId}/imageEmbed`, {
           vector: JSON.stringify(imageEmbedderResult.embeddings[0].floatEmbedding),
         });
       } catch (err) {
@@ -72,15 +72,16 @@ export const ImageEmbed: React.FC = () => {
   };
 
   const onTextStart = async () => {
-    const response2 = await axios.get<{ imageId: number }[]>(`/api/collections/noTextEmbedding`);
+    const response2 = await axios.get<{ imageId: number; collectionInfoId: number; }[]>(`/api/collections/noTextEmbedding`);
     console.log(response2.data, textEmbedder);
     for (const r of response2.data) {
-      const htmlImageElement = document.querySelector('#image') as HTMLImageElement;
+      const htmlImageElement = document.querySelector('#text') as HTMLImageElement;
       htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
       const response2 = await axios.get<string>(`/api/collections/${r.imageId}/caption`);
       try {
         const textEmbedderResult = textEmbedder.embed(response2.data);
-        await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
+        console.log(r.imageId, textEmbedderResult);
+        await axios.patch(`/api/collections/${r.collectionInfoId}/textEmbed`, {
           vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
         });
       } catch (err) {
@@ -229,6 +230,7 @@ export const ImageEmbed: React.FC = () => {
   return (
     <div>
       <img id='image' alt='' width={256} height={256}/>
+      <img id='text' alt='' width={256} height={256}/>
       <br/>
       <input type="color" id="color1" name="head" value={color1}/>
       <input type="color" id="color2" name="head" value={color2}/>

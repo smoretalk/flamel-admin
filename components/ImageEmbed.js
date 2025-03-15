@@ -49,7 +49,7 @@ export const ImageEmbed = () => {
             try {
                 const imageEmbedderResult = embedder.embed(htmlImageElement);
                 console.log(r.imageId, imageEmbedderResult);
-                await axios.patch(`/api/collections/${r.imageId}/imageEmbed`, {
+                await axios.patch(`/api/collections/${r.collectionInfoId}/imageEmbed`, {
                     vector: JSON.stringify(imageEmbedderResult.embeddings[0].floatEmbedding),
                 });
             }
@@ -62,12 +62,13 @@ export const ImageEmbed = () => {
         const response2 = await axios.get(`/api/collections/noTextEmbedding`);
         console.log(response2.data, textEmbedder);
         for (const r of response2.data) {
-            const htmlImageElement = document.querySelector('#image');
+            const htmlImageElement = document.querySelector('#text');
             htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
             const response2 = await axios.get(`/api/collections/${r.imageId}/caption`);
             try {
                 const textEmbedderResult = textEmbedder.embed(response2.data);
-                await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
+                console.log(r.imageId, textEmbedderResult);
+                await axios.patch(`/api/collections/${r.collectionInfoId}/textEmbed`, {
                     vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
                 });
             }
@@ -202,6 +203,7 @@ export const ImageEmbed = () => {
     };
     return (React.createElement("div", null,
         React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),
+        React.createElement("img", { id: 'text', alt: '', width: 256, height: 256 }),
         React.createElement("br", null),
         React.createElement("input", { type: "color", id: "color1", name: "head", value: color1 }),
         React.createElement("input", { type: "color", id: "color2", name: "head", value: color2 }),
