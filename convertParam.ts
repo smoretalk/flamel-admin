@@ -47,8 +47,8 @@ export const convertParam = (property: Property, fields: readonly { name: string
     if (typeof value === 'string' || typeof value === 'number') {
       return safeParseNumber(value);
     }
-    if (typeof value === 'object' && foreignColumnType === 'Int') {
-      return parseInt((value as Record<string, any>)[property.column.relationToFields[0]], 10);
+    if (typeof value === 'object' && foreignColumn.name === 'collectionInfoId') {
+      return parseInt((value as Record<string, any>).Original, 10);
     }
   }
   return value;
