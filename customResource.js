@@ -267,21 +267,34 @@ export class CustomResource extends BaseResource {
         const create = {
             ...ids,
         };
-        if (resourceId === 'GenerationInfo' || resourceId === 'CollectionInfo' || resourceId === 'UpscaleInfo') {
-            delete create.imageId;
+        if (resourceId === 'CollectionInfo') {
             delete update.imageId;
-        }
-        await this.manager.update({
-            where,
-            data: {
-                [resourceId]: {
-                    upsert: {
-                        create,
-                        update,
+            await this.manager.update({
+                where,
+                data: {
+                    [resourceId]: {
+                        update: {
+                            ...update,
+                        },
                     }
                 }
-            }
-        });
+            });
+        }
+        else if (resourceId === 'GenerationInfo' || resourceId === 'UpscaleInfo') {
+            delete create.imageId;
+            delete update.imageId;
+            await this.manager.update({
+                where,
+                data: {
+                    [resourceId]: {
+                        upsert: {
+                            create,
+                            update,
+                        }
+                    }
+                }
+            });
+        }
     }
     async saveRecords(key, idValue, resourceId, targetKey, ids) {
         if (resourceId.includes('.')) {

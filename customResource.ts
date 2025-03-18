@@ -327,21 +327,33 @@ export class CustomResource extends BaseResource {
     const create = {
       ...ids,
     };
-    if (resourceId === 'GenerationInfo' || resourceId === 'CollectionInfo' || resourceId === 'UpscaleInfo') {
-      delete create.imageId;
+    if (resourceId === 'CollectionInfo') {
       delete update.imageId;
-    }
-    await this.manager.update({
-      where,
-      data: {
-        [resourceId]: {
-          upsert: {
-            create,
-            update,
+      await this.manager.update({
+        where,
+        data: {
+          [resourceId]: {
+            update: {
+              ...update,
+            },
           }
         }
-      }
-    })
+      })
+    } else if (resourceId === 'GenerationInfo' || resourceId === 'UpscaleInfo') {
+      delete create.imageId;
+      delete update.imageId;
+      await this.manager.update({
+        where,
+        data: {
+          [resourceId]: {
+            upsert: {
+              create,
+              update,
+            }
+          }
+        }
+      })
+    }
   }
 
   // 다대다용도
