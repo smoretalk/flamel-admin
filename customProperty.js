@@ -35,6 +35,9 @@ export class Property extends BaseProperty {
     isRequired() {
         return this.column.isRequired;
     }
+    isArray() {
+        return this.column.isList;
+    }
     isSortable() {
         return this.type() !== 'reference';
     }

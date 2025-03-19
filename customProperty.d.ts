@@ -13,6 +13,7 @@ export declare class Property extends BaseProperty {
     isId(): boolean;
     name(): string;
     isRequired(): boolean;
+    isArray(): boolean;
     isSortable(): boolean;
     reference(): string;
     referencedColumnName(): string;

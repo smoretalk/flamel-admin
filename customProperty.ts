@@ -40,6 +40,9 @@ export class Property extends BaseProperty {
   override isRequired() {
     return this.column.isRequired;
   }
+  override isArray() {
+    return this.column.isList;
+  }
   override isSortable() {
     return this.type() !== 'reference';
   }
