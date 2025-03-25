@@ -120,6 +120,8 @@ export const convertFilter = (modelFields: DMMF.Model, filterObject: Filter): Re
       where[name] = parseInt(filter.value as string);
     } else if (/^".*"$/.test(filter.value as string)) { // 정확한 검색
       where[name] = (filter.value as string).slice(1).slice(0, -1); // 따옴표 제거하고
+    } else if (modelFields.name === 'CollectionInfo' && name === 'Original.Owner') {
+      where[name] = parseInt(filter.value.toString(), 10);
     } else {
       where[name] = { contains: filter.value.toString() };
     }

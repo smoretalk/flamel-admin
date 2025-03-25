@@ -132,6 +132,9 @@ export const convertFilter = (modelFields, filterObject) => {
         else if (/^".*"$/.test(filter.value)) {
             where[name] = filter.value.slice(1).slice(0, -1);
         }
+        else if (modelFields.name === 'CollectionInfo' && name === 'Original.Owner') {
+            where[name] = parseInt(filter.value.toString(), 10);
+        }
         else {
             where[name] = { contains: filter.value.toString() };
         }
