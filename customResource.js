@@ -211,7 +211,12 @@ export class CustomResource extends BaseResource {
                 continue;
             }
             if (property.isArray()) {
-                preparedParams[key] = param?.length > 0 ? param.map((p) => convertParam(property, this.model.fields, p)) : undefined;
+                if (type === 'reference' && !foreignColumnName) {
+                    preparedParams[key] = undefined;
+                }
+                else {
+                    preparedParams[key] = param?.length > 0 ? param.map((p) => convertParam(property, this.model.fields, p)) : undefined;
+                }
             }
             else {
                 preparedParams[key] = convertParam(property, this.model.fields, param);
