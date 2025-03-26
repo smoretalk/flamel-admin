@@ -22,7 +22,7 @@ export const convertParam = (property, fields, value, nested = false) => {
     if (type === 'reference') {
         const foreignColumn = fields.find((field) => field.name === property.foreignColumnName());
         if (!foreignColumn) {
-            if (Array.isArray(value) && value.length === 0) {
+            if (Array.isArray(value)) {
                 return undefined;
             }
             return value;
