@@ -49,6 +49,12 @@ export const convertParam = (
     if (typeof value === "string" || typeof value === "number") {
       return safeParseNumber(value);
     }
+    if (
+      typeof value === "object" &&
+      foreignColumn.name === "collectionInfoId"
+    ) {
+      return parseInt((value as Record<string, any>).Original, 10);
+    }
   }
   return value;
 };
