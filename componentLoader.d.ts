@@ -1,4 +1,4 @@
-import { ComponentLoader } from 'adminjs';
+import { ComponentLoader } from "adminjs";
 export declare const componentLoader: ComponentLoader;
 export declare const Components: {
     Dashboard: string;
@@ -8,6 +8,7 @@ export declare const Components: {
     PrintImage: string;
     BulkCollectionApprove: string;
     BulkPremiumCollectionApprove: string;
+    BulkNormalCollectionApprove: string;
     BulkCollectionReject: string;
     DisplayImage: string;
     DisplayImageBig: string;
