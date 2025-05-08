@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { FilesetResolver, ImageEmbedder } from '@mediapipe/tasks-vision';
-import { FilesetResolver as TextFilesetResolver, TextEmbedder } from '@mediapipe/tasks-text';
+import { FilesetResolver, ImageEmbedder } from "@mediapipe/tasks-vision";
+import { FilesetResolver as TextFilesetResolver, TextEmbedder, } from "@mediapipe/tasks-text";
 import axios from "axios";
-import { Color, opacityFilter, Palette } from 'auto-palette';
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+import { Color, opacityFilter, Palette } from "auto-palette";
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 export const ImageEmbed = () => {
     const [embedder, setEmbedder] = useState(null);
     const [textEmbedder, setTextEmbedder] = useState(null);
-    const [value, setValue] = useState('');
-    const [color1, setColor1] = useState('');
-    const [color2, setColor2] = useState('');
-    const [color3, setColor3] = useState('');
-    const [color4, setColor4] = useState('');
-    const [color5, setColor5] = useState('');
+    const [value, setValue] = useState("");
+    const [color1, setColor1] = useState("");
+    const [color2, setColor2] = useState("");
+    const [color3, setColor3] = useState("");
+    const [color4, setColor4] = useState("");
+    const [color5, setColor5] = useState("");
     const [usePercentage, setUsePercentage] = useState(false);
     const colorSetter = [setColor1, setColor2, setColor3, setColor4, setColor5];
     const [disabled, setDisabled] = useState(true);
-    const [color, setColor] = useState('');
+    const [color, setColor] = useState("");
     const [result, setResult] = useState([]);
     useEffect(() => {
         async function main() {
@@ -27,14 +27,14 @@ export const ImageEmbed = () => {
             const [imageEmbedder, textEmbedder] = await Promise.all([
                 ImageEmbedder.createFromOptions(vision, {
                     baseOptions: {
-                        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/1/mobilenet_v3_small.tflite`
+                        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/image_embedder/mobilenet_v3_small/float32/1/mobilenet_v3_small.tflite`,
                     },
                 }),
                 TextEmbedder.createFromModelPath(text, "https://storage.googleapis.com/mediapipe-models/text_embedder/universal_sentence_encoder/float32/1/universal_sentence_encoder.tflite"),
             ]);
             setEmbedder(imageEmbedder);
             setTextEmbedder(textEmbedder);
-            alert('모델 준비 완료');
+            alert("모델 준비 완료");
             setDisabled(false);
         }
         main();
@@ -43,13 +43,13 @@ export const ImageEmbed = () => {
         const response2 = await axios.get(`/api/collections/noImageEmbedding`);
         console.log(response2.data, embedder);
         for (const r of response2.data) {
-            const htmlImageElement = document.querySelector('#image');
+            const htmlImageElement = document.querySelector("#image");
             htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
             await sleep(2000);
             try {
                 const imageEmbedderResult = embedder.embed(htmlImageElement);
                 console.log(r.imageId, imageEmbedderResult);
-                await axios.patch(`/api/collections/${r.collectionInfoId}/imageEmbed`, {
+                await axios.patch(`/api/collections/${r.imageId}/imageEmbed`, {
                     vector: JSON.stringify(imageEmbedderResult.embeddings[0].floatEmbedding),
                 });
             }
@@ -62,13 +62,13 @@ export const ImageEmbed = () => {
         const response2 = await axios.get(`/api/collections/noTextEmbedding`);
         console.log(response2.data, textEmbedder);
         for (const r of response2.data) {
-            const htmlImageElement = document.querySelector('#text');
+            const htmlImageElement = document.querySelector("#text");
             htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
             const response2 = await axios.get(`/api/collections/${r.imageId}/caption`);
             try {
                 const textEmbedderResult = textEmbedder.embed(response2.data);
                 console.log(r.imageId, textEmbedderResult);
-                await axios.patch(`/api/collections/${r.collectionInfoId}/textEmbed`, {
+                await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
                     vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
                 });
             }
@@ -84,11 +84,10 @@ export const ImageEmbed = () => {
         else if (color > 255) {
             color = 255;
         }
-        ;
         const hex = color.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     };
-    const rgb2hex = (r, g, b) => ((convertToHex(r) + convertToHex(g) + convertToHex(b)).toUpperCase());
+    const rgb2hex = (r, g, b) => (convertToHex(r) + convertToHex(g) + convertToHex(b)).toUpperCase();
     const onColorStart = async () => {
         const response2 = await axios.get(`/api/collections/noColors`);
         console.log(response2.data);
@@ -98,19 +97,19 @@ export const ImageEmbed = () => {
             }
             return true;
         });
-        const image = document.querySelector('#image');
+        const image = document.querySelector("#image");
         for (const r of filtered) {
             await new Promise((resolve, reject) => {
                 console.log(r);
                 const loadEvent = async function () {
                     const palette = Palette.extract(image, {
                         maxSwatches: 5,
-                        filters: [opacityFilter(0.5)]
+                        filters: [opacityFilter(0.5)],
                     });
-                    const swatches = palette.findSwatches(5, 'vivid');
+                    const swatches = palette.findSwatches(5, "vivid");
                     console.log(swatches);
                     for (const setter of colorSetter) {
-                        setter('');
+                        setter("");
                     }
                     let i = 0;
                     let total = 0;
@@ -120,7 +119,7 @@ export const ImageEmbed = () => {
                     for (const rr of swatches) {
                         const lab = rr.color.toLAB();
                         const rgb = rr.color.toRGB();
-                        const hex = '#' + rgb2hex(rgb.r, rgb.g, rgb.b);
+                        const hex = "#" + rgb2hex(rgb.r, rgb.g, rgb.b);
                         colorSetter[i](hex);
                         console.log(r.imageId, lab, rgb, hex, rr.population, rr.name);
                         await axios.post(`/api/collections/${r.imageId}/colors`, {
@@ -131,16 +130,16 @@ export const ImageEmbed = () => {
                         });
                         i++;
                     }
-                    image.removeEventListener('load', loadEvent);
+                    image.removeEventListener("load", loadEvent);
                     resolve(result);
                 };
-                image.addEventListener('load', loadEvent);
+                image.addEventListener("load", loadEvent);
                 image.src = `/api/admin/images/${r.imageId}/binary`;
             });
         }
     };
     const onChange = (e) => {
-        setValue(e.target.value || '');
+        setValue(e.target.value || "");
     };
     const onChangeColor = (e) => {
         setColor(e.target.value);
@@ -148,13 +147,23 @@ export const ImageEmbed = () => {
     const onClick = async () => {
         const response = await axios.get(`/api/collections/imageEmbedding`);
         const target = response.data.find((v) => v.imageId.toString() === value);
-        const result = response.data.map((v) => {
-            const similar = ImageEmbedder.cosineSimilarity({ floatEmbedding: JSON.parse(target.imageEmbedding), headName: 'feature', headIndex: 0 }, { floatEmbedding: JSON.parse(v.imageEmbedding), headName: 'feature', headIndex: 0 });
+        const result = response.data
+            .map((v) => {
+            const similar = ImageEmbedder.cosineSimilarity({
+                floatEmbedding: JSON.parse(target.imageEmbedding),
+                headName: "feature",
+                headIndex: 0,
+            }, {
+                floatEmbedding: JSON.parse(v.imageEmbedding),
+                headName: "feature",
+                headIndex: 0,
+            });
             return {
                 imageId: v.imageId,
                 similar: similar.toString(),
             };
-        }).toSorted((a, b) => parseFloat(b.similar) - parseFloat(a.similar));
+        })
+            .toSorted((a, b) => parseFloat(b.similar) - parseFloat(a.similar));
         console.log(result);
         setResult(result);
     };
@@ -164,21 +173,31 @@ export const ImageEmbed = () => {
         if (!target.textEmbedding) {
             return;
         }
-        const result = response.data.map((v) => {
+        const result = response.data
+            .map((v) => {
             if (!v.textEmbedding) {
                 return { imageId: v.imageId };
             }
-            const similar = TextEmbedder.cosineSimilarity({ floatEmbedding: JSON.parse(target.textEmbedding), headName: 'feature', headIndex: 0 }, { floatEmbedding: JSON.parse(v.textEmbedding), headName: 'feature', headIndex: 0 });
+            const similar = TextEmbedder.cosineSimilarity({
+                floatEmbedding: JSON.parse(target.textEmbedding),
+                headName: "feature",
+                headIndex: 0,
+            }, {
+                floatEmbedding: JSON.parse(v.textEmbedding),
+                headName: "feature",
+                headIndex: 0,
+            });
             return {
                 imageId: v.imageId,
                 similar: similar.toString(),
             };
-        }).toSorted((a, b) => parseFloat(b.similar) - parseFloat(a.similar));
+        })
+            .toSorted((a, b) => parseFloat(b.similar) - parseFloat(a.similar));
         console.log(result);
         setResult(result);
     };
     const onColorClick = async () => {
-        const rgb = color.split(',').map((v) => parseInt(v));
+        const rgb = color.split(",").map((v) => parseInt(v));
         const target = Color.fromRGB({ r: rgb[0], g: rgb[1], b: rgb[2] });
         const response = await axios.get(`/api/collections/allColors`);
         response.data.forEach((color) => {
@@ -186,11 +205,13 @@ export const ImageEmbed = () => {
                 color.similar = Infinity;
                 return;
             }
-            const lab2 = color.color.split(',').map((v) => parseFloat(v.replace(/[()]/g, '')));
+            const lab2 = color.color
+                .split(",")
+                .map((v) => parseFloat(v.replace(/[()]/g, "")));
             const comparison = Color.fromLAB({ l: lab2[0], a: lab2[1], b: lab2[2] });
             color.similar = target.differenceTo(comparison);
         });
-        const uniq = (arr, track = new Set()) => arr.filter(({ imageId }) => (track.has(imageId) ? false : track.add(imageId)));
+        const uniq = (arr, track = new Set()) => arr.filter(({ imageId }) => track.has(imageId) ? false : track.add(imageId));
         const sorted = response.data.toSorted((a, b) => {
             if (usePercentage) {
                 return a.similar / a.percentage - b.similar / b.percentage;
@@ -202,8 +223,8 @@ export const ImageEmbed = () => {
         setResult(unique);
     };
     return (React.createElement("div", null,
-        React.createElement("img", { id: 'image', alt: '', width: 256, height: 256 }),
-        React.createElement("img", { id: 'text', alt: '', width: 256, height: 256 }),
+        React.createElement("img", { id: "image", alt: "", width: 256, height: 256 }),
+        React.createElement("img", { id: "text", alt: "", width: 256, height: 256 }),
         React.createElement("br", null),
         React.createElement("input", { type: "color", id: "color1", name: "head", value: color1 }),
         React.createElement("input", { type: "color", id: "color2", name: "head", value: color2 }),
