@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { flat, ApiClient } from "adminjs";
-import { Button, FormGroup, FormMessage, SelectAsync } from "@adminjs/design-system";
+import { Button, FormGroup, FormMessage, SelectAsync, } from "@adminjs/design-system";
 import { PropertyLabel } from "adminjs";
 import axios from "axios";
 export default function CopyAndAssign(props) {
-    const { onChange, property, record } = props;
+    const { property, record } = props;
     const { reference: resourceId } = property;
     const [id, setId] = useState();
     if (!resourceId) {
@@ -12,7 +12,6 @@ export default function CopyAndAssign(props) {
     }
     const handleChange = (selected) => {
         console.log(property.path, selected.value, selected.record);
-        onChange(property.path, selected.value, selected.record);
         setId(selected.value);
     };
     const loadOptions = async (inputValue) => {
@@ -34,11 +33,12 @@ export default function CopyAndAssign(props) {
     const onCopy = (e) => {
         e.preventDefault();
         if (!id) {
-            return alert('유저를 선택하세요.');
+            return alert("유저를 선택하세요.");
         }
-        axios.post(`/api/categories/${record.id}/copy/${id}`)
+        axios
+            .post(`/api/categories/${record.id}/copy/${id}`)
             .then((response) => {
-            console.log('복사되었습니다.');
+            console.log("복사되었습니다.");
             location.href = `/admin/resources/Style/records/${response.data}/show`;
         })
             .catch(console.error);
@@ -47,25 +47,30 @@ export default function CopyAndAssign(props) {
         if (selectedId) {
             setLoadingRecord((c) => c + 1);
             const api = new ApiClient();
-            api.recordAction({
-                actionName: 'show',
+            api
+                .recordAction({
+                actionName: "show",
                 resourceId,
                 recordId: selectedId,
-            }).then(({ data }) => {
+            })
+                .then(({ data }) => {
                 setLoadedRecord(data.record);
-            }).finally(() => {
+            })
+                .finally(() => {
                 setLoadingRecord((c) => c - 1);
             });
         }
     }, [selectedId, resourceId]);
     const selectedValue = loadedRecord;
-    const selectedOption = (selectedId && selectedValue) ? {
-        value: selectedValue.id,
-        label: selectedValue.title,
-    } : {
-        value: '',
-        label: '',
-    };
+    const selectedOption = selectedId && selectedValue
+        ? {
+            value: selectedValue.id,
+            label: selectedValue.title,
+        }
+        : {
+            value: "",
+            label: "",
+        };
     return (React.createElement(FormGroup, { error: Boolean(error) },
         React.createElement(PropertyLabel, { property: property }),
         React.createElement(SelectAsync, { cacheOptions: true, value: selectedOption, defaultOptions: true, loadOptions: loadOptions, onChange: handleChange, isClearable: true, isDisabled: property.isDisabled, isLoading: !!loadingRecord, ...property.props }),
