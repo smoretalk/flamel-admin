@@ -61,6 +61,8 @@ export const ImageEmbed: React.FC = () => {
       `/api/collections/noImageEmbedding`
     );
     console.log(response2.data, embedder);
+    const BATCH = 50;
+    let buffer: Array<{ imageId: number; vector: string }> = [];
     for (const r of response2.data) {
       const htmlImageElement = document.querySelector(
         "#image"
@@ -70,14 +72,22 @@ export const ImageEmbed: React.FC = () => {
       try {
         const imageEmbedderResult = embedder.embed(htmlImageElement);
         console.log(r.imageId, imageEmbedderResult);
-        await axios.patch(`/api/collections/${r.imageId}/imageEmbed`, {
+        buffer.push({
+          imageId: r.imageId,
           vector: JSON.stringify(
             imageEmbedderResult.embeddings[0].floatEmbedding
           ),
         });
+        if (buffer.length >= BATCH) {
+          await axios.patch(`/api/collections/batchImageEmbed`, buffer);
+          buffer = [];
+        }
       } catch (err) {
         console.error(err);
       }
+    }
+    if (buffer.length > 0) {
+      await axios.patch(`/api/collections/batchImageEmbed`, buffer);
     }
   };
 
@@ -86,25 +96,35 @@ export const ImageEmbed: React.FC = () => {
       `/api/collections/noTextEmbedding`
     );
     console.log(response2.data, textEmbedder);
+    const BATCH = 100;
+    let buffer: Array<{ imageId: number; vector: string }> = [];
     for (const r of response2.data) {
       const htmlImageElement = document.querySelector(
         "#text"
       ) as HTMLImageElement;
       htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
-      const response2 = await axios.get<string>(
+      const captionResponse = await axios.get<string>(
         `/api/collections/${r.imageId}/caption`
       );
       try {
-        const textEmbedderResult = textEmbedder.embed(response2.data);
+        const textEmbedderResult = textEmbedder.embed(captionResponse.data);
         console.log(r.imageId, textEmbedderResult);
-        await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
+        buffer.push({
+          imageId: r.imageId,
           vector: JSON.stringify(
             textEmbedderResult.embeddings[0].floatEmbedding
           ),
         });
+        if (buffer.length >= BATCH) {
+          await axios.patch(`/api/collections/batchTextEmbed`, buffer);
+          buffer = [];
+        }
       } catch (err) {
         console.error(err);
       }
+    }
+    if (buffer.length > 0) {
+      await axios.patch(`/api/collections/batchTextEmbed`, buffer);
     }
   };
 
@@ -132,6 +152,14 @@ export const ImageEmbed: React.FC = () => {
       }
       return true;
     });
+    const BATCH = 100;
+    let buffer: Array<{
+      imageId: number;
+      name: string;
+      lab: [number, number, number];
+      rgb: string;
+      percentage: number;
+    }> = [];
     const image = document.querySelector("#image") as HTMLImageElement;
     for (const r of filtered) {
       await new Promise((resolve, reject) => {
@@ -158,7 +186,8 @@ export const ImageEmbed: React.FC = () => {
             const hex = "#" + rgb2hex(rgb.r, rgb.g, rgb.b);
             colorSetter[i](hex);
             console.log(r.imageId, lab, rgb, hex, rr.population, rr.name);
-            await axios.post(`/api/collections/${r.imageId}/colors`, {
+            buffer.push({
+              imageId: r.imageId,
               lab: [lab.l, lab.a, lab.b],
               rgb: hex,
               name: rr.name,
@@ -166,12 +195,19 @@ export const ImageEmbed: React.FC = () => {
             });
             i++;
           }
+          if (buffer.length >= BATCH) {
+            await axios.post(`/api/collections/batchColors`, buffer);
+            buffer = [];
+          }
           image.removeEventListener("load", loadEvent);
           resolve(result);
         };
         image.addEventListener("load", loadEvent);
         image.src = `/api/admin/images/${r.imageId}/binary`;
       });
+    }
+    if (buffer.length > 0) {
+      await axios.post(`/api/collections/batchColors`, buffer);
     }
   };
 
