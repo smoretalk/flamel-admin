@@ -42,6 +42,8 @@ export const ImageEmbed = () => {
     const onStart = async () => {
         const response2 = await axios.get(`/api/collections/noImageEmbedding`);
         console.log(response2.data, embedder);
+        const BATCH = 50;
+        let buffer = [];
         for (const r of response2.data) {
             const htmlImageElement = document.querySelector("#image");
             htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
@@ -49,32 +51,50 @@ export const ImageEmbed = () => {
             try {
                 const imageEmbedderResult = embedder.embed(htmlImageElement);
                 console.log(r.imageId, imageEmbedderResult);
-                await axios.patch(`/api/collections/${r.imageId}/imageEmbed`, {
+                buffer.push({
+                    imageId: r.imageId,
                     vector: JSON.stringify(imageEmbedderResult.embeddings[0].floatEmbedding),
                 });
+                if (buffer.length >= BATCH) {
+                    await axios.patch(`/api/collections/batchImageEmbed`, buffer);
+                    buffer = [];
+                }
             }
             catch (err) {
                 console.error(err);
             }
         }
+        if (buffer.length > 0) {
+            await axios.patch(`/api/collections/batchImageEmbed`, buffer);
+        }
     };
     const onTextStart = async () => {
         const response2 = await axios.get(`/api/collections/noTextEmbedding`);
         console.log(response2.data, textEmbedder);
+        const BATCH = 100;
+        let buffer = [];
         for (const r of response2.data) {
             const htmlImageElement = document.querySelector("#text");
             htmlImageElement.src = `/api/admin/images/${r.imageId}/binary`;
-            const response2 = await axios.get(`/api/collections/${r.imageId}/caption`);
+            const captionResponse = await axios.get(`/api/collections/${r.imageId}/caption`);
             try {
-                const textEmbedderResult = textEmbedder.embed(response2.data);
+                const textEmbedderResult = textEmbedder.embed(captionResponse.data);
                 console.log(r.imageId, textEmbedderResult);
-                await axios.patch(`/api/collections/${r.imageId}/textEmbed`, {
+                buffer.push({
+                    imageId: r.imageId,
                     vector: JSON.stringify(textEmbedderResult.embeddings[0].floatEmbedding),
                 });
+                if (buffer.length >= BATCH) {
+                    await axios.patch(`/api/collections/batchTextEmbed`, buffer);
+                    buffer = [];
+                }
             }
             catch (err) {
                 console.error(err);
             }
+        }
+        if (buffer.length > 0) {
+            await axios.patch(`/api/collections/batchTextEmbed`, buffer);
         }
     };
     const convertToHex = (color) => {
@@ -97,6 +117,8 @@ export const ImageEmbed = () => {
             }
             return true;
         });
+        const BATCH = 100;
+        let buffer = [];
         const image = document.querySelector("#image");
         for (const r of filtered) {
             await new Promise((resolve, reject) => {
@@ -122,7 +144,8 @@ export const ImageEmbed = () => {
                         const hex = "#" + rgb2hex(rgb.r, rgb.g, rgb.b);
                         colorSetter[i](hex);
                         console.log(r.imageId, lab, rgb, hex, rr.population, rr.name);
-                        await axios.post(`/api/collections/${r.imageId}/colors`, {
+                        buffer.push({
+                            imageId: r.imageId,
                             lab: [lab.l, lab.a, lab.b],
                             rgb: hex,
                             name: rr.name,
@@ -130,12 +153,19 @@ export const ImageEmbed = () => {
                         });
                         i++;
                     }
+                    if (buffer.length >= BATCH) {
+                        await axios.post(`/api/collections/batchColors`, buffer);
+                        buffer = [];
+                    }
                     image.removeEventListener("load", loadEvent);
                     resolve(result);
                 };
                 image.addEventListener("load", loadEvent);
                 image.src = `/api/admin/images/${r.imageId}/binary`;
             });
+        }
+        if (buffer.length > 0) {
+            await axios.post(`/api/collections/batchColors`, buffer);
         }
     };
     const onChange = (e) => {
