@@ -18,11 +18,18 @@ export const convertParam = (
 ) => {
   const type = property.type();
   if (type === "mixed") return value;
-  if (
-    type === "number" &&
-    (typeof value === "string" || typeof value === "number")
-  ) {
-    return safeParseNumber(value);
+  if (type === "number") {
+    if (typeof value === "object" && value !== null) {
+      const id = (value as Record<string, unknown>).id ??
+        (value as Record<string, unknown>).imageId;
+      if (id !== undefined && id !== null) {
+        return safeParseNumber(id as string | number);
+      }
+      return undefined;
+    }
+    if (typeof value === "string" || typeof value === "number") {
+      return safeParseNumber(value);
+    }
   }
   if (type === "boolean") {
     return value === true || value === "true";

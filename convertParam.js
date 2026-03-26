@@ -13,9 +13,17 @@ export const convertParam = (property, fields, value, nested = false) => {
     const type = property.type();
     if (type === "mixed")
         return value;
-    if (type === "number" &&
-        (typeof value === "string" || typeof value === "number")) {
-        return safeParseNumber(value);
+    if (type === "number") {
+        if (typeof value === "object" && value !== null) {
+            const id = value.id ?? value.imageId;
+            if (id !== undefined && id !== null) {
+                return safeParseNumber(id);
+            }
+            return undefined;
+        }
+        if (typeof value === "string" || typeof value === "number") {
+            return safeParseNumber(value);
+        }
     }
     if (type === "boolean") {
         return value === true || value === "true";
