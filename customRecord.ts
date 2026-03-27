@@ -26,7 +26,11 @@ class CustomRecord extends BaseRecord {
     // idProperty가 여러 개일 수 있는 문제 해결
     const idField = this.resource.model.fields.find((v) => v.isId);
     const idProperty = idProperties.find((v) => v.name() === idField.name);
-    return this.params[idProperty.name()]
+    const value = this.params[idProperty.name()];
+    if (typeof value === 'object' && value !== null) {
+      return (value as Record<string, any>)[idProperty.name()];
+    }
+    return value;
   }
 }
 

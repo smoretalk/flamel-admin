@@ -12,7 +12,11 @@ class CustomRecord extends BaseRecord {
         }
         const idField = this.resource.model.fields.find((v) => v.isId);
         const idProperty = idProperties.find((v) => v.name() === idField.name);
-        return this.params[idProperty.name()];
+        const value = this.params[idProperty.name()];
+        if (typeof value === 'object' && value !== null) {
+            return value[idProperty.name()];
+        }
+        return value;
     }
 }
 export default CustomRecord;
