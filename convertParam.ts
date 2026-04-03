@@ -28,7 +28,11 @@ export const convertParam = (
       return undefined;
     }
     if (typeof value === "string" || typeof value === "number") {
-      return safeParseNumber(value);
+      const parsed = safeParseNumber(value);
+      if (typeof parsed === "string" && !isNumeric(parsed)) {
+        return undefined;
+      }
+      return parsed;
     }
   }
   if (type === "boolean") {

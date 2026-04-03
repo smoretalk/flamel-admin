@@ -94,9 +94,13 @@ export class CustomResource extends BaseResource {
         if (!idProperty) {
             return null;
         }
+        const convertedId = convertParam(idProperty, this.model.fields, id);
+        if (convertedId === undefined || convertedId === null) {
+            return null;
+        }
         const result = await this.manager.findUnique({
             where: {
-                [idProperty.path()]: convertParam(idProperty, this.model.fields, id),
+                [idProperty.path()]: convertedId,
             },
             include: this.include,
         });
